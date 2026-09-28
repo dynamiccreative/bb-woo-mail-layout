@@ -36,4 +36,10 @@ tests_add_filter(
 );
 
 require $bb_tests_dir . '/includes/bootstrap.php';
+
+// Le mailer WooCommerce branche ses hooks (en-tête, tableau, adresses) à sa première instanciation.
+// WP_UnitTestCase restaure les hooks après chaque test : on l'instancie avant, pour qu'ils fassent
+// partie de la sauvegarde au lieu de disparaître après le premier test qui l'utilise.
+WC()->mailer();
+
 require_once __DIR__ . '/TestCase.php';
