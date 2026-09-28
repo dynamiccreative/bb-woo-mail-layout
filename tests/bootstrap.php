@@ -20,7 +20,12 @@ require_once $bb_tests_dir . '/includes/functions.php';
 tests_add_filter(
 	'muplugins_loaded',
 	static function () use ( $bb_root ): void {
-		require_once WP_PLUGIN_DIR . '/woocommerce/woocommerce.php';
+		// wp-env nomme le dossier d'après le zip téléchargé (ex. « woocommerce.latest-stable »).
+		$bb_wc = glob( WP_PLUGIN_DIR . '/woocommerce*/woocommerce.php' );
+		if ( ! $bb_wc ) {
+			throw new RuntimeException( 'WooCommerce introuvable dans ' . WP_PLUGIN_DIR ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+		}
+		require_once $bb_wc[0];
 		require_once $bb_root . '/bb-woo-mail-layout.php';
 	}
 );
