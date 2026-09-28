@@ -29,6 +29,9 @@ $bb_colors = $v['colors'];
 	<?php if ( $v['google_font_url'] ) : ?>
 		<link href="<?php echo esc_url( $v['google_font_url'] ); ?>" rel="stylesheet" type="text/css"><?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- document e-mail, hors file d'attente WordPress. ?>
 	<?php endif; ?>
+	<style type="text/css">
+<?php echo $v['css']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS du plugin, jetons assainis, « </ » neutralisé. ?>
+	</style>
 </head>
 <body class="bb-body bb-layout-classique" bgcolor="<?php echo esc_attr( $bb_colors['background'] ); ?>" style="background-color:<?php echo esc_attr( $bb_colors['background'] ); ?>;">
 <table role="presentation" class="bb-wrapper" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo esc_attr( $bb_colors['background'] ); ?>" style="background-color:<?php echo esc_attr( $bb_colors['background'] ); ?>;">

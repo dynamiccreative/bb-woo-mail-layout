@@ -76,6 +76,21 @@ class RenderingTest extends TestCase {
 		$this->snapshot( $layout, $email_id, $html );
 	}
 
+	/**
+	 * Une extension qui remplace le CSS des e-mails (ex. Flycart) ne doit pas retirer le style du layout.
+	 */
+	public function test_layout_css_survives_third_party_style_override(): void {
+		$override = static fn() => '.autre-extension { color: red; }';
+		add_filter( 'woocommerce_email_styles', $override, 10 );
+
+		$simulator = new Simulator( Plugin::instance()->registry() );
+		$html      = $simulator->render( $simulator->prepare( 'new_order', $this->create_order()->get_id() ) );
+
+		remove_filter( 'woocommerce_email_styles', $override, 10 );
+
+		$this->assertMatchesRegularExpression( '/<td class="bb-main"[^>]*style="[^"]*padding:/', $html );
+	}
+
 	public function test_disabled_email_falls_back_to_native_rendering(): void {
 		Options::replace( array( 'emails' => array( 'customer_processing_order' => 'no' ) ) );
 

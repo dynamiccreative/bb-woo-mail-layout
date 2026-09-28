@@ -279,7 +279,11 @@ final class LayoutRenderer {
 	}
 
 	/**
-	 * Remplace le CSS natif par celui du layout.
+	 * Retire le CSS natif de WooCommerce (email-styles.php) pour les e-mails mis en forme.
+	 *
+	 * Le CSS du layout n'est pas passé ici mais écrit dans le <style> du <head> (voir header.php) :
+	 * une extension qui remplace ensuite ce CSS ne peut pas l'écraser, et si l'inlining de WooCommerce
+	 * échoue, le bloc <style> reste dans l'e-mail. L'inliner lit les <style> du document après ce CSS.
 	 *
 	 * @param mixed $css   CSS WooCommerce.
 	 * @param mixed $email E-mail.
@@ -287,7 +291,7 @@ final class LayoutRenderer {
 	 */
 	public function filter_styles( $css, $email = null ) {
 		$email = $email instanceof \WC_Email ? $email : $this->current_email();
-		return $this->applies_to( $email ) ? $this->css( $email ) : $css;
+		return $this->applies_to( $email ) ? '' : $css;
 	}
 
 	/**
@@ -440,6 +444,7 @@ final class LayoutRenderer {
 			'site_url'        => home_url( '/' ),
 			'colors'          => $this->colors( $settings ),
 			'google_font_url' => $this->google_font_url( $settings ),
+			'css'             => str_replace( '</', '<\/', $this->css( $email ) ),
 			'logo'            => $this->logo( $settings, $site_title ),
 			'intro_html'      => 'yes' === $settings['show_intro'] ? $this->intro_html( $email ) : '',
 			'help'            => $this->help( $settings ),
