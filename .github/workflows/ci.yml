@@ -40,7 +40,15 @@ jobs:
       - run: composer install --no-interaction --no-progress
       - run: npm install --no-audit --no-fund
       - run: npx wp-env start
-      - run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/bb-woo-mail-layout vendor/bin/phpunit
+      - name: PHPUnit
+        run: |
+          set -o pipefail
+          if ! npx wp-env run tests-cli --env-cwd=wp-content/plugins/bb-woo-mail-layout vendor/bin/phpunit 2>&1 | tee phpunit.log; then
+            # Fin de la sortie en annotation : lisible sans ouvrir les logs.
+            msg=$(tail -n 60 phpunit.log | sed -e 's/%/%25/g' -e 's/\r/%0D/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=PHPUnit::${msg}"
+            exit 1
+          fi
       - name: Aucun warning PHP dans debug.log
         run: |
           npx wp-env run tests-cli cat wp-content/debug.log > debug.log 2>/dev/null || true

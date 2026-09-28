@@ -10,7 +10,7 @@ $bb_root = dirname( __DIR__ );
 require_once $bb_root . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 
 $bb_tests_dir = getenv( 'WP_TESTS_DIR' );
-if ( ! $bb_tests_dir ) {
+if ( ! $bb_tests_dir || ! is_readable( $bb_tests_dir . '/includes/functions.php' ) ) {
 	$bb_tests_dir = $bb_root . '/vendor/wp-phpunit/wp-phpunit';
 	putenv( 'WP_PHPUNIT__TESTS_CONFIG=' . __DIR__ . '/wp-tests-config.php' );
 }
