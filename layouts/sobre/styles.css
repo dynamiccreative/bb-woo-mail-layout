@@ -1,0 +1,39 @@
+/*
+ * Layout Name: Sobre
+ * Description: Tout blanc, logo centré souligné d'un filet de la couleur principale.
+ */
+
+.bb-body,
+.bb-layout-sobre .bb-wrapper {
+	background-color: #ffffff;
+}
+
+.bb-header {
+	background-color: #ffffff;
+	padding: 28px 32px 20px;
+	border-bottom: 3px solid {{primary}};
+}
+
+h1.bb-heading {
+	color: {{text}};
+}
+
+.bb-help-box {
+	background-color: #ffffff;
+	border: 1px solid {{border}};
+}
+
+.bb-footer {
+	border-top: 1px solid {{border}};
+	padding-top: 20px;
+}
+
+.bb-social {
+	padding: 8px 0 16px;
+}
+
+@media only screen and (max-width: 620px) {
+	.bb-header {
+		padding: 20px !important;
+	}
+}

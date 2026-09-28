@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  lint:
+    name: PHPCS + PHPStan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --no-progress
+      - run: vendor/bin/phpcs
+      - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
+  test:
+    name: PHPUnit (wp-env)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --no-progress
+      - run: npm install --no-audit --no-fund
+      - run: npx wp-env start
+      - run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/bb-woo-mail-layout vendor/bin/phpunit
+      - name: Aucun warning PHP dans debug.log
+        run: |
+          npx wp-env run tests-cli cat wp-content/debug.log > debug.log 2>/dev/null || true
+          if grep -E "PHP (Warning|Notice|Deprecated|Fatal)" debug.log | grep -i "bb-woo-mail-layout"; then exit 1; fi
+
+  release:
+    name: Zip de release
+    needs: [ lint, test ]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: zip
+      - run: php bin/build-zip.php
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: build/bb-woo-mail-layout.zip

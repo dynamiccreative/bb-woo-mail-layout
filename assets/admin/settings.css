@@ -1,0 +1,123 @@
+/* BB Woo Mail Layout — onglet de réglages. */
+
+.bb-wml-media {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.bb-wml-media__preview {
+	display: block;
+	flex-basis: 100%;
+	max-width: 240px;
+	max-height: 80px;
+	padding: 8px;
+	background: #f0f0f1;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	object-fit: contain;
+}
+
+.bb-wml-media__preview[hidden] {
+	display: none;
+}
+
+.bb-wml-media__remove {
+	color: #b32d2e;
+}
+
+.bb-wml-logo-status {
+	margin-top: 6px;
+	padding: 6px 10px;
+	border-left: 4px solid #72aee6;
+	background: #f0f6fc;
+}
+
+.bb-wml-logo-status.is-ok {
+	border-color: #00a32a;
+	background: #edfaef;
+}
+
+.bb-wml-logo-status.is-error {
+	border-color: #d63638;
+	background: #fcf0f1;
+}
+
+.bb-wml-logo-status.is-unverified {
+	border-color: #dba617;
+	background: #fcf9e8;
+}
+
+.bb-wml-editor {
+	max-width: 720px;
+}
+
+.bb-wml-emails,
+.bb-wml-intros {
+	max-width: 1100px;
+}
+
+.bb-wml-emails .check-column {
+	width: 2.4em;
+	padding: 10px 0 0 10px;
+}
+
+.bb-wml-intros th {
+	width: 260px;
+	vertical-align: top;
+}
+
+.bb-wml-intros textarea::placeholder {
+	color: #8c8f94;
+}
+
+.bb-wml-placeholders code {
+	margin: 0 2px;
+	cursor: help;
+}
+
+.bb-wml-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 10px;
+	background: #f0f0f1;
+	color: #50575e;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.bb-wml-badge.is-on {
+	background: #e7f0fa;
+	color: #1f4e79;
+}
+
+.bb-wml-status {
+	margin-left: 8px;
+	vertical-align: middle;
+}
+
+.bb-wml-status.is-success {
+	color: #00a32a;
+	font-weight: 600;
+}
+
+.bb-wml-status.is-error {
+	color: #d63638;
+	font-weight: 600;
+}
+
+.bb-wml-preview-frame {
+	display: block;
+	width: 100%;
+	max-width: 760px;
+	height: 900px;
+	margin-top: 12px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.bb-wml-preview-frame[hidden] {
+	display: none;
+}

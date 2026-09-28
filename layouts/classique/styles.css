@@ -1,0 +1,20 @@
+/*
+ * Layout Name: Classique
+ * Description: Fond extérieur clair, bandeau coloré avec le logo, carte blanche centrée.
+ */
+
+.bb-body,
+.bb-layout-classique .bb-wrapper {
+	background-color: {{background}};
+}
+
+.bb-header {
+	background-color: {{primary}};
+	padding: 24px 32px;
+}
+
+@media only screen and (max-width: 620px) {
+	.bb-header {
+		padding: 20px !important;
+	}
+}

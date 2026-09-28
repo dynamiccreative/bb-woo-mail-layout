@@ -1,0 +1,27 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 6
+	paths:
+		- bb-woo-mail-layout.php
+		- uninstall.php
+		- src
+		- templates
+		- layouts
+	scanFiles:
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+	bootstrapFiles:
+		- tests/phpstan-bootstrap.php
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+		# Variables injectées par wc_get_template() / LayoutRenderer::include_part().
+		-
+			identifier: variable.undefined
+			paths:
+				- templates/*
+				- layouts/*
+		# Fonctions WPML / Polylang optionnelles, protégées par function_exists().
+		-
+			message: '#^Function (pll_[a-z_]+|PLL) not found\.$#'
+			path: src/Compat/Wpml.php

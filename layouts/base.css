@@ -1,0 +1,346 @@
+/*
+ * Base commune à tous les layouts : structure + contenu métier WooCommerce.
+ * Jetons remplacés au rendu : {{font}} {{primary}} {{primary_text}} {{button}} {{button_text}}
+ * {{text}} {{background}} {{muted}} {{border}} {{soft}}.
+ * Inliné par WooCommerce (CssInliner) ; les @media restent dans un <style> en <head>.
+ * Les !important écrasent les styles inline codés en dur par les templates WooCommerce.
+ */
+
+body,
+.bb-body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+table {
+	border-collapse: collapse;
+	mso-table-lspace: 0pt;
+	mso-table-rspace: 0pt;
+}
+
+img {
+	border: 0;
+	outline: none;
+	text-decoration: none;
+	-ms-interpolation-mode: bicubic;
+}
+
+.bb-wrapper {
+	width: 100%;
+}
+
+.bb-wrapper-cell {
+	padding: 24px 12px;
+}
+
+.bb-container {
+	width: 100%;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+/* ---- Contenu ---- */
+
+.bb-main {
+	background-color: #ffffff;
+	padding: 32px 40px 16px;
+	font-family: {{font}};
+	font-size: 15px;
+	line-height: 1.6;
+	color: {{text}};
+	text-align: left;
+}
+
+.bb-main p {
+	margin: 0 0 16px;
+	font-family: {{font}};
+	font-size: 15px;
+	line-height: 1.6;
+	color: {{text}};
+}
+
+h1.bb-heading {
+	margin: 0 0 20px;
+	font-family: {{font}};
+	font-size: 24px;
+	line-height: 1.3;
+	font-weight: bold;
+	color: {{primary}};
+}
+
+.bb-intro {
+	margin: 0 0 8px;
+}
+
+.bb-main a,
+.bb-main a.link {
+	color: {{primary}};
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.bb-main h2 {
+	margin: 28px 0 12px !important;
+	font-family: {{font}} !important;
+	font-size: 17px !important;
+	line-height: 1.3 !important;
+	font-weight: bold;
+	color: {{text}} !important;
+	text-align: left;
+}
+
+.bb-main h2 a,
+.bb-main h2 a.link {
+	color: {{primary}};
+	text-decoration: none;
+}
+
+.bb-main h3 {
+	margin: 20px 0 8px;
+	font-family: {{font}};
+	font-size: 15px;
+	font-weight: bold;
+	color: {{text}};
+}
+
+.bb-order-date {
+	font-weight: normal;
+	color: {{muted}};
+}
+
+/* ---- Tableau de commande ---- */
+
+.bb-order-table-wrap {
+	margin: 0 0 32px;
+}
+
+.bb-main table.td {
+	width: 100% !important;
+	border: 1px solid {{border}} !important;
+	border-collapse: collapse !important;
+	font-family: {{font}} !important;
+	color: {{text}} !important;
+}
+
+.bb-main .td {
+	border: 1px solid {{border}} !important;
+	padding: 10px 12px !important;
+	font-family: {{font}} !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	color: {{text}} !important;
+	vertical-align: middle;
+}
+
+.bb-main table.td thead th {
+	background-color: {{soft}};
+	font-weight: bold;
+}
+
+.bb-main table.td tfoot th {
+	font-weight: bold;
+}
+
+.bb-main .bb-total-first {
+	border-top: 3px solid {{border}} !important;
+}
+
+.bb-main .wc-item-meta {
+	margin: 6px 0 0 !important;
+	padding: 0 !important;
+	list-style: none;
+	font-size: 12px !important;
+	color: {{muted}};
+}
+
+.bb-main .wc-item-meta li {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.bb-main .wc-item-meta p {
+	display: inline;
+	margin: 0 !important;
+	font-size: 12px !important;
+}
+
+/* ---- Adresses ---- */
+
+.bb-addresses {
+	width: 100%;
+	margin: 0 0 24px;
+}
+
+.bb-address-col {
+	padding: 0;
+	vertical-align: top;
+}
+
+.bb-main .address {
+	padding: 12px 14px;
+	border: 1px solid {{border}};
+	background-color: {{soft}};
+	font-style: normal;
+	font-size: 14px;
+	line-height: 1.6;
+	color: {{text}};
+}
+
+/* ---- Note, citations ---- */
+
+.bb-main blockquote,
+.bb-note {
+	margin: 0 0 20px;
+	padding: 12px 16px;
+	border-left: 4px solid {{primary}};
+	background-color: {{soft}};
+}
+
+.bb-main blockquote p {
+	margin: 0 0 8px;
+}
+
+/* ---- Boutons ---- */
+
+.bb-button-table {
+	margin: 4px 0 24px;
+}
+
+.bb-button-cell {
+	background-color: {{button}};
+	border-radius: 4px;
+}
+
+a.bb-button {
+	display: inline-block;
+	padding: 13px 28px;
+	font-family: {{font}};
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 1.2;
+	color: {{button_text}} !important;
+	text-decoration: none !important;
+	border-radius: 4px;
+}
+
+/* ---- Besoin d'aide ? ---- */
+
+.bb-help {
+	background-color: #ffffff;
+	padding: 0 40px 32px;
+	font-family: {{font}};
+}
+
+.bb-help-box {
+	width: 100%;
+	background-color: {{soft}};
+}
+
+.bb-help-cell {
+	padding: 16px 20px;
+	font-family: {{font}};
+	font-size: 14px;
+	line-height: 1.6;
+	color: {{text}};
+}
+
+.bb-help-title {
+	margin: 0 0 6px;
+	font-family: {{font}};
+	font-size: 15px;
+	font-weight: bold;
+	color: {{primary}};
+}
+
+.bb-help-cell a {
+	color: {{primary}};
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/* ---- Réseaux sociaux ---- */
+
+.bb-social {
+	padding: 24px 0 0;
+	text-align: center;
+}
+
+.bb-social a {
+	text-decoration: none;
+}
+
+.bb-social img {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+}
+
+/* ---- Pied de page ---- */
+
+.bb-footer {
+	padding: 16px 24px 8px;
+	font-family: {{font}};
+	font-size: 12px;
+	line-height: 1.6;
+	color: {{muted}};
+	text-align: center;
+}
+
+.bb-footer p {
+	margin: 0 0 8px;
+	font-family: {{font}};
+	font-size: 12px;
+	line-height: 1.6;
+	color: {{muted}};
+}
+
+.bb-footer a {
+	color: {{muted}};
+	text-decoration: underline;
+}
+
+.bb-legal-name {
+	font-weight: bold;
+}
+
+/* ---- Mobile ---- */
+
+@media only screen and (max-width: 620px) {
+	.bb-wrapper-cell {
+		padding: 0 !important;
+	}
+
+	.bb-main {
+		padding: 24px 20px 8px !important;
+	}
+
+	.bb-help {
+		padding: 0 20px 24px !important;
+	}
+
+	h1.bb-heading {
+		font-size: 21px !important;
+	}
+
+	.bb-address-col {
+		display: block !important;
+		width: 100% !important;
+		margin-bottom: 16px !important;
+	}
+
+	.bb-address-gap {
+		display: none !important;
+	}
+
+	.bb-button-table {
+		width: 100% !important;
+	}
+
+	a.bb-button {
+		display: block !important;
+		text-align: center !important;
+	}
+}

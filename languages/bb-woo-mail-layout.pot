@@ -1,0 +1,717 @@
+# Copyright (C) 2026 bleuebuzz
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: BB Woo Mail Layout 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-28 14:19+0000\n"
+"X-Domain: bb-woo-mail-layout\n"
+
+#: src/Settings/SettingsPage.php:76 src/Settings/SettingsPage.php:102
+msgid "Mise en forme bleuebuzz"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:104
+msgid "Layout appliqué aux e-mails WooCommerce. Les sujets et titres se règlent toujours dans chaque e-mail WooCommerce (onglet « Options e-mail »)."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:108
+msgid "Layout"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:113
+msgid "Classique : fond clair et bandeau coloré. Sobre : tout blanc, filet de couleur."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:121
+msgid "Logo"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:126
+msgid "Bandeau logo"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:127
+msgid "Afficher le logo en tête d’e-mail (lien vers la boutique)"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:133
+msgid "Image"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:134
+msgid "Image de la médiathèque de ce site (PNG ou JPG). Hauteur affichée : 80 px maximum."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:143
+msgid "Largeur maximale (px)"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:160
+msgid "Couleurs et police"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:165
+msgid "Couleur principale"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:166
+msgid "Bandeau, titres, liens."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:173
+msgid "Couleur des boutons"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:180
+msgid "Couleur du texte"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:187
+msgid "Couleur de fond extérieur"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:188
+msgid "Layout Classique uniquement."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:195
+msgid "Police"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:205
+msgid "Google Font (repli sur Arial)"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:209
+msgid "Nom de la Google Font"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:210
+msgid "Ex. : Montserrat. Affichée par Apple Mail et iOS ; Gmail et Outlook affichent la police de repli."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:222
+msgid "Blocs affichés"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:227
+msgid "Blocs"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:228
+msgid "Paragraphe d’introduction"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:235
+msgid "Bloc « Besoin d’aide ? »"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:242 src/Settings/SettingsPage.php:288
+msgid "Réseaux sociaux"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:249 src/Settings/SettingsPage.php:320
+msgid "Pied de page"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:261 layouts/classique/footer.php:24 layouts/sobre/footer.php:24
+msgid "Besoin d’aide ?"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:263
+msgid "Le bloc n’apparaît que si au moins une information est renseignée."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:267
+msgid "Téléphone"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:272 src/Settings/SettingsPage.php:534 src/Settings/SettingsPage.php:622
+msgid "E-mail"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:277
+msgid "Horaires"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:280
+msgid "Du lundi au vendredi, de 9 h à 18 h"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:290
+msgid "Seuls les réseaux dont l’URL est renseignée sont affichés."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:325
+msgid "Nom légal"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:330
+msgid "Adresse"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:336 src/Email/Placeholders.php:30
+msgid "Lien vers le site"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:337
+msgid "Afficher le lien vers la boutique"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:343
+msgid "Mentions"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:344
+msgid "Gras, lien et saut de ligne uniquement. Placeholders autorisés."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:354
+msgid "E-mails mis en forme"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:356
+msgid "Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail décoché garde le rendu WooCommerce natif."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:369
+msgid "Textes d’introduction"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:371
+msgid "Laisser vide pour utiliser le texte par défaut (affiché en gris). Une ligne vide sépare deux paragraphes."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:384
+msgid "Prévisualisation, test, import / export"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:476
+msgid "Choisir une image"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:477
+msgid "Retirer"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:533
+msgid "Actif"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:535
+msgid "ID"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:536
+msgid "Destinataire"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:537
+msgid "Source"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:538
+msgid "Statut"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:551
+msgid "Sujet et titre"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:554
+msgid "Client"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:554
+msgid "Administrateur"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:558
+msgid "Layout bleuebuzz"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:560
+msgid "Rendu WooCommerce"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:584
+msgid "Placeholders :"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:618
+msgid "Aperçu et e-mail de test"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:620
+msgid "L’aperçu et le test utilisent les réglages enregistrés : enregistrez vos modifications avant."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:626
+msgid "rendu natif"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:632
+msgid "Commande utilisée comme jeu de données"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:635
+msgid "Aucune commande sur ce site"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:655
+msgid "Destinataire du test"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:659
+msgid "Prévisualiser"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:660
+msgid "Envoyer un e-mail de test"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:663
+msgid "Aperçu de l’e-mail"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:667
+msgid "Import / export"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:670
+msgid "Exporter les réglages (JSON)"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:674
+msgid "Importer"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:677
+msgid "L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:707
+msgid "Choisir le logo"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:708
+msgid "Utiliser cette image"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:709
+msgid "Génération de l’aperçu…"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:710
+msgid "Envoi en cours…"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:711
+msgid "Import en cours…"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:712
+msgid "Une erreur est survenue."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:713
+msgid "Choisissez un fichier JSON."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:714
+msgid "Remplacer tous les réglages de mise en forme par ceux du fichier ?"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:727
+msgid "Réglages"
+msgstr ""
+
+#: src/Settings/ImportExport.php:42 src/Settings/ImportExport.php:61 src/Admin/Preview.php:38 src/Admin/TestEmail.php:41
+msgid "Accès refusé."
+msgstr ""
+
+#: src/Settings/ImportExport.php:70
+msgid "Import refusé :"
+msgstr ""
+
+#: src/Settings/ImportExport.php:75
+msgid "Réglages importés."
+msgstr ""
+
+#: src/Settings/ImportExport.php:125
+msgid "Fichier vide."
+msgstr ""
+
+#: src/Settings/ImportExport.php:128
+msgid "Fichier trop volumineux."
+msgstr ""
+
+#: src/Settings/ImportExport.php:133
+msgid "JSON invalide."
+msgstr ""
+
+#: src/Settings/ImportExport.php:136
+msgid "Ce fichier n’est pas un export BB Woo Mail Layout."
+msgstr ""
+
+#. translators: %s: liste de clés.
+#: src/Settings/ImportExport.php:144
+msgid "Clés inconnues : %s."
+msgstr ""
+
+#: src/Settings/ImportExport.php:147
+msgid "Version de schéma non prise en charge : mettez le plugin à jour sur ce site."
+msgstr ""
+
+#: src/Settings/ImportExport.php:150
+msgid "Section « settings » manquante."
+msgstr ""
+
+#. translators: %s: liste de clés.
+#: src/Settings/ImportExport.php:158
+msgid "Réglages inconnus : %s."
+msgstr ""
+
+#. translators: %s: clé de réglage.
+#: src/Settings/ImportExport.php:171
+msgid "Type invalide pour « %s »."
+msgstr ""
+
+#: src/Settings/LogoChecker.php:81
+msgid "Le site n’a pas pu se joindre lui-même pour vérifier le logo, mais le fichier existe bien sur le serveur."
+msgstr ""
+
+#. translators: %s: message d'erreur HTTP.
+#: src/Settings/LogoChecker.php:85
+msgid "Le logo est injoignable (%s). Les e-mails s’afficheront avec une image cassée."
+msgstr ""
+
+#. translators: %d: code HTTP.
+#: src/Settings/LogoChecker.php:92
+msgid "L’URL du logo répond %d au lieu de 200. Les e-mails s’afficheront avec une image cassée."
+msgstr ""
+
+#. translators: %s: type MIME.
+#: src/Settings/LogoChecker.php:99
+msgid "L’URL du logo ne renvoie pas une image (%s)."
+msgstr ""
+
+#: src/Settings/LogoChecker.php:104
+msgid "Logo vérifié : l’image répond correctement."
+msgstr ""
+
+#: src/Email/EmailRegistry.php:138
+msgid "Must-use plugin"
+msgstr ""
+
+#: src/Email/EmailRegistry.php:141
+msgid "Thème"
+msgstr ""
+
+#: src/Email/Placeholders.php:29
+msgid "Nom du site"
+msgstr ""
+
+#: src/Email/Placeholders.php:31
+msgid "Prénom du client"
+msgstr ""
+
+#: src/Email/Placeholders.php:32
+msgid "Nom du client"
+msgstr ""
+
+#: src/Email/Placeholders.php:33
+msgid "Numéro de commande"
+msgstr ""
+
+#: src/Email/Placeholders.php:34
+msgid "Date de commande"
+msgstr ""
+
+#: src/Email/Placeholders.php:35
+msgid "Total de la commande"
+msgstr ""
+
+#: src/Email/Placeholders.php:36
+msgid "Lien « Voir ma commande »"
+msgstr ""
+
+#: src/Email/Placeholders.php:37
+msgid "Lien de suivi du colis (si fourni par l’extension d’expédition)"
+msgstr ""
+
+#: src/Email/Placeholders.php:38
+msgid "E-mail de l’administrateur"
+msgstr ""
+
+#: src/Email/Placeholders.php:39
+msgid "Téléphone de la boutique"
+msgstr ""
+
+#: src/Email/Placeholders.php:82
+msgid "Voir la commande"
+msgstr ""
+
+#: src/Email/Placeholders.php:82
+msgid "Voir ma commande"
+msgstr ""
+
+#: src/Email/Placeholders.php:89
+msgid "Suivre mon colis"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:28
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande n° {order_number} a été partiellement remboursée. Le montant sera crédité sur votre moyen de paiement d’origine dans les prochains jours."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:33
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Le paiement de votre commande n° {order_number} du {order_date} n’a pas abouti. Vous pouvez le relancer à tout moment grâce au bouton ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:34
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Une commande a été créée pour vous sur {site_title}. Vous en trouverez le détail ci-dessous, ainsi qu’un lien pour la régler quand vous le souhaitez."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:52
+msgid ""
+"Vous avez reçu une nouvelle commande de {customer_first_name} {customer_last_name}.\n"
+"\n"
+"Commande n° {order_number} du {order_date}, d’un montant de {order_total}. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:53
+msgid "La commande n° {order_number} de {customer_first_name} {customer_last_name} a été annulée. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:54
+msgid "Le paiement de la commande n° {order_number} de {customer_first_name} {customer_last_name} a échoué. La commande est en attente de paiement. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:55
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Nous avons bien reçu votre commande n° {order_number}. Elle est en attente jusqu’à la confirmation de votre paiement. Vous en trouverez le récapitulatif ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:56
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Merci pour votre commande ! Nous avons bien reçu votre commande n° {order_number} et nous la préparons dès maintenant. Vous en trouverez le récapitulatif ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:57
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Bonne nouvelle : votre commande n° {order_number} est terminée. Si elle doit vous être livrée, elle est désormais en route. {tracking_url}\n"
+"\n"
+"Merci pour votre confiance !"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:58
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande n° {order_number} a été annulée. S’il s’agit d’une erreur, n’hésitez pas à nous contacter."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:59
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Le paiement de votre commande n° {order_number} n’a malheureusement pas abouti. Vous pouvez réessayer depuis votre espace client ou nous contacter si le problème persiste."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:60
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande n° {order_number} a été remboursée. Le montant sera crédité sur votre moyen de paiement d’origine dans les prochains jours."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:61
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Une note a été ajoutée à votre commande n° {order_number} :"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:62
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Voici le détail de votre commande n° {order_number} passée le {order_date}."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:63
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Merci d’avoir créé votre compte sur {site_title}. Depuis votre espace client, vous pouvez suivre vos commandes et gérer vos informations personnelles."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:64
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Nous avons reçu une demande de réinitialisation du mot de passe de votre compte sur {site_title}. Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet e-mail : votre mot de passe restera inchangé."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:75
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Vous trouverez ci-dessous les informations concernant : « {email_title} »."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:76
+msgid "Notification de la boutique {site_title} : « {email_title} »."
+msgstr ""
+
+#: src/Email/Simulator.php:51
+msgid "E-mail introuvable."
+msgstr ""
+
+#: src/Email/Simulator.php:57
+msgid "Commande introuvable."
+msgstr ""
+
+#: src/Email/Simulator.php:66
+msgid "Choisissez une commande pour cet e-mail."
+msgstr ""
+
+#: src/Email/Simulator.php:87
+msgid "Ceci est un exemple de note ajoutée à la commande par la boutique."
+msgstr ""
+
+#. translators: %s: version minimale de WooCommerce.
+#: src/Plugin.php:128
+msgid "BB Woo Mail Layout nécessite WooCommerce %s ou supérieur. Le plugin est inactif."
+msgstr ""
+
+#: src/Admin/Notices.php:59 src/Admin/Notices.php:76
+msgid "BB Woo Mail Layout :"
+msgstr ""
+
+#: src/Admin/Notices.php:62
+msgid "Corriger le logo"
+msgstr ""
+
+#. translators: %s: liste de plugins.
+#: src/Admin/Notices.php:80
+msgid "ces extensions modifient aussi les e-mails WooCommerce et peuvent entrer en conflit : %s. Désactivez-les après avoir reporté leurs réglages (voir la procédure de migration)."
+msgstr ""
+
+#: src/Admin/TestEmail.php:50
+msgid "Adresse destinataire invalide."
+msgstr ""
+
+#. translators: %s: sujet de l'e-mail.
+#: src/Admin/TestEmail.php:61
+msgid "[Test] %s"
+msgstr ""
+
+#. translators: %s: erreur renvoyée par wp_mail.
+#: src/Admin/TestEmail.php:75
+msgid "Échec de l’envoi : %s"
+msgstr ""
+
+#: src/Admin/TestEmail.php:76
+msgid "Échec de l’envoi (wp_mail a renvoyé false). Vérifiez la configuration SMTP."
+msgstr ""
+
+#. translators: 1: titre de l'e-mail, 2: destinataire.
+#: src/Admin/TestEmail.php:84
+msgid "E-mail « %1$s » envoyé à %2$s."
+msgstr ""
+
+#: templates/emails/customer-failed-order.php:22
+msgid "Réessayer le paiement"
+msgstr ""
+
+#: templates/emails/customer-invoice.php:22
+msgid "Payer cette commande"
+msgstr ""
+
+#: templates/emails/customer-new-account.php:20
+msgid "Votre identifiant :"
+msgstr ""
+
+#: templates/emails/customer-new-account.php:23
+msgid "Définir mon mot de passe"
+msgstr ""
+
+#: templates/emails/customer-new-account.php:26
+msgid "Accéder à mon compte"
+msgstr ""
+
+#: templates/emails/customer-reset-password.php:27
+msgid "Identifiant du compte :"
+msgstr ""
+
+#: templates/emails/customer-reset-password.php:29
+msgid "Réinitialiser mon mot de passe"
+msgstr ""
+
+#. translators: %s: numéro de commande.
+#: templates/emails/email-order-details.php:24
+msgid "Commande n° %s"
+msgstr ""
+
+#: templates/emails/email-order-details.php:46
+msgid "Produit"
+msgstr ""
+
+#: templates/emails/email-order-details.php:47
+msgid "Quantité"
+msgstr ""
+
+#: templates/emails/email-order-details.php:48
+msgid "Prix"
+msgstr ""
+
+#: templates/emails/email-order-details.php:84
+msgid "Note du client :"
+msgstr ""
+
+#: templates/emails/email-addresses.php:20
+msgid "Adresse de facturation"
+msgstr ""
+
+#: templates/emails/email-addresses.php:22
+msgid "Non renseignée"
+msgstr ""
+
+#: templates/emails/email-addresses.php:35
+msgid "Adresse de livraison"
+msgstr ""
+
+#: templates/emails/customer-note.php:24
+msgid "Pour rappel, voici le détail de votre commande :"
+msgstr ""
+
+#: layouts/classique/footer.php:26 layouts/sobre/footer.php:26
+msgid "Téléphone :"
+msgstr ""
+
+#: layouts/classique/footer.php:29 layouts/sobre/footer.php:29
+msgid "E-mail :"
+msgstr ""
+
+#: layouts/classique/footer.php:67 layouts/sobre/footer.php:67
+msgid "Se désinscrire"
+msgstr ""

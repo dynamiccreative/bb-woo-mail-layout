@@ -1,0 +1,13 @@
+<wpml-config>
+	<admin-texts>
+		<key name="bb_woo_mail_layout">
+			<key name="contact_hours" />
+			<key name="footer_legal_name" />
+			<key name="footer_address" />
+			<key name="footer_text" />
+			<key name="intros">
+				<key name="*" />
+			</key>
+		</key>
+	</admin-texts>
+</wpml-config>
