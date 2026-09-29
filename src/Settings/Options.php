@@ -182,6 +182,29 @@ final class Options {
 	}
 
 	/**
+	 * Réglages complets à partir de l'état d'un formulaire non enregistré (aperçu, e-mail de test).
+	 *
+	 * Comme à l'enregistrement : une case décochée n'est pas postée (« no »), un sélecteur de produits
+	 * vide non plus ; les autres clés absentes gardent leur valeur enregistrée.
+	 *
+	 * @param array<string, mixed> $raw Valeurs brutes postées (déjà déslashées).
+	 * @return array<string, mixed>
+	 */
+	public static function draft( array $raw ): array {
+		$draft = self::all();
+		foreach ( self::schema() as $key => $type ) {
+			if ( array_key_exists( $key, $raw ) ) {
+				$draft[ $key ] = self::sanitize_field( $key, $raw[ $key ] );
+			} elseif ( 'bool' === $type ) {
+				$draft[ $key ] = 'no';
+			} elseif ( 'ids' === $type ) {
+				$draft[ $key ] = array();
+			}
+		}
+		return $draft;
+	}
+
+	/**
 	 * Assainit une valeur d'après sa clé. Utilisé par la page de réglages et l'import.
 	 *
 	 * @param string $key Clé du schéma.

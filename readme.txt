@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.1.2
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ BB Woo Mail Layout remplace l'en-tête, le pied et le style de tous les e-mails 
 * Logo, couleurs, police, bloc « Besoin d'aide ? », réseaux sociaux, pied de page légal.
 * Textes d'introduction français rédigés pour chaque e-mail natif, modifiables, avec placeholders.
 * Activation e-mail par e-mail : un e-mail désactivé garde le rendu WooCommerce natif.
-* Aperçu et e-mail de test avec une commande réelle, via le pipeline d'envoi de WooCommerce.
+* Aperçu en direct (600 px, ordinateur ou mobile) et e-mail de test avec une commande réelle, via le pipeline d'envoi de WooCommerce, sans avoir à enregistrer.
 * Import / export JSON des réglages pour dupliquer un site.
 * Contrôle du logo (alerte si l'image ne répond pas en 200).
 * Compatible HPOS, WPML et Polylang. Aucun appel externe, aucune télémétrie, aucun chargement en front.
@@ -50,6 +50,11 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.2.0 =
+* Nouvelle page de réglages : sous-onglets Apparence, Contenu, E-mails, Outils ; aperçu 600 px collant, mis à jour en direct.
+* L'aperçu et l'e-mail de test utilisent les réglages non encore enregistrés.
+* E-mails et textes d'introduction réunis dans une seule liste (filtres, recherche, activation groupée).
 
 = 1.1.2 =
 * Logo : hauteur maximale réglable (80 px par défaut), en plus de la largeur maximale.

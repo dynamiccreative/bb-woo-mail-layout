@@ -1,6 +1,7 @@
 <?php
 /**
  * Prévisualisation : rendu HTML d'un e-mail avec une commande réelle, affiché dans une iframe sandboxée.
+ * Les réglages du formulaire en cours (non enregistrés) sont pris en compte.
  *
  * @package BB\WooMailLayout
  */
@@ -47,6 +48,8 @@ final class Preview {
 		$email_id = Options::sanitize_email_id( isset( $_POST['email'] ) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '' );
 		$order_id = isset( $_POST['order'] ) ? absint( $_POST['order'] ) : 0;
 		// phpcs:enable
+
+		DraftSettings::apply_from_request();
 
 		$simulator = new Simulator( $this->registry );
 		try {

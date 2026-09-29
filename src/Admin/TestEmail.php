@@ -60,6 +60,8 @@ final class TestEmail {
 			wp_send_json_error( array( 'message' => __( 'Adresse destinataire invalide.', 'bb-woo-mail-layout' ) ) );
 		}
 
+		DraftSettings::apply_from_request();
+
 		$simulator = new Simulator( $this->registry );
 		add_action( 'wp_mail_failed', array( $this, 'capture_error' ) );
 

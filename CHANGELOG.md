@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0
+
+- **Nouvelle page de réglages** : sous-onglets Apparence, Contenu, E-mails, Outils au lieu de 12 sections empilées ; barre d'enregistrement fixe.
+- **Aperçu en direct** dans une colonne collante de 600 px (bascule ordinateur / mobile), mis à jour à chaque modification. L'aperçu et l'e-mail de test utilisent les réglages du formulaire **non encore enregistrés** (`Options::draft()`, court-circuit `pre_option_` limité à la requête AJAX, rien n'est écrit).
+- Layout choisi par vignette ; couleurs en nuancier (sélecteur + code hexadécimal) avec « Rétablir les couleurs par défaut ».
+- Chaque bloc (aide, réseaux, produits, pied de page) a son interrupteur et ses réglages au même endroit ; champs dépendants masqués (nom de Google Font, fond extérieur hors Classique).
+- E-mails et textes d'introduction réunis dans une seule liste : filtres Client / Administrateur, recherche, activation groupée, placeholders insérés d'un clic.
+- Confirmation d'import intégrée à la page.
+- Technique : l'interface est rendue par un seul champ `bb_wml_app` ; chaque clé de l'option reste un champ WooCommerce (`bb_wml_value`) enregistré et assaini comme avant.
+
 ## 1.1.2
 
 - Logo : **hauteur maximale réglable** (80 px par défaut, 20 à 300 px). Auparavant fixée à 80 px, elle l'emportait sur la largeur maximale pour les logos carrés ou verticaux.

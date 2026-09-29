@@ -2,6 +2,10 @@
 /**
  * Onglet « Mise en forme bleuebuzz » dans WooCommerce → Réglages → E-mails (Settings API WooCommerce).
  *
+ * L'interface (sous-onglets, cartes, aperçu en direct) est rendue d'un bloc par le champ `bb_wml_app`.
+ * Chaque réglage reste déclaré comme champ `bb_wml_value` (sans rendu) : WooCommerce l'enregistre
+ * et le fait passer par sanitize(), comme avant.
+ *
  * @package BB\WooMailLayout
  */
 
@@ -16,13 +20,16 @@ use BB\WooMailLayout\Email\Simulator;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Champs, rendu des champs personnalisés, assainissement.
+ * Champs, rendu de l'interface, assainissement.
  */
 final class SettingsPage {
 
 	public const SECTION = 'bb_mail_layout';
 
 	public const NONCE_ACTION = 'bb_wml_admin';
+
+	/** E-mail affiché par défaut dans l'aperçu. */
+	private const PREVIEW_EMAIL = 'customer_processing_order';
 
 	/**
 	 * Constructeur.
@@ -40,15 +47,11 @@ final class SettingsPage {
 		add_filter( 'woocommerce_admin_settings_sanitize_option_' . BB_WML_OPTION, array( $this, 'sanitize' ), 10, 3 );
 		add_action( 'woocommerce_update_options_email_' . self::SECTION, array( $this, 'after_save' ) );
 
-		add_action( 'woocommerce_admin_field_bb_wml_media', array( $this, 'field_media' ) );
-		add_action( 'woocommerce_admin_field_bb_wml_hidden', array( $this, 'field_hidden' ) );
-		add_action( 'woocommerce_admin_field_bb_wml_editor', array( $this, 'field_editor' ) );
-		add_action( 'woocommerce_admin_field_bb_wml_emails', array( $this, 'field_emails' ) );
-		add_action( 'woocommerce_admin_field_bb_wml_intros', array( $this, 'field_intros' ) );
-		add_action( 'woocommerce_admin_field_bb_wml_tools', array( $this, 'field_tools' ) );
-		add_action( 'woocommerce_admin_field_bb_wml_products', array( $this, 'field_products' ) );
+		add_action( 'woocommerce_admin_field_bb_wml_app', array( $this, 'render_app' ) );
+		add_action( 'woocommerce_admin_field_bb_wml_value', array( $this, 'field_value' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_filter( 'admin_body_class', array( $this, 'body_class' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( BB_WML_FILE ), array( $this, 'action_links' ) );
 	}
 
@@ -95,382 +98,25 @@ final class SettingsPage {
 	}
 
 	/**
-	 * Définition des champs (types WooCommerce standard + quelques types bb_wml_*).
+	 * Définition des champs : l'interface complète, puis un champ enregistrable par clé du schéma.
 	 *
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function fields(): array {
-		$d       = Options::defaults();
-		$layouts = array_map( static fn( $layout ) => $layout['label'], LayoutRenderer::available_layouts() );
-
 		$fields = array(
 			array(
-				'title' => __( 'Mise en forme bleuebuzz', 'bb-woo-mail-layout' ),
-				'type'  => 'title',
-				'desc'  => __( 'Layout appliqué aux e-mails WooCommerce. Les sujets et titres se règlent toujours dans chaque e-mail WooCommerce (onglet « Options e-mail »).', 'bb-woo-mail-layout' ),
-				'id'    => 'bb_wml_general',
-			),
-			array(
-				'title'   => __( 'Layout', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'layout' ),
-				'type'    => 'select',
-				'options' => $layouts,
-				'default' => $d['layout'],
-				'desc'    => __( 'Classique : fond clair et bandeau coloré. Sobre : tout blanc, filet de couleur. E-commerce : barre d’accent et photos produit dans le tableau de commande.', 'bb-woo-mail-layout' ),
-			),
-			array(
-				'type' => 'sectionend',
-				'id'   => 'bb_wml_general',
-			),
-
-			array(
-				'title' => __( 'Logo', 'bb-woo-mail-layout' ),
-				'type'  => 'title',
-				'id'    => 'bb_wml_logo',
-			),
-			array(
-				'title'   => __( 'Bandeau logo', 'bb-woo-mail-layout' ),
-				'desc'    => __( 'Afficher le logo en tête d’e-mail (lien vers la boutique)', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'show_logo' ),
-				'type'    => 'checkbox',
-				'default' => $d['show_logo'],
-			),
-			array(
-				'title' => __( 'Image', 'bb-woo-mail-layout' ),
-				'desc'  => __( 'Image de la médiathèque de ce site (PNG ou JPG).', 'bb-woo-mail-layout' ),
-				'id'    => self::id( 'logo_url' ),
-				'type'  => 'bb_wml_media',
-			),
-			array(
-				'id'   => self::id( 'logo_id' ),
-				'type' => 'bb_wml_hidden',
-			),
-			array(
-				'title'             => __( 'Largeur maximale (px)', 'bb-woo-mail-layout' ),
-				'id'                => self::id( 'logo_max_width' ),
-				'type'              => 'number',
-				'default'           => $d['logo_max_width'],
-				'css'               => 'width:90px;',
-				'custom_attributes' => array(
-					'min'  => 50,
-					'max'  => 600,
-					'step' => 10,
-				),
-			),
-			array(
-				'title'             => __( 'Hauteur maximale (px)', 'bb-woo-mail-layout' ),
-				'desc'              => __( 'La plus contraignante des deux limites l’emporte : un logo carré de 200 px de large avec 80 px de haut maximum s’affiche en 80 × 80 px. Le logo n’est jamais agrandi au-delà de sa taille réelle.', 'bb-woo-mail-layout' ),
-				'id'                => self::id( 'logo_max_height' ),
-				'type'              => 'number',
-				'default'           => $d['logo_max_height'],
-				'css'               => 'width:90px;',
-				'custom_attributes' => array(
-					'min'  => 20,
-					'max'  => 300,
-					'step' => 5,
-				),
-			),
-			array(
-				'type' => 'sectionend',
-				'id'   => 'bb_wml_logo',
-			),
-
-			array(
-				'title' => __( 'Couleurs et police', 'bb-woo-mail-layout' ),
-				'type'  => 'title',
-				'id'    => 'bb_wml_style',
-			),
-			array(
-				'title'   => __( 'Couleur principale', 'bb-woo-mail-layout' ),
-				'desc'    => __( 'Bandeau, titres, liens.', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'color_primary' ),
-				'type'    => 'color',
-				'css'     => 'width:6em;',
-				'default' => $d['color_primary'],
-			),
-			array(
-				'title'   => __( 'Couleur des boutons', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'color_button' ),
-				'type'    => 'color',
-				'css'     => 'width:6em;',
-				'default' => $d['color_button'],
-			),
-			array(
-				'title'   => __( 'Couleur du texte', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'color_text' ),
-				'type'    => 'color',
-				'css'     => 'width:6em;',
-				'default' => $d['color_text'],
-			),
-			array(
-				'title'   => __( 'Couleur des bordures', 'bb-woo-mail-layout' ),
-				'desc'    => __( 'Tableau de commande, adresses, séparateurs. Vide : teinte calculée depuis la couleur du texte.', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'color_border' ),
-				'type'    => 'color',
-				'css'     => 'width:6em;',
-				'default' => '',
-			),
-			array(
-				'title'   => __( 'Couleur de fond extérieur', 'bb-woo-mail-layout' ),
-				'desc'    => __( 'Layout Classique uniquement.', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'color_background' ),
-				'type'    => 'color',
-				'css'     => 'width:6em;',
-				'default' => $d['color_background'],
-			),
-			array(
-				'title'   => __( 'Police', 'bb-woo-mail-layout' ),
-				'id'      => self::id( 'font' ),
-				'type'    => 'select',
-				'default' => $d['font'],
-				'options' => array(
-					'arial'     => 'Arial',
-					'helvetica' => 'Helvetica',
-					'georgia'   => 'Georgia',
-					'verdana'   => 'Verdana',
-					'trebuchet' => 'Trebuchet MS',
-					'google'    => __( 'Google Font (repli sur Arial)', 'bb-woo-mail-layout' ),
-				),
-			),
-			array(
-				'title'       => __( 'Nom de la Google Font', 'bb-woo-mail-layout' ),
-				'desc'        => __( 'Ex. : Montserrat. Affichée par Apple Mail et iOS ; Gmail et Outlook affichent la police de repli.', 'bb-woo-mail-layout' ),
-				'id'          => self::id( 'google_font' ),
-				'type'        => 'text',
-				'placeholder' => 'Montserrat',
-				'default'     => '',
-			),
-			array(
-				'type' => 'sectionend',
-				'id'   => 'bb_wml_style',
-			),
-
-			array(
-				'title' => __( 'Blocs affichés', 'bb-woo-mail-layout' ),
-				'type'  => 'title',
-				'id'    => 'bb_wml_blocks',
-			),
-			array(
-				'title'         => __( 'Blocs', 'bb-woo-mail-layout' ),
-				'desc'          => __( 'Paragraphe d’introduction', 'bb-woo-mail-layout' ),
-				'id'            => self::id( 'show_intro' ),
-				'type'          => 'checkbox',
-				'default'       => 'yes',
-				'checkboxgroup' => 'start',
-			),
-			array(
-				'desc'          => __( 'Bloc « Besoin d’aide ? »', 'bb-woo-mail-layout' ),
-				'id'            => self::id( 'show_help' ),
-				'type'          => 'checkbox',
-				'default'       => 'yes',
-				'checkboxgroup' => '',
-			),
-			array(
-				'desc'          => __( 'Réseaux sociaux', 'bb-woo-mail-layout' ),
-				'id'            => self::id( 'show_social' ),
-				'type'          => 'checkbox',
-				'default'       => 'yes',
-				'checkboxgroup' => '',
-			),
-			array(
-				'desc'          => __( 'Pied de page', 'bb-woo-mail-layout' ),
-				'id'            => self::id( 'show_footer' ),
-				'type'          => 'checkbox',
-				'default'       => 'yes',
-				'checkboxgroup' => 'end',
-			),
-			array(
-				'type' => 'sectionend',
-				'id'   => 'bb_wml_blocks',
-			),
-
-			array(
-				'title' => __( 'Besoin d’aide ?', 'bb-woo-mail-layout' ),
-				'type'  => 'title',
-				'desc'  => __( 'Le bloc n’apparaît que si au moins une information est renseignée.', 'bb-woo-mail-layout' ),
-				'id'    => 'bb_wml_help',
-			),
-			array(
-				'title' => __( 'Téléphone', 'bb-woo-mail-layout' ),
-				'id'    => self::id( 'contact_phone' ),
-				'type'  => 'text',
-			),
-			array(
-				'title' => __( 'E-mail', 'bb-woo-mail-layout' ),
-				'id'    => self::id( 'contact_email' ),
-				'type'  => 'email',
-			),
-			array(
-				'title'       => __( 'Horaires', 'bb-woo-mail-layout' ),
-				'id'          => self::id( 'contact_hours' ),
-				'type'        => 'text',
-				'placeholder' => __( 'Du lundi au vendredi, de 9 h à 18 h', 'bb-woo-mail-layout' ),
-			),
-			array(
-				'type' => 'sectionend',
-				'id'   => 'bb_wml_help',
-			),
-
-			array(
-				'title' => __( 'Réseaux sociaux', 'bb-woo-mail-layout' ),
-				'type'  => 'title',
-				'desc'  => __( 'Seuls les réseaux dont l’URL est renseignée sont affichés.', 'bb-woo-mail-layout' ),
-				'id'    => 'bb_wml_social',
+				'id'        => 'bb_wml_app',
+				'type'      => 'bb_wml_app',
+				'is_option' => false,
 			),
 		);
-
-		foreach ( array(
-			'facebook'  => 'Facebook',
-			'instagram' => 'Instagram',
-			'linkedin'  => 'LinkedIn',
-			'tiktok'    => 'TikTok',
-			'youtube'   => 'YouTube',
-		) as $network => $label ) {
+		foreach ( array_keys( Options::schema() ) as $key ) {
 			$fields[] = array(
-				'title'       => $label,
-				'id'          => self::id( 'social_' . $network ),
-				'type'        => 'url',
-				'placeholder' => 'https://',
-				'css'         => 'width:25em;',
+				'id'   => self::id( $key ),
+				'type' => 'bb_wml_value',
 			);
 		}
-
-		return array_merge(
-			$fields,
-			array(
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_social',
-				),
-
-				array(
-					'title' => __( 'Pied de page', 'bb-woo-mail-layout' ),
-					'type'  => 'title',
-					'id'    => 'bb_wml_footer',
-				),
-				array(
-					'title' => __( 'Nom légal', 'bb-woo-mail-layout' ),
-					'id'    => self::id( 'footer_legal_name' ),
-					'type'  => 'text',
-				),
-				array(
-					'title' => __( 'Adresse', 'bb-woo-mail-layout' ),
-					'id'    => self::id( 'footer_address' ),
-					'type'  => 'textarea',
-					'css'   => 'width:25em;height:4.5em;',
-				),
-				array(
-					'title'   => __( 'Lien vers le site', 'bb-woo-mail-layout' ),
-					'desc'    => __( 'Afficher le lien vers la boutique', 'bb-woo-mail-layout' ),
-					'id'      => self::id( 'footer_show_site_link' ),
-					'type'    => 'checkbox',
-					'default' => 'yes',
-				),
-				array(
-					'title' => __( 'Mentions', 'bb-woo-mail-layout' ),
-					'desc'  => __( 'Gras, lien et saut de ligne uniquement. Placeholders autorisés.', 'bb-woo-mail-layout' ),
-					'id'    => self::id( 'footer_text' ),
-					'type'  => 'bb_wml_editor',
-				),
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_footer',
-				),
-
-				array(
-					'title' => __( 'Produits mis en avant', 'bb-woo-mail-layout' ),
-					'type'  => 'title',
-					'desc'  => __( 'Jusqu’à 3 produits (photo, titre, prix) affichés sous la commande, dans les e-mails envoyés au client.', 'bb-woo-mail-layout' ),
-					'id'    => 'bb_wml_featured',
-				),
-				array(
-					'title'   => __( 'Bloc produits', 'bb-woo-mail-layout' ),
-					'desc'    => __( 'Afficher les produits mis en avant', 'bb-woo-mail-layout' ),
-					'id'      => self::id( 'show_featured' ),
-					'type'    => 'checkbox',
-					'default' => 'no',
-				),
-				array(
-					'title'       => __( 'Titre du bloc', 'bb-woo-mail-layout' ),
-					'id'          => self::id( 'featured_title' ),
-					'type'        => 'text',
-					'placeholder' => __( 'Vous aimerez aussi', 'bb-woo-mail-layout' ),
-				),
-				array(
-					'title' => __( 'Produits', 'bb-woo-mail-layout' ),
-					'desc'  => __( '3 produits maximum. Les produits non publiés ou masqués du catalogue sont ignorés.', 'bb-woo-mail-layout' ),
-					'id'    => self::id( 'featured_products' ),
-					'type'  => 'bb_wml_products',
-				),
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_featured',
-				),
-
-				array(
-					'title' => __( 'CSS personnalisé', 'bb-woo-mail-layout' ),
-					'type'  => 'title',
-					'desc'  => __( 'Ajouté après le CSS du layout (il l’emporte). Jetons disponibles : {{primary}}, {{button}}, {{text}}, {{muted}}, {{border}}, {{soft}}, {{background}}, {{font}}. Balises, @import et scripts sont retirés.', 'bb-woo-mail-layout' ),
-					'id'    => 'bb_wml_css',
-				),
-				array(
-					'title'       => __( 'CSS', 'bb-woo-mail-layout' ),
-					'id'          => self::id( 'custom_css' ),
-					'type'        => 'textarea',
-					'css'         => 'width:100%;max-width:720px;height:12em;font-family:Consolas,Monaco,monospace;',
-					'placeholder' => ".bb-heading { letter-spacing: .5px; }\n.bb-featured-price { color: {{button}}; }",
-				),
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_css',
-				),
-
-				array(
-					'title' => __( 'E-mails mis en forme', 'bb-woo-mail-layout' ),
-					'type'  => 'title',
-					'desc'  => __( 'Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail décoché garde le rendu WooCommerce natif.', 'bb-woo-mail-layout' ),
-					'id'    => 'bb_wml_emails',
-				),
-				array(
-					'id'   => self::id( 'emails' ),
-					'type' => 'bb_wml_emails',
-				),
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_emails',
-				),
-
-				array(
-					'title' => __( 'Textes d’introduction', 'bb-woo-mail-layout' ),
-					'type'  => 'title',
-					'desc'  => __( 'Laisser vide pour utiliser le texte par défaut (affiché en gris). Une ligne vide sépare deux paragraphes.', 'bb-woo-mail-layout' ),
-					'id'    => 'bb_wml_intros',
-				),
-				array(
-					'id'   => self::id( 'intros' ),
-					'type' => 'bb_wml_intros',
-				),
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_intros',
-				),
-
-				array(
-					'title' => __( 'Prévisualisation, test, import / export', 'bb-woo-mail-layout' ),
-					'type'  => 'title',
-					'id'    => 'bb_wml_tools',
-				),
-				array(
-					'id'        => 'bb_wml_tools',
-					'type'      => 'bb_wml_tools',
-					'is_option' => false,
-				),
-				array(
-					'type' => 'sectionend',
-					'id'   => 'bb_wml_tools',
-				),
-			)
-		);
+		return $fields;
 	}
 
 	/**
@@ -527,265 +173,652 @@ final class SettingsPage {
 
 	/*
 	 * ------------------------------------------------------------------
-	 * Champs personnalisés
+	 * Interface
 	 * ------------------------------------------------------------------
 	 */
 
 	/**
-	 * Sélecteur de logo (médiathèque).
-	 *
-	 * @param array<string,mixed> $field Champ.
+	 * Champ enregistrable : rendu par render_app(), rien à afficher ici.
 	 */
-	public function field_media( $field ): void {
-		$url    = (string) Options::get( 'logo_url' );
-		$id     = (int) Options::get( 'logo_id' );
-		$status = LogoChecker::status();
-		?>
-		<tr valign="top">
-			<th scope="row" class="titledesc"><label for="bb-wml-logo-url"><?php echo esc_html( $field['title'] ); ?></label></th>
-			<td class="forminp">
-				<div class="bb-wml-media">
-					<img class="bb-wml-media__preview" src="<?php echo esc_url( $url ); ?>" alt="" <?php echo '' === $url ? 'hidden' : ''; ?>>
-					<input type="url" id="bb-wml-logo-url" class="regular-text" name="<?php echo esc_attr( self::id( 'logo_url' ) ); ?>" value="<?php echo esc_attr( $url ); ?>">
-					<input type="hidden" id="bb-wml-logo-id" name="<?php echo esc_attr( self::id( 'logo_id' ) ); ?>" value="<?php echo (int) $id; ?>">
-					<button type="button" class="button bb-wml-media__choose"><?php esc_html_e( 'Choisir une image', 'bb-woo-mail-layout' ); ?></button>
-					<button type="button" class="button-link bb-wml-media__remove"><?php esc_html_e( 'Retirer', 'bb-woo-mail-layout' ); ?></button>
-				</div>
-				<p class="description"><?php echo esc_html( $field['desc'] ?? '' ); ?></p>
-				<?php if ( $status && '' !== $url && $status['url'] === $url ) : ?>
-					<p class="bb-wml-logo-status is-<?php echo esc_attr( $status['state'] ); ?>"><?php echo esc_html( $status['message'] ); ?></p>
-				<?php endif; ?>
-			</td>
-		</tr>
-		<?php
-	}
+	public function field_value(): void {}
 
 	/**
-	 * Champ logo_id : l'input caché est rendu par field_media(), rien à afficher ici.
+	 * Interface complète de l'onglet.
 	 */
-	public function field_hidden(): void {}
+	public function render_app(): void {
+		// Le bouton d'enregistrement est dans notre barre fixe ; WooCommerce garde son nonce.
+		$GLOBALS['hide_save_button'] = true; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- drapeau de WooCommerce.
 
-	/**
-	 * Sélecteur de produits (recherche WooCommerce), 3 maximum.
-	 *
-	 * @param array<string,mixed> $field Champ.
-	 */
-	public function field_products( $field ): void {
-		$ids = (array) Options::get( 'featured_products' );
+		$settings = Options::all();
+		$orders   = ( new Simulator( $this->registry ) )->recent_orders( 20 );
+		$emails   = $this->registry->all();
+		$status   = LogoChecker::status();
+		$layouts  = LayoutRenderer::available_layouts();
 		?>
-		<tr valign="top">
-			<th scope="row" class="titledesc"><label for="bb-wml-featured-products"><?php echo esc_html( $field['title'] ); ?></label></th>
-			<td class="forminp">
-				<select id="bb-wml-featured-products" class="wc-product-search" multiple="multiple" style="width:50%;min-width:320px;"
-					name="<?php echo esc_attr( self::id( 'featured_products' ) ); ?>[]"
-					data-placeholder="<?php esc_attr_e( 'Rechercher un produit…', 'bb-woo-mail-layout' ); ?>"
-					data-action="woocommerce_json_search_products_and_variations"
-					data-maximum-selection-length="<?php echo (int) Options::MAX_FEATURED; ?>">
-					<?php foreach ( $ids as $id ) : ?>
-						<?php $product = wc_get_product( (int) $id ); ?>
-						<?php if ( $product ) : ?>
-							<option value="<?php echo (int) $id; ?>" selected="selected"><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
-						<?php endif; ?>
-					<?php endforeach; ?>
-				</select>
-				<p class="description"><?php echo esc_html( $field['desc'] ?? '' ); ?></p>
-			</td>
-		</tr>
-		<?php
-	}
-
-	/**
-	 * Éditeur restreint du pied de page (gras, lien).
-	 *
-	 * @param array<string,mixed> $field Champ.
-	 */
-	public function field_editor( $field ): void {
-		?>
-		<tr valign="top">
-			<th scope="row" class="titledesc"><label for="bb_wml_footer_text"><?php echo esc_html( $field['title'] ); ?></label></th>
-			<td class="forminp bb-wml-editor">
-				<?php
-				wp_editor(
-					(string) Options::get( 'footer_text' ),
-					'bb_wml_footer_text',
-					array(
-						'textarea_name' => self::id( 'footer_text' ),
-						'textarea_rows' => 4,
-						'media_buttons' => false,
-						'teeny'         => false,
-						'quicktags'     => array( 'buttons' => 'strong,link' ),
-						'tinymce'       => array(
-							'toolbar1'       => 'bold,link,unlink',
-							'toolbar2'       => '',
-							'valid_elements' => 'strong/b,em,br,p,a[href|title|target|rel]',
-						),
-					)
-				);
-				?>
-				<p class="description"><?php echo esc_html( $field['desc'] ?? '' ); ?></p>
-			</td>
-		</tr>
-		<?php
-	}
-
-	/**
-	 * Tableau d'activation par e-mail.
-	 */
-	public function field_emails(): void {
-		$name = self::id( 'emails' );
-		?>
-		<tr valign="top">
-			<td class="forminp" colspan="2" style="padding-left:0;">
-				<table class="widefat striped bb-wml-emails">
-					<thead>
-						<tr>
-							<th class="check-column"><span class="screen-reader-text"><?php esc_html_e( 'Actif', 'bb-woo-mail-layout' ); ?></span></th>
-							<th><?php esc_html_e( 'E-mail', 'bb-woo-mail-layout' ); ?></th>
-							<th><?php esc_html_e( 'ID', 'bb-woo-mail-layout' ); ?></th>
-							<th><?php esc_html_e( 'Destinataire', 'bb-woo-mail-layout' ); ?></th>
-							<th><?php esc_html_e( 'Source', 'bb-woo-mail-layout' ); ?></th>
-							<th><?php esc_html_e( 'Statut', 'bb-woo-mail-layout' ); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $this->registry->all() as $id => $email ) : ?>
-							<?php $enabled = $this->registry->is_enabled( $id ); ?>
-							<tr>
-								<th class="check-column">
-									<input type="hidden" name="<?php echo esc_attr( $name . '[' . $id . ']' ); ?>" value="no">
-									<input type="checkbox" id="bb-wml-email-<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name . '[' . $id . ']' ); ?>" value="yes" <?php checked( $enabled ); ?>>
-								</th>
-								<td>
-									<label for="bb-wml-email-<?php echo esc_attr( $id ); ?>"><strong><?php echo esc_html( $email['title'] ); ?></strong></label>
-									<br><a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=email&section=' . strtolower( $email['class'] ) ) ); ?>"><?php esc_html_e( 'Sujet et titre', 'bb-woo-mail-layout' ); ?></a>
-								</td>
-								<td><code><?php echo esc_html( $id ); ?></code></td>
-								<td><?php echo $email['customer'] ? esc_html__( 'Client', 'bb-woo-mail-layout' ) : esc_html__( 'Administrateur', 'bb-woo-mail-layout' ); ?></td>
-								<td><?php echo esc_html( '' !== $email['source'] ? $email['source'] : '—' ); ?></td>
-								<td>
-									<?php if ( $enabled ) : ?>
-										<span class="bb-wml-badge is-on"><?php esc_html_e( 'Layout bleuebuzz', 'bb-woo-mail-layout' ); ?></span>
-									<?php else : ?>
-										<span class="bb-wml-badge"><?php esc_html_e( 'Rendu WooCommerce', 'bb-woo-mail-layout' ); ?></span>
-									<?php endif; ?>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-		<?php
-	}
-
-	/**
-	 * Textes d'introduction par e-mail.
-	 */
-	public function field_intros(): void {
-		$name     = self::id( 'intros' );
-		$intros   = (array) Options::get( 'intros' );
-		$texts    = new DefaultTexts();
-		$defaults = $texts->by_id();
-		?>
-		<tr valign="top">
-			<td class="forminp" colspan="2" style="padding-left:0;">
-				<p class="bb-wml-placeholders">
-					<?php esc_html_e( 'Placeholders :', 'bb-woo-mail-layout' ); ?>
-					<?php foreach ( Placeholders::documented() as $placeholder => $label ) : ?>
-						<code title="<?php echo esc_attr( $label ); ?>"><?php echo esc_html( $placeholder ); ?></code>
-					<?php endforeach; ?>
-				</p>
-				<table class="widefat striped bb-wml-intros">
-					<tbody>
-						<?php foreach ( $this->registry->all() as $id => $email ) : ?>
-							<tr>
-								<th scope="row">
-									<label for="bb-wml-intro-<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $email['title'] ); ?></label>
-									<br><code><?php echo esc_html( $id ); ?></code>
-								</th>
-								<td>
-									<textarea id="bb-wml-intro-<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name . '[' . $id . ']' ); ?>" rows="3" class="large-text" placeholder="<?php echo esc_attr( $defaults[ $id ] ?? $texts->generic( $email['customer'] ) ); ?>"><?php echo esc_textarea( (string) ( $intros[ $id ] ?? '' ) ); ?></textarea>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-		<?php
-	}
-
-	/**
-	 * Prévisualisation, envoi de test, import / export.
-	 * Les champs n'ont pas d'attribut name : ils ne sont pas soumis avec le formulaire WooCommerce.
-	 */
-	public function field_tools(): void {
-		$simulator = new Simulator( $this->registry );
-		$orders    = $simulator->recent_orders( 20 );
-		?>
-		<tr valign="top">
-			<th scope="row" class="titledesc"><?php esc_html_e( 'Aperçu et e-mail de test', 'bb-woo-mail-layout' ); ?></th>
-			<td class="forminp bb-wml-tools">
-				<p class="description"><?php esc_html_e( 'L’aperçu et le test utilisent les réglages enregistrés : enregistrez vos modifications avant.', 'bb-woo-mail-layout' ); ?></p>
-				<p>
-					<label for="bb-wml-tool-email"><?php esc_html_e( 'E-mail', 'bb-woo-mail-layout' ); ?></label><br>
-					<select id="bb-wml-tool-email">
-						<?php foreach ( $this->registry->all() as $id => $email ) : ?>
-							<option value="<?php echo esc_attr( $id ); ?>" <?php selected( 'customer_processing_order', $id ); ?>>
-								<?php echo esc_html( $email['title'] . ( $this->registry->is_enabled( $id ) ? '' : ' — ' . __( 'rendu natif', 'bb-woo-mail-layout' ) ) ); ?>
-							</option>
-						<?php endforeach; ?>
-					</select>
-				</p>
-				<p>
-					<label for="bb-wml-tool-order"><?php esc_html_e( 'Commande utilisée comme jeu de données', 'bb-woo-mail-layout' ); ?></label><br>
-					<select id="bb-wml-tool-order">
-						<?php if ( ! $orders ) : ?>
-							<option value="0"><?php esc_html_e( 'Aucune commande sur ce site', 'bb-woo-mail-layout' ); ?></option>
-						<?php endif; ?>
-						<?php foreach ( $orders as $order ) : ?>
-							<option value="<?php echo (int) $order->get_id(); ?>">
+		<div class="bb-wml" id="bb-wml">
+			<div class="bb-wml-head">
+				<div>
+					<h2><?php esc_html_e( 'Mise en forme bleuebuzz', 'bb-woo-mail-layout' ); ?></h2>
+					<div class="bb-wml-chips">
+						<span class="bb-wml-chip"><?php esc_html_e( 'Layout', 'bb-woo-mail-layout' ); ?> <b id="bb-wml-sum-layout"><?php echo esc_html( $layouts[ $settings['layout'] ]['label'] ?? '' ); ?></b></span>
+						<span class="bb-wml-chip"><b id="bb-wml-sum-mails"></b> <?php esc_html_e( 'e-mails mis en forme', 'bb-woo-mail-layout' ); ?></span>
+						<?php if ( $status && '' !== $settings['logo_url'] && $status['url'] === $settings['logo_url'] ) : ?>
+							<span class="bb-wml-chip is-<?php echo esc_attr( $status['state'] ); ?>" title="<?php echo esc_attr( $status['message'] ); ?>">
+								<span class="bb-wml-dot"></span>
 								<?php
 								echo esc_html(
-									sprintf(
-										'#%1$s — %2$s — %3$s — %4$s',
-										$order->get_order_number(),
-										$order->get_formatted_billing_full_name(),
-										$order->get_date_created() ? wc_format_datetime( $order->get_date_created() ) : '',
-										wc_get_order_status_name( $order->get_status() )
-									)
+									'ok' === $status['state'] ? __( 'Logo vérifié', 'bb-woo-mail-layout' )
+										: ( 'error' === $status['state'] ? __( 'Logo inaccessible', 'bb-woo-mail-layout' ) : __( 'Logo non vérifié', 'bb-woo-mail-layout' ) )
 								);
 								?>
-							</option>
+							</span>
+						<?php endif; ?>
+					</div>
+				</div>
+				<button type="button" class="button" data-bb-goto="outils"><?php esc_html_e( 'Envoyer un e-mail de test', 'bb-woo-mail-layout' ); ?></button>
+			</div>
+
+			<div class="bb-wml-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Sections', 'bb-woo-mail-layout' ); ?>">
+				<?php
+				foreach ( array(
+					'apparence' => __( 'Apparence', 'bb-woo-mail-layout' ),
+					'contenu'   => __( 'Contenu', 'bb-woo-mail-layout' ),
+					'emails'    => __( 'E-mails', 'bb-woo-mail-layout' ),
+					'outils'    => __( 'Outils', 'bb-woo-mail-layout' ),
+				) as $tab => $label ) :
+					?>
+					<button type="button" class="bb-wml-tab" role="tab" id="bb-wml-tab-<?php echo esc_attr( $tab ); ?>" aria-controls="bb-wml-panel-<?php echo esc_attr( $tab ); ?>" aria-selected="<?php echo 'apparence' === $tab ? 'true' : 'false'; ?>" data-bb-tab="<?php echo esc_attr( $tab ); ?>">
+						<?php echo esc_html( $label ); ?>
+						<?php if ( 'emails' === $tab ) : ?>
+							<span class="bb-wml-count"><?php echo (int) count( $emails ); ?></span>
+						<?php endif; ?>
+					</button>
+				<?php endforeach; ?>
+			</div>
+
+			<div class="bb-wml-work">
+				<div class="bb-wml-panels">
+					<?php
+					$this->panel_appearance( $settings, $layouts, $status );
+					$this->panel_content( $settings );
+					$this->panel_emails( $settings, $emails );
+					$this->panel_tools( $emails, $orders );
+					?>
+				</div>
+				<?php $this->preview( $emails, $orders ); ?>
+			</div>
+
+			<div class="bb-wml-savebar submit">
+				<span class="bb-wml-savebar__state" id="bb-wml-dirty" hidden><?php esc_html_e( 'Modifications non enregistrées', 'bb-woo-mail-layout' ); ?></span>
+				<button type="submit" name="save" class="button button-primary button-large" value="<?php esc_attr_e( 'Enregistrer les modifications', 'bb-woo-mail-layout' ); ?>"><?php esc_html_e( 'Enregistrer les modifications', 'bb-woo-mail-layout' ); ?></button>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Onglet Apparence : layout, logo, couleurs, police.
+	 *
+	 * @param array<string,mixed>                                $settings Réglages.
+	 * @param array<string,array<string,mixed>>                  $layouts  Layouts disponibles.
+	 * @param array{url:string,state:string,message:string}|null $status Contrôle du logo.
+	 */
+	private function panel_appearance( array $settings, array $layouts, ?array $status ): void {
+		$descriptions = array(
+			'classique' => __( 'Fond clair, bandeau coloré sous le logo.', 'bb-woo-mail-layout' ),
+			'sobre'     => __( 'Tout blanc, simple filet de couleur.', 'bb-woo-mail-layout' ),
+			'ecommerce' => __( 'Barre d’accent, photos produit dans la commande.', 'bb-woo-mail-layout' ),
+		);
+		$logo_url     = (string) $settings['logo_url'];
+		?>
+		<section class="bb-wml-panel" id="bb-wml-panel-apparence" role="tabpanel" aria-labelledby="bb-wml-tab-apparence">
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'Layout', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Structure appliquée à tous les e-mails activés.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-card__body">
+					<div class="bb-wml-layouts" role="radiogroup" aria-label="<?php esc_attr_e( 'Layout', 'bb-woo-mail-layout' ); ?>">
+						<?php foreach ( $layouts as $slug => $layout ) : ?>
+							<label class="bb-wml-layout">
+								<input type="radio" name="<?php echo esc_attr( self::id( 'layout' ) ); ?>" value="<?php echo esc_attr( $slug ); ?>" data-label="<?php echo esc_attr( $layout['label'] ); ?>" <?php checked( $settings['layout'], $slug ); ?>>
+								<?php self::thumb( (string) $slug ); ?>
+								<strong><?php echo esc_html( $layout['label'] ); ?></strong>
+								<?php if ( isset( $descriptions[ $slug ] ) ) : ?>
+									<small><?php echo esc_html( $descriptions[ $slug ] ); ?></small>
+								<?php endif; ?>
+							</label>
 						<?php endforeach; ?>
-					</select>
-				</p>
-				<p>
-					<label for="bb-wml-tool-to"><?php esc_html_e( 'Destinataire du test', 'bb-woo-mail-layout' ); ?></label><br>
-					<input type="email" id="bb-wml-tool-to" class="regular-text" value="<?php echo esc_attr( (string) get_option( 'admin_email' ) ); ?>">
-				</p>
-				<p>
-					<button type="button" class="button" id="bb-wml-preview"><?php esc_html_e( 'Prévisualiser', 'bb-woo-mail-layout' ); ?></button>
-					<button type="button" class="button button-primary" id="bb-wml-send-test"><?php esc_html_e( 'Envoyer un e-mail de test', 'bb-woo-mail-layout' ); ?></button>
-					<span class="bb-wml-status" id="bb-wml-tools-status" role="status" aria-live="polite"></span>
-				</p>
-				<iframe id="bb-wml-preview-frame" class="bb-wml-preview-frame" sandbox="" title="<?php esc_attr_e( 'Aperçu de l’e-mail', 'bb-woo-mail-layout' ); ?>" hidden></iframe>
-			</td>
-		</tr>
-		<tr valign="top">
-			<th scope="row" class="titledesc"><?php esc_html_e( 'Import / export', 'bb-woo-mail-layout' ); ?></th>
-			<td class="forminp bb-wml-transfer">
-				<p>
-					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=' . ImportExport::EXPORT_ACTION ), ImportExport::EXPORT_ACTION ) ); ?>"><?php esc_html_e( 'Exporter les réglages (JSON)', 'bb-woo-mail-layout' ); ?></a>
-				</p>
-				<p>
-					<input type="file" id="bb-wml-import-file" accept="application/json,.json">
-					<button type="button" class="button" id="bb-wml-import"><?php esc_html_e( 'Importer', 'bb-woo-mail-layout' ); ?></button>
+					</div>
+				</div>
+			</div>
+
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head">
+					<div><h3><?php esc_html_e( 'Logo', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Affiché en tête d’e-mail, avec un lien vers la boutique.', 'bb-woo-mail-layout' ); ?></p></div>
+					<?php self::switch_input( 'show_logo', __( 'Afficher le logo', 'bb-woo-mail-layout' ), 'yes' === $settings['show_logo'] ); ?>
+				</div>
+				<div class="bb-wml-card__body" data-bb-show-if="show_logo">
+					<div class="bb-wml-media">
+						<div class="bb-wml-media__box">
+							<img class="bb-wml-media__preview" src="<?php echo esc_url( $logo_url ); ?>" alt="" <?php echo '' === $logo_url ? 'hidden' : ''; ?>>
+							<span class="bb-wml-media__empty" <?php echo '' === $logo_url ? '' : 'hidden'; ?>><?php esc_html_e( 'Aucun logo', 'bb-woo-mail-layout' ); ?></span>
+						</div>
+						<div class="bb-wml-media__actions">
+							<button type="button" class="button bb-wml-media__choose"><?php esc_html_e( 'Choisir une image', 'bb-woo-mail-layout' ); ?></button>
+							<button type="button" class="button-link bb-wml-media__remove"><?php esc_html_e( 'Retirer', 'bb-woo-mail-layout' ); ?></button>
+							<span class="bb-wml-hint"><?php esc_html_e( 'Image de la médiathèque de ce site (PNG ou JPG).', 'bb-woo-mail-layout' ); ?></span>
+						</div>
+					</div>
+					<div class="bb-wml-field">
+						<label for="bb-wml-logo-url"><?php esc_html_e( 'URL de l’image', 'bb-woo-mail-layout' ); ?></label>
+						<input type="url" id="bb-wml-logo-url" name="<?php echo esc_attr( self::id( 'logo_url' ) ); ?>" value="<?php echo esc_attr( $logo_url ); ?>">
+						<input type="hidden" id="bb-wml-logo-id" name="<?php echo esc_attr( self::id( 'logo_id' ) ); ?>" value="<?php echo (int) $settings['logo_id']; ?>">
+					</div>
+					<div class="bb-wml-row">
+						<div class="bb-wml-field">
+							<label for="bb-wml-logo-w"><?php esc_html_e( 'Largeur maximale', 'bb-woo-mail-layout' ); ?></label>
+							<div class="bb-wml-suffix"><input type="number" id="bb-wml-logo-w" name="<?php echo esc_attr( self::id( 'logo_max_width' ) ); ?>" value="<?php echo (int) $settings['logo_max_width']; ?>" min="50" max="600" step="10"><span>px</span></div>
+						</div>
+						<div class="bb-wml-field">
+							<label for="bb-wml-logo-h"><?php esc_html_e( 'Hauteur maximale', 'bb-woo-mail-layout' ); ?></label>
+							<div class="bb-wml-suffix"><input type="number" id="bb-wml-logo-h" name="<?php echo esc_attr( self::id( 'logo_max_height' ) ); ?>" value="<?php echo (int) $settings['logo_max_height']; ?>" min="20" max="300" step="5"><span>px</span></div>
+						</div>
+					</div>
+					<p class="bb-wml-hint">
+						<?php esc_html_e( 'La limite la plus contraignante l’emporte. Le logo n’est jamais agrandi au-delà de sa taille réelle.', 'bb-woo-mail-layout' ); ?>
+						<span id="bb-wml-logo-size"></span>
+					</p>
+					<?php if ( $status && '' !== $logo_url && $status['url'] === $logo_url ) : ?>
+						<p class="bb-wml-logo-status is-<?php echo esc_attr( $status['state'] ); ?>"><?php echo esc_html( $status['message'] ); ?></p>
+					<?php endif; ?>
+				</div>
+			</div>
+
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head">
+					<div><h3><?php esc_html_e( 'Couleurs', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Cliquez sur une pastille pour choisir, ou saisissez le code hexadécimal.', 'bb-woo-mail-layout' ); ?></p></div>
+					<button type="button" class="button-link" id="bb-wml-reset-colors"><?php esc_html_e( 'Rétablir les couleurs par défaut', 'bb-woo-mail-layout' ); ?></button>
+				</div>
+				<div class="bb-wml-card__body">
+					<div class="bb-wml-swatches">
+						<?php
+						self::swatch( 'color_primary', __( 'Principale', 'bb-woo-mail-layout' ), __( 'Bandeau, titres, liens', 'bb-woo-mail-layout' ), $settings );
+						self::swatch( 'color_button', __( 'Boutons', 'bb-woo-mail-layout' ), '', $settings );
+						self::swatch( 'color_text', __( 'Texte', 'bb-woo-mail-layout' ), '', $settings );
+						self::swatch( 'color_border', __( 'Bordures', 'bb-woo-mail-layout' ), __( 'Vide : teinte calculée depuis le texte', 'bb-woo-mail-layout' ), $settings );
+						self::swatch( 'color_background', __( 'Fond extérieur', 'bb-woo-mail-layout' ), __( 'Layout Classique uniquement', 'bb-woo-mail-layout' ), $settings );
+						?>
+					</div>
+				</div>
+			</div>
+
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'Police', 'bb-woo-mail-layout' ); ?></h3></div></div>
+				<div class="bb-wml-card__body">
+					<div class="bb-wml-row">
+						<div class="bb-wml-field">
+							<label for="bb-wml-font"><?php esc_html_e( 'Police du texte', 'bb-woo-mail-layout' ); ?></label>
+							<select id="bb-wml-font" name="<?php echo esc_attr( self::id( 'font' ) ); ?>">
+								<?php
+								foreach ( array(
+									'arial'     => 'Arial',
+									'helvetica' => 'Helvetica',
+									'georgia'   => 'Georgia',
+									'verdana'   => 'Verdana',
+									'trebuchet' => 'Trebuchet MS',
+									'google'    => __( 'Google Font (repli sur Arial)', 'bb-woo-mail-layout' ),
+								) as $value => $label ) :
+									?>
+									<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $settings['font'], $value ); ?>><?php echo esc_html( $label ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+						<div class="bb-wml-field" data-bb-show-if="font=google">
+							<label for="bb-wml-google-font"><?php esc_html_e( 'Nom de la Google Font', 'bb-woo-mail-layout' ); ?></label>
+							<input type="text" id="bb-wml-google-font" name="<?php echo esc_attr( self::id( 'google_font' ) ); ?>" value="<?php echo esc_attr( (string) $settings['google_font'] ); ?>" placeholder="Montserrat">
+							<p class="bb-wml-hint"><?php esc_html_e( 'Affichée par Apple Mail et iOS. Gmail et Outlook affichent la police de repli.', 'bb-woo-mail-layout' ); ?></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Onglet Contenu : blocs (interrupteur + réglages), CSS personnalisé.
+	 *
+	 * @param array<string,mixed> $settings Réglages.
+	 */
+	private function panel_content( array $settings ): void {
+		?>
+		<section class="bb-wml-panel" id="bb-wml-panel-contenu" role="tabpanel" aria-labelledby="bb-wml-tab-contenu" hidden>
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'Blocs de l’e-mail', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Activez un bloc pour le régler. Un bloc désactivé n’apparaît dans aucun e-mail.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-card__body is-flush">
+
+					<?php self::block_open( 'show_intro', __( 'Paragraphe d’introduction', 'bb-woo-mail-layout' ), __( 'Texte sous le titre, réglé e-mail par e-mail dans l’onglet E-mails.', 'bb-woo-mail-layout' ), $settings, false ); ?>
+						<button type="button" class="button-link" data-bb-goto="emails"><?php esc_html_e( 'Modifier les textes', 'bb-woo-mail-layout' ); ?></button>
+					</div></div>
+
+					<?php self::block_open( 'show_help', __( 'Besoin d’aide ?', 'bb-woo-mail-layout' ), __( 'Masqué automatiquement si aucune information n’est renseignée.', 'bb-woo-mail-layout' ), $settings ); ?>
+						<div class="bb-wml-row">
+							<?php self::text_field( 'contact_phone', __( 'Téléphone', 'bb-woo-mail-layout' ), $settings ); ?>
+							<?php self::text_field( 'contact_email', __( 'E-mail', 'bb-woo-mail-layout' ), $settings, 'email' ); ?>
+						</div>
+						<?php self::text_field( 'contact_hours', __( 'Horaires', 'bb-woo-mail-layout' ), $settings, 'text', __( 'Du lundi au vendredi, de 9 h à 18 h', 'bb-woo-mail-layout' ) ); ?>
+					</div></div>
+
+					<?php self::block_open( 'show_social', __( 'Réseaux sociaux', 'bb-woo-mail-layout' ), __( 'Seuls les réseaux dont l’URL est renseignée sont affichés.', 'bb-woo-mail-layout' ), $settings ); ?>
+						<div class="bb-wml-social">
+							<?php
+							foreach ( array(
+								'facebook'  => 'Facebook',
+								'instagram' => 'Instagram',
+								'linkedin'  => 'LinkedIn',
+								'tiktok'    => 'TikTok',
+								'youtube'   => 'YouTube',
+							) as $network => $label ) :
+								?>
+								<div class="bb-wml-social__row">
+									<label for="bb-wml-social-<?php echo esc_attr( $network ); ?>"><img src="<?php echo esc_url( BB_WML_URL . 'assets/icons/' . $network . '.png' ); ?>" alt="" width="20" height="20"><?php echo esc_html( $label ); ?></label>
+									<input type="url" id="bb-wml-social-<?php echo esc_attr( $network ); ?>" data-bb-social name="<?php echo esc_attr( self::id( 'social_' . $network ) ); ?>" value="<?php echo esc_attr( (string) $settings[ 'social_' . $network ] ); ?>" placeholder="https://">
+								</div>
+							<?php endforeach; ?>
+						</div>
+					</div></div>
+
+					<?php self::block_open( 'show_featured', __( 'Produits mis en avant', 'bb-woo-mail-layout' ), __( 'Jusqu’à 3 produits (photo, titre, prix) sous la commande, dans les e-mails envoyés au client.', 'bb-woo-mail-layout' ), $settings ); ?>
+						<?php self::text_field( 'featured_title', __( 'Titre du bloc', 'bb-woo-mail-layout' ), $settings, 'text', __( 'Vous aimerez aussi', 'bb-woo-mail-layout' ) ); ?>
+						<div class="bb-wml-field">
+							<label for="bb-wml-featured-products"><?php esc_html_e( 'Produits (3 maximum)', 'bb-woo-mail-layout' ); ?></label>
+							<select id="bb-wml-featured-products" class="wc-product-search" multiple="multiple" style="width:100%;"
+								name="<?php echo esc_attr( self::id( 'featured_products' ) ); ?>[]"
+								data-placeholder="<?php esc_attr_e( 'Rechercher un produit…', 'bb-woo-mail-layout' ); ?>"
+								data-action="woocommerce_json_search_products_and_variations"
+								data-maximum-selection-length="<?php echo (int) Options::MAX_FEATURED; ?>">
+								<?php foreach ( (array) $settings['featured_products'] as $id ) : ?>
+									<?php $product = wc_get_product( (int) $id ); ?>
+									<?php if ( $product ) : ?>
+										<option value="<?php echo (int) $id; ?>" selected="selected"><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</select>
+							<p class="bb-wml-hint"><?php esc_html_e( 'Les produits non publiés ou masqués du catalogue sont ignorés.', 'bb-woo-mail-layout' ); ?></p>
+						</div>
+					</div></div>
+
+					<?php self::block_open( 'show_footer', __( 'Pied de page', 'bb-woo-mail-layout' ), __( 'Nom légal, adresse et mentions.', 'bb-woo-mail-layout' ), $settings ); ?>
+						<div class="bb-wml-row">
+							<?php self::text_field( 'footer_legal_name', __( 'Nom légal', 'bb-woo-mail-layout' ), $settings ); ?>
+							<div class="bb-wml-field">
+								<label for="bb-wml-footer-address"><?php esc_html_e( 'Adresse', 'bb-woo-mail-layout' ); ?></label>
+								<textarea id="bb-wml-footer-address" rows="2" name="<?php echo esc_attr( self::id( 'footer_address' ) ); ?>"><?php echo esc_textarea( (string) $settings['footer_address'] ); ?></textarea>
+							</div>
+						</div>
+						<label class="bb-wml-check">
+							<input type="checkbox" name="<?php echo esc_attr( self::id( 'footer_show_site_link' ) ); ?>" value="yes" <?php checked( 'yes', $settings['footer_show_site_link'] ); ?>>
+							<?php esc_html_e( 'Afficher le lien vers la boutique', 'bb-woo-mail-layout' ); ?>
+						</label>
+						<div class="bb-wml-field bb-wml-editor">
+							<label for="bb_wml_footer_text"><?php esc_html_e( 'Mentions', 'bb-woo-mail-layout' ); ?></label>
+							<?php
+							wp_editor(
+								(string) $settings['footer_text'],
+								'bb_wml_footer_text',
+								array(
+									'textarea_name' => self::id( 'footer_text' ),
+									'textarea_rows' => 4,
+									'media_buttons' => false,
+									'teeny'         => false,
+									'quicktags'     => array( 'buttons' => 'strong,link' ),
+									'tinymce'       => array(
+										'toolbar1'       => 'bold,link,unlink',
+										'toolbar2'       => '',
+										'valid_elements' => 'strong/b,em,br,p,a[href|title|target|rel]',
+									),
+								)
+							);
+							?>
+							<p class="bb-wml-hint"><?php esc_html_e( 'Gras, lien et saut de ligne uniquement. Placeholders autorisés.', 'bb-woo-mail-layout' ); ?></p>
+						</div>
+					</div></div>
+
+				</div>
+			</div>
+
+			<details class="bb-wml-card bb-wml-advanced" <?php echo '' !== (string) $settings['custom_css'] ? 'open' : ''; ?>>
+				<summary><?php esc_html_e( 'Avancé : CSS personnalisé', 'bb-woo-mail-layout' ); ?></summary>
+				<div class="bb-wml-card__body">
+					<p class="bb-wml-hint"><?php esc_html_e( 'Ajouté après le CSS du layout (il l’emporte). Balises, @import et scripts sont retirés. Jetons (cliquer pour insérer) :', 'bb-woo-mail-layout' ); ?></p>
+					<div class="bb-wml-tokens" data-bb-target="bb-wml-custom-css">
+						<?php foreach ( array( 'primary', 'button', 'text', 'muted', 'border', 'soft', 'background', 'font' ) as $token ) : ?>
+							<button type="button" class="bb-wml-token">{{<?php echo esc_html( $token ); ?>}}</button>
+						<?php endforeach; ?>
+					</div>
+					<textarea id="bb-wml-custom-css" class="bb-wml-code" rows="10" name="<?php echo esc_attr( self::id( 'custom_css' ) ); ?>" placeholder="<?php echo esc_attr( ".bb-heading { letter-spacing: .5px; }\n.bb-featured-price { color: {{button}}; }" ); ?>"><?php echo esc_textarea( (string) $settings['custom_css'] ); ?></textarea>
+				</div>
+			</details>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Onglet E-mails : activation et texte d'introduction, e-mail par e-mail.
+	 *
+	 * @param array<string,mixed>               $settings Réglages.
+	 * @param array<string,array<string,mixed>> $emails   E-mails du registre.
+	 */
+	private function panel_emails( array $settings, array $emails ): void {
+		$texts    = new DefaultTexts();
+		$defaults = $texts->by_id();
+		$intros   = (array) $settings['intros'];
+		?>
+		<section class="bb-wml-panel" id="bb-wml-panel-emails" role="tabpanel" aria-labelledby="bb-wml-tab-emails" hidden>
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'E-mails mis en forme', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail désactivé garde le rendu WooCommerce natif. Les sujets et titres se règlent dans chaque e-mail WooCommerce.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-toolbar">
+					<div class="bb-wml-seg" role="group" aria-label="<?php esc_attr_e( 'Filtrer par destinataire', 'bb-woo-mail-layout' ); ?>">
+						<button type="button" aria-pressed="true" data-bb-filter="all"><?php esc_html_e( 'Tous', 'bb-woo-mail-layout' ); ?></button><button type="button" aria-pressed="false" data-bb-filter="client"><?php esc_html_e( 'Client', 'bb-woo-mail-layout' ); ?></button><button type="button" aria-pressed="false" data-bb-filter="admin"><?php esc_html_e( 'Administrateur', 'bb-woo-mail-layout' ); ?></button>
+					</div>
+					<input type="search" id="bb-wml-mail-search" class="bb-wml-search" placeholder="<?php esc_attr_e( 'Rechercher un e-mail', 'bb-woo-mail-layout' ); ?>" aria-label="<?php esc_attr_e( 'Rechercher un e-mail', 'bb-woo-mail-layout' ); ?>">
+					<div class="bb-wml-bulk">
+						<button type="button" class="button-link" data-bb-bulk="on"><?php esc_html_e( 'Tout activer', 'bb-woo-mail-layout' ); ?></button>
+						<button type="button" class="button-link" data-bb-bulk="off"><?php esc_html_e( 'Tout désactiver', 'bb-woo-mail-layout' ); ?></button>
+					</div>
+				</div>
+				<div class="bb-wml-toolbar is-tokens">
+					<span class="bb-wml-hint"><?php esc_html_e( 'Placeholders des introductions (cliquer pour insérer dans le texte ouvert) :', 'bb-woo-mail-layout' ); ?></span>
+					<div class="bb-wml-tokens" data-bb-target="intro">
+						<?php foreach ( Placeholders::documented() as $placeholder => $label ) : ?>
+							<button type="button" class="bb-wml-token" title="<?php echo esc_attr( $label ); ?>"><?php echo esc_html( $placeholder ); ?></button>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<div class="bb-wml-mails">
+					<?php foreach ( $emails as $id => $email ) : ?>
+						<?php
+						$enabled = $this->registry->is_enabled( $id );
+						$custom  = '' !== (string) ( $intros[ $id ] ?? '' );
+						?>
+						<div class="bb-wml-mail<?php echo $enabled ? '' : ' is-off'; ?>" data-bb-mail="<?php echo esc_attr( $id ); ?>" data-bb-client="<?php echo $email['customer'] ? '1' : '0'; ?>" data-bb-search="<?php echo esc_attr( strtolower( $email['title'] . ' ' . $id ) ); ?>">
+							<div class="bb-wml-mail__main">
+								<label class="bb-wml-switch">
+									<input type="hidden" name="<?php echo esc_attr( self::id( 'emails' ) . '[' . $id . ']' ); ?>" value="no">
+									<input type="checkbox" name="<?php echo esc_attr( self::id( 'emails' ) . '[' . $id . ']' ); ?>" value="yes" data-bb-mail-toggle <?php checked( $enabled ); ?>>
+									<span aria-hidden="true"></span>
+									<span class="screen-reader-text">
+										<?php
+										/* translators: %s: titre de l'e-mail. */
+										echo esc_html( sprintf( __( 'Mettre en forme : %s', 'bb-woo-mail-layout' ), $email['title'] ) );
+										?>
+									</span>
+								</label>
+								<div class="bb-wml-mail__title">
+									<strong><?php echo esc_html( $email['title'] ); ?></strong>
+									<code><?php echo esc_html( $id ); ?></code>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=email&section=' . strtolower( $email['class'] ) ) ); ?>"><?php esc_html_e( 'Sujet et titre', 'bb-woo-mail-layout' ); ?></a>
+								</div>
+								<span class="bb-wml-pill <?php echo $email['customer'] ? 'is-client' : 'is-admin'; ?>"><?php echo $email['customer'] ? esc_html__( 'Client', 'bb-woo-mail-layout' ) : esc_html__( 'Administrateur', 'bb-woo-mail-layout' ); ?></span>
+								<span class="bb-wml-src"><?php echo esc_html( '' !== $email['source'] ? $email['source'] : '—' ); ?></span>
+								<button type="button" class="bb-wml-intro-btn<?php echo $custom ? ' is-custom' : ''; ?>" aria-expanded="false" aria-controls="bb-wml-intro-<?php echo esc_attr( $id ); ?>">
+									<span class="bb-wml-dot" aria-hidden="true"></span><span class="bb-wml-intro-btn__label"><?php echo $custom ? esc_html__( 'Intro personnalisée', 'bb-woo-mail-layout' ) : esc_html__( 'Intro par défaut', 'bb-woo-mail-layout' ); ?></span>
+								</button>
+							</div>
+							<div class="bb-wml-mail__intro" id="bb-wml-intro-<?php echo esc_attr( $id ); ?>" hidden>
+								<textarea rows="4" data-bb-intro name="<?php echo esc_attr( self::id( 'intros' ) . '[' . $id . ']' ); ?>" placeholder="<?php echo esc_attr( $defaults[ $id ] ?? $texts->generic( $email['customer'] ) ); ?>" aria-label="<?php echo esc_attr( $email['title'] ); ?>"><?php echo esc_textarea( (string) ( $intros[ $id ] ?? '' ) ); ?></textarea>
+								<p class="bb-wml-hint"><?php esc_html_e( 'Vide : le texte par défaut (en gris) est utilisé. Une ligne vide sépare deux paragraphes.', 'bb-woo-mail-layout' ); ?></p>
+							</div>
+						</div>
+					<?php endforeach; ?>
+					<p class="bb-wml-empty" id="bb-wml-mails-empty" hidden><?php esc_html_e( 'Aucun e-mail ne correspond à cette recherche.', 'bb-woo-mail-layout' ); ?></p>
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Onglet Outils : e-mail de test, import / export.
+	 * Les champs n'ont pas d'attribut name : ils ne sont pas enregistrés avec le formulaire WooCommerce.
+	 *
+	 * @param array<string,array<string,mixed>> $emails E-mails du registre.
+	 * @param \WC_Order[]                       $orders Commandes récentes.
+	 */
+	private function panel_tools( array $emails, array $orders ): void {
+		?>
+		<section class="bb-wml-panel bb-wml-tools" id="bb-wml-panel-outils" role="tabpanel" aria-labelledby="bb-wml-tab-outils" hidden>
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'E-mail de test', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Envoie l’e-mail choisi avec les données d’une vraie commande. Les modifications non enregistrées sont prises en compte.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-card__body">
+					<div class="bb-wml-row">
+						<div class="bb-wml-field">
+							<label for="bb-wml-tool-email"><?php esc_html_e( 'E-mail', 'bb-woo-mail-layout' ); ?></label>
+							<?php $this->email_select( 'bb-wml-tool-email', $emails ); ?>
+						</div>
+						<div class="bb-wml-field">
+							<label for="bb-wml-tool-order"><?php esc_html_e( 'Commande utilisée comme jeu de données', 'bb-woo-mail-layout' ); ?></label>
+							<?php self::order_select( 'bb-wml-tool-order', $orders ); ?>
+						</div>
+					</div>
+					<div class="bb-wml-field">
+						<label for="bb-wml-tool-to"><?php esc_html_e( 'Destinataire du test', 'bb-woo-mail-layout' ); ?></label>
+						<input type="email" id="bb-wml-tool-to" class="regular-text" value="<?php echo esc_attr( (string) get_option( 'admin_email' ) ); ?>">
+					</div>
+					<p class="bb-wml-actions">
+						<button type="button" class="button button-primary" id="bb-wml-send-test"><?php esc_html_e( 'Envoyer l’e-mail de test', 'bb-woo-mail-layout' ); ?></button>
+						<span class="bb-wml-status" id="bb-wml-tools-status" role="status" aria-live="polite"></span>
+					</p>
+				</div>
+			</div>
+
+			<div class="bb-wml-card">
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'Import / export', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Copier la mise en forme d’un site à l’autre.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-card__body bb-wml-transfer">
+					<p class="bb-wml-actions">
+						<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=' . ImportExport::EXPORT_ACTION ), ImportExport::EXPORT_ACTION ) ); ?>"><?php esc_html_e( 'Exporter les réglages (JSON)', 'bb-woo-mail-layout' ); ?></a>
+					</p>
+					<p class="bb-wml-actions">
+						<input type="file" id="bb-wml-import-file" accept="application/json,.json">
+						<button type="button" class="button" id="bb-wml-import"><?php esc_html_e( 'Importer…', 'bb-woo-mail-layout' ); ?></button>
+					</p>
+					<div class="bb-wml-confirm" id="bb-wml-import-confirm" hidden>
+						<span><?php esc_html_e( 'L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées.', 'bb-woo-mail-layout' ); ?></span>
+						<button type="button" class="button button-primary" id="bb-wml-import-yes"><?php esc_html_e( 'Remplacer les réglages', 'bb-woo-mail-layout' ); ?></button>
+						<button type="button" class="button-link" id="bb-wml-import-no"><?php esc_html_e( 'Annuler', 'bb-woo-mail-layout' ); ?></button>
+					</div>
 					<span class="bb-wml-status" id="bb-wml-import-status" role="status" aria-live="polite"></span>
-				</p>
-				<p class="description"><?php esc_html_e( 'L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées.', 'bb-woo-mail-layout' ); ?></p>
-			</td>
-		</tr>
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Colonne d'aperçu (iframe sandboxée, 600 px).
+	 *
+	 * @param array<string,array<string,mixed>> $emails E-mails du registre.
+	 * @param \WC_Order[]                       $orders Commandes récentes.
+	 */
+	private function preview( array $emails, array $orders ): void {
+		?>
+		<aside class="bb-wml-card bb-wml-preview" aria-label="<?php esc_attr_e( 'Aperçu', 'bb-woo-mail-layout' ); ?>">
+			<div class="bb-wml-card__head">
+				<h3><?php esc_html_e( 'Aperçu', 'bb-woo-mail-layout' ); ?></h3>
+				<span class="bb-wml-live" id="bb-wml-preview-status" role="status" aria-live="polite"><?php esc_html_e( 'Mis à jour en direct', 'bb-woo-mail-layout' ); ?></span>
+			</div>
+			<div class="bb-wml-preview__bar">
+				<?php $this->email_select( 'bb-wml-preview-email', $emails, __( 'E-mail à prévisualiser', 'bb-woo-mail-layout' ) ); ?>
+				<?php self::order_select( 'bb-wml-preview-order', $orders, __( 'Commande utilisée pour l’aperçu', 'bb-woo-mail-layout' ) ); ?>
+				<div class="bb-wml-seg" role="group" aria-label="<?php esc_attr_e( 'Largeur de l’aperçu', 'bb-woo-mail-layout' ); ?>">
+					<button type="button" aria-pressed="true" data-bb-device="desktop"><?php esc_html_e( 'Ordinateur', 'bb-woo-mail-layout' ); ?></button><button type="button" aria-pressed="false" data-bb-device="mobile"><?php esc_html_e( 'Mobile', 'bb-woo-mail-layout' ); ?></button>
+				</div>
+			</div>
+			<div class="bb-wml-stage" id="bb-wml-stage">
+				<iframe id="bb-wml-preview-frame" class="bb-wml-preview-frame" sandbox="" title="<?php esc_attr_e( 'Aperçu de l’e-mail', 'bb-woo-mail-layout' ); ?>"></iframe>
+				<p class="bb-wml-stage__error" id="bb-wml-preview-error" hidden></p>
+			</div>
+		</aside>
+		<?php
+	}
+
+	/*
+	 * ------------------------------------------------------------------
+	 * Morceaux d'interface
+	 * ------------------------------------------------------------------
+	 */
+
+	/**
+	 * Interrupteur enregistré sous bb_woo_mail_layout[clé].
+	 *
+	 * @param string $key     Clé.
+	 * @param string $label   Libellé (lecteurs d'écran).
+	 * @param bool   $checked Coché.
+	 */
+	private static function switch_input( string $key, string $label, bool $checked ): void {
+		?>
+		<label class="bb-wml-switch">
+			<input type="checkbox" id="bb-wml-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( self::id( $key ) ); ?>" value="yes" data-bb-key="<?php echo esc_attr( $key ); ?>" <?php checked( $checked ); ?>>
+			<span aria-hidden="true"></span>
+			<span class="screen-reader-text"><?php echo esc_html( $label ); ?></span>
+		</label>
+		<?php
+	}
+
+	/**
+	 * Début d'un bloc « interrupteur + réglages » (à refermer par deux </div>).
+	 *
+	 * @param string              $key      Clé du booléen.
+	 * @param string              $title    Titre.
+	 * @param string              $desc     Description.
+	 * @param array<string,mixed> $settings Réglages.
+	 * @param bool                $has_body Le bloc a des réglages dépliables.
+	 */
+	private static function block_open( string $key, string $title, string $desc, array $settings, bool $has_body = true ): void {
+		$on = 'yes' === $settings[ $key ];
+		?>
+		<div class="bb-wml-block<?php echo $on ? '' : ' is-off'; ?>" data-bb-block="<?php echo esc_attr( $key ); ?>">
+			<div class="bb-wml-block__head">
+				<?php self::switch_input( $key, $title, $on ); ?>
+				<div class="bb-wml-block__txt"><strong><?php echo esc_html( $title ); ?></strong><span><?php echo esc_html( $desc ); ?></span></div>
+				<span class="bb-wml-block__state" data-bb-summary="<?php echo esc_attr( $key ); ?>"></span>
+			</div>
+			<div class="<?php echo $has_body ? 'bb-wml-block__body' : 'bb-wml-block__link'; ?>">
+		<?php
+	}
+
+	/**
+	 * Champ texte simple.
+	 *
+	 * @param string              $key         Clé.
+	 * @param string              $label       Libellé.
+	 * @param array<string,mixed> $settings    Réglages.
+	 * @param string              $type        Type d'input.
+	 * @param string              $placeholder Placeholder.
+	 */
+	private static function text_field( string $key, string $label, array $settings, string $type = 'text', string $placeholder = '' ): void {
+		$html_id = 'bb-wml-' . str_replace( '_', '-', $key );
+		?>
+		<div class="bb-wml-field">
+			<label for="<?php echo esc_attr( $html_id ); ?>"><?php echo esc_html( $label ); ?></label>
+			<input type="<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $html_id ); ?>" name="<?php echo esc_attr( self::id( $key ) ); ?>" value="<?php echo esc_attr( (string) $settings[ $key ] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>">
+		</div>
+		<?php
+	}
+
+	/**
+	 * Pastille de couleur : sélecteur natif (non enregistré) + code hexadécimal (enregistré).
+	 *
+	 * @param string              $key      Clé.
+	 * @param string              $label    Libellé.
+	 * @param string              $desc     Précision.
+	 * @param array<string,mixed> $settings Réglages.
+	 */
+	private static function swatch( string $key, string $label, string $desc, array $settings ): void {
+		$value   = (string) $settings[ $key ];
+		$html_id = 'bb-wml-' . str_replace( '_', '-', $key );
+		?>
+		<div class="bb-wml-swatch" data-bb-swatch="<?php echo esc_attr( $key ); ?>">
+			<input type="color" class="bb-wml-swatch__pick" value="<?php echo esc_attr( '' !== $value ? $value : '#e5e5e5' ); ?>" aria-label="<?php echo esc_attr( $label ); ?>">
+			<div class="bb-wml-swatch__txt">
+				<label for="<?php echo esc_attr( $html_id ); ?>"><?php echo esc_html( $label ); ?></label>
+				<?php if ( '' !== $desc ) : ?>
+					<span class="bb-wml-hint"><?php echo esc_html( $desc ); ?></span>
+				<?php endif; ?>
+				<input type="text" id="<?php echo esc_attr( $html_id ); ?>" class="bb-wml-swatch__hex" name="<?php echo esc_attr( self::id( $key ) ); ?>" value="<?php echo esc_attr( $value ); ?>" maxlength="7" spellcheck="false" placeholder="<?php echo 'color_border' === $key ? esc_attr__( 'Auto', 'bb-woo-mail-layout' ) : '#000000'; ?>">
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Vignette d'un layout.
+	 *
+	 * @param string $slug Slug du layout.
+	 */
+	private static function thumb( string $slug ): void {
+		$known = in_array( $slug, array( 'classique', 'sobre', 'ecommerce' ), true ) ? $slug : 'generic';
+		?>
+		<span class="bb-wml-thumb is-<?php echo esc_attr( $known ); ?>" aria-hidden="true">
+			<?php if ( 'classique' === $known ) : ?>
+				<span class="band"></span><span class="paper"><i class="w60"></i><i></i><i class="w80"></i><i class="w40"></i></span>
+			<?php elseif ( 'sobre' === $known ) : ?>
+				<i class="w40"></i><span class="rule"></span><i class="w60"></i><i></i><i class="w80"></i>
+			<?php elseif ( 'ecommerce' === $known ) : ?>
+				<span class="bar"></span><i class="w60"></i><span class="prods"><i></i><i></i><i></i></span><i class="w80"></i>
+			<?php else : ?>
+				<i class="w60"></i><i></i><i class="w80"></i><i class="w40"></i>
+			<?php endif; ?>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Liste déroulante des e-mails.
+	 *
+	 * @param string                            $html_id Id HTML.
+	 * @param array<string,array<string,mixed>> $emails  E-mails du registre.
+	 * @param string                            $label   Libellé (aria), si pas de <label>.
+	 */
+	private function email_select( string $html_id, array $emails, string $label = '' ): void {
+		?>
+		<select id="<?php echo esc_attr( $html_id ); ?>" data-bb-email-select <?php echo '' !== $label ? 'aria-label="' . esc_attr( $label ) . '"' : ''; ?>>
+			<?php foreach ( $emails as $id => $email ) : ?>
+				<option value="<?php echo esc_attr( $id ); ?>" data-title="<?php echo esc_attr( $email['title'] ); ?>" <?php selected( self::PREVIEW_EMAIL, $id ); ?>>
+					<?php echo esc_html( $email['title'] . ( $this->registry->is_enabled( $id ) ? '' : ' — ' . __( 'rendu natif', 'bb-woo-mail-layout' ) ) ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Liste déroulante des commandes récentes.
+	 *
+	 * @param string      $html_id Id HTML.
+	 * @param \WC_Order[] $orders  Commandes.
+	 * @param string      $label   Libellé (aria), si pas de <label>.
+	 */
+	private static function order_select( string $html_id, array $orders, string $label = '' ): void {
+		?>
+		<select id="<?php echo esc_attr( $html_id ); ?>" <?php echo '' !== $label ? 'aria-label="' . esc_attr( $label ) . '"' : ''; ?>>
+			<?php if ( ! $orders ) : ?>
+				<option value="0"><?php esc_html_e( 'Aucune commande sur ce site', 'bb-woo-mail-layout' ); ?></option>
+			<?php endif; ?>
+			<?php foreach ( $orders as $order ) : ?>
+				<option value="<?php echo (int) $order->get_id(); ?>">
+					<?php
+					echo esc_html(
+						sprintf(
+							'#%1$s — %2$s — %3$s — %4$s',
+							$order->get_order_number(),
+							$order->get_formatted_billing_full_name(),
+							$order->get_date_created() ? wc_format_datetime( $order->get_date_created() ) : '',
+							wc_get_order_status_name( $order->get_status() )
+						)
+					);
+					?>
+				</option>
+			<?php endforeach; ?>
+		</select>
 		<?php
 	}
 
@@ -794,6 +827,15 @@ final class SettingsPage {
 	 * Assets, liens
 	 * ------------------------------------------------------------------
 	 */
+
+	/**
+	 * Classe sur <body> pour cibler la barre d'enregistrement et le chrome WooCommerce.
+	 *
+	 * @param string $classes Classes existantes.
+	 */
+	public function body_class( $classes ): string {
+		return self::is_current_page() ? $classes . ' bb-wml-page' : (string) $classes;
+	}
 
 	/**
 	 * Scripts de l'onglet uniquement.
@@ -809,21 +851,43 @@ final class SettingsPage {
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'bb-wml-settings', BB_WML_URL . 'assets/admin/settings.css', array(), BB_WML_VERSION );
 		wp_enqueue_script( 'bb-wml-settings', BB_WML_URL . 'assets/admin/settings.js', array( 'media-editor' ), BB_WML_VERSION, true );
+
+		$defaults = Options::defaults();
 		wp_localize_script(
 			'bb-wml-settings',
 			'bbWml',
 			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( self::NONCE_ACTION ),
-				'i18n'    => array(
+				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( self::NONCE_ACTION ),
+				'option'   => BB_WML_OPTION,
+				'defaults' => array(
+					'color_primary'    => $defaults['color_primary'],
+					'color_button'     => $defaults['color_button'],
+					'color_text'       => $defaults['color_text'],
+					'color_border'     => $defaults['color_border'],
+					'color_background' => $defaults['color_background'],
+				),
+				'i18n'     => array(
 					'chooseLogo'    => __( 'Choisir le logo', 'bb-woo-mail-layout' ),
 					'useImage'      => __( 'Utiliser cette image', 'bb-woo-mail-layout' ),
-					'loading'       => __( 'Génération de l’aperçu…', 'bb-woo-mail-layout' ),
+					'live'          => __( 'Mis à jour en direct', 'bb-woo-mail-layout' ),
+					'loading'       => __( 'Mise à jour…', 'bb-woo-mail-layout' ),
 					'sending'       => __( 'Envoi en cours…', 'bb-woo-mail-layout' ),
 					'importing'     => __( 'Import en cours…', 'bb-woo-mail-layout' ),
 					'error'         => __( 'Une erreur est survenue.', 'bb-woo-mail-layout' ),
-					'chooseFile'    => __( 'Choisissez un fichier JSON.', 'bb-woo-mail-layout' ),
-					'confirmImport' => __( 'Remplacer tous les réglages de mise en forme par ceux du fichier ?', 'bb-woo-mail-layout' ),
+					'chooseFile'    => __( 'Choisissez d’abord un fichier JSON exporté depuis cette page.', 'bb-woo-mail-layout' ),
+					'introCustom'   => __( 'Intro personnalisée', 'bb-woo-mail-layout' ),
+					'introDefault'  => __( 'Intro par défaut', 'bb-woo-mail-layout' ),
+					'nativeSuffix'  => __( 'rendu natif', 'bb-woo-mail-layout' ),
+					/* translators: 1: largeur, 2: hauteur (px). */
+					'logoSize'      => __( 'Rendu actuel : %1$s × %2$s px.', 'bb-woo-mail-layout' ),
+					/* translators: %d: nombre d'informations renseignées. */
+					'helpFilled'    => __( '%d / 3 renseignés', 'bb-woo-mail-layout' ),
+					'helpEmpty'     => __( 'Vide : bloc masqué', 'bb-woo-mail-layout' ),
+					/* translators: %d: nombre de réseaux. */
+					'socialCount'   => __( '%d réseau(x)', 'bb-woo-mail-layout' ),
+					/* translators: %d: nombre de produits. */
+					'featuredCount' => __( '%d / 3 produits', 'bb-woo-mail-layout' ),
 				),
 			)
 		);
