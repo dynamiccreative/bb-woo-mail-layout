@@ -65,7 +65,14 @@ La CI GitHub Actions (`.github/workflows/ci.yml`) lance lint, PHPStan et PHPUnit
 
 ## Mises à jour
 
-Les en-têtes Git Updater (`GitHub Plugin URI`, `Release Asset`) sont en place. Pour utiliser le serveur de mises à jour bleuebuzz (DC Visibility / GéoPrestations), brancher son client dans `Plugin::init()`.
+Mécanisme maison des plugins Dynamic Creative / bleuebuzz : `lib/GitHubUpdater.php` (fork patché de Ryan Sechrest, classe préfixée `BB_WML_`), branché dans `Plugin::register_updater()`.
+
+- L'en-tête `Update URI` du fichier principal pointe vers ce dépôt.
+- La version proposée aux sites est la `Version` de l'en-tête de `bb-woo-mail-layout.php` **sur la branche `main`** : pour publier, incrémenter `Version` (et `BB_WML_VERSION`), compléter `CHANGELOG.md`, pousser sur `main`.
+- Le paquet installé est le zip de la branche `main`.
+- Dépôt public : aucun jeton. Dépôt privé : enregistrer un jeton GitHub dans l'option `bb_wml_github_access_token`.
+
+Les tags `v*` servent uniquement à attacher un zip « propre » (sans outillage de dev) à une release GitHub, pour une installation manuelle.
 
 ## Migration depuis Flycart Email Customizer
 

@@ -11,6 +11,7 @@ parameters:
 		- layouts
 	scanFiles:
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+		- lib/GitHubUpdater.php
 	bootstrapFiles:
 		- tests/phpstan-bootstrap.php
 	reportUnmatchedIgnoredErrors: false

@@ -103,6 +103,9 @@ final class Plugin {
 	private function init(): void {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 
+		// Avant le contrôle WooCommerce : le plugin reste mis à jour même si WooCommerce est inactif.
+		self::register_updater();
+
 		if ( ! self::woocommerce_is_compatible() ) {
 			add_action( 'admin_notices', array( $this, 'missing_woocommerce_notice' ) );
 			return;
@@ -126,6 +129,29 @@ final class Plugin {
 			( new ImportExport() )->register();
 			( new Notices() )->register();
 		}
+	}
+
+	/**
+	 * Mises à jour depuis GitHub (mécanisme maison des plugins Dynamic Creative / bleuebuzz).
+	 *
+	 * La version publiée est celle de l'en-tête du fichier principal sur la branche `main` :
+	 * pousser une nouvelle `Version` sur `main` suffit à proposer la mise à jour aux sites.
+	 * Dépôt public : aucun jeton requis ; pour un dépôt privé, renseigner l'option
+	 * `bb_wml_github_access_token`.
+	 */
+	private static function register_updater(): void {
+		require_once BB_WML_DIR . 'lib/GitHubUpdater.php';
+
+		// La bibliothèque retire « WP_PLUGIN_DIR/ » du chemin puis le découpe en dossier/fichier :
+		// sous Windows, __FILE__ contient des antislashs et ce découpage échoue (erreur fatale).
+		$updater = new \BB_WML_GitHubUpdater( WP_PLUGIN_DIR . '/' . plugin_basename( BB_WML_FILE ) );
+		$updater->setBranch( 'main' );
+		$updater->setAccessToken( (string) get_option( 'bb_wml_github_access_token', '' ) );
+		$updater->setPluginIcon( 'https://raw.githubusercontent.com/dynamiccreative/setting-plugin/main/img/icon-256x256.png' );
+		$updater->setPluginBannerSmall( 'https://raw.githubusercontent.com/dynamiccreative/setting-plugin/main/img/banner-1544x500.png' );
+		$updater->setPluginBannerLarge( 'https://raw.githubusercontent.com/dynamiccreative/setting-plugin/main/img/banner-1544x500.png' );
+		$updater->setChangelog( 'CHANGELOG.md' );
+		$updater->add();
 	}
 
 	/**
