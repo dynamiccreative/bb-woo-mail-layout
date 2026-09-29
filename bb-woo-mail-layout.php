@@ -2,7 +2,7 @@
 /**
  * Plugin Name:          BB Woo Mail Layout
  * Description:          Mise en forme brandée et 100 % française des e-mails transactionnels WooCommerce (layout codé, réglages simples).
- * Version:              1.0.1
+ * Version:              1.0.2
  * Requires at least:    6.4
  * Requires PHP:         8.1
  * Requires Plugins:     woocommerce
@@ -22,7 +22,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BB_WML_VERSION', '1.0.1' );
+define( 'BB_WML_VERSION', '1.0.2' );
 define( 'BB_WML_FILE', __FILE__ );
 define( 'BB_WML_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BB_WML_URL', plugin_dir_url( __FILE__ ) );

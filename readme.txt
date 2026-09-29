@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,9 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.0.2 =
+* Aucun changement fonctionnel : correction de l’environnement de tests (CI wp-env).
 
 = 1.0.1 =
 * Le CSS du layout est écrit dans le <head> de l’e-mail : il ne peut plus être écrasé par une autre extension de personnalisation d’e-mails (rendu sans style constaté sur « Nouvelle commande »), et reste présent si l’inlining échoue.
