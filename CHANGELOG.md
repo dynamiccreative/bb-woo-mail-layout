@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- **Layout par e-mail** : dans l'onglet E-mails, chaque e-mail peut utiliser son propre layout ou suivre le layout général (option `email_layouts`, incluse dans l'import / export). Couleurs, logo, police et blocs restent communs. Le filtre `bb_email_layout` reçoit ce layout et garde le dernier mot.
+
 ## 1.2.1
 
 - Aperçu « Ordinateur » : iframe de 640 px au lieu de 600 px. À 600 px, le `@media (max-width: 620px)` des layouts s'appliquait et l'aperçu montrait la version mobile (colonnes à 100 %).

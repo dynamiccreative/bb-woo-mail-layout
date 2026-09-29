@@ -67,6 +67,34 @@ class FeaturesTest extends TestCase {
 		$this->assertDoesNotMatchRegularExpression( '/<table class="td bb-order-table.*?<img.*?<\/table>/s', $html );
 	}
 
+	public function test_layout_can_be_set_per_email(): void {
+		$order = $this->create_order( 2 );
+
+		Options::replace(
+			array(
+				'layout'        => 'classique',
+				'email_layouts' => array( 'customer_processing_order' => 'ecommerce' ),
+			)
+		);
+		$this->assertMatchesRegularExpression( '/bb-order-table.*<img/s', $this->render( 'customer_processing_order', $order ) );
+		$this->assertDoesNotMatchRegularExpression( '/<table class="td bb-order-table.*?<img.*?<\/table>/s', $this->render( 'customer_completed_order', $order ) );
+
+		// Retour au layout général : '' écrase l'ancienne valeur à la fusion ; un slug inconnu est refusé.
+		$this->assertSame(
+			array(
+				'customer_processing_order' => '',
+				'new_order'                 => '',
+			),
+			Options::sanitize_field(
+				'email_layouts',
+				array(
+					'customer_processing_order' => '',
+					'new_order'                 => '../evil',
+				)
+			)
+		);
+	}
+
 	public function test_featured_products_block(): void {
 		$ids    = array(
 			$this->product( 'Tapenade noire' ),

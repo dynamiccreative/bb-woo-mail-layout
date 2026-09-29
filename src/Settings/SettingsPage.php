@@ -241,7 +241,7 @@ final class SettingsPage {
 					<?php
 					$this->panel_appearance( $settings, $layouts, $status );
 					$this->panel_content( $settings );
-					$this->panel_emails( $settings, $emails );
+					$this->panel_emails( $settings, $emails, $layouts );
 					$this->panel_tools( $emails, $orders );
 					?>
 				</div>
@@ -273,7 +273,7 @@ final class SettingsPage {
 		?>
 		<section class="bb-wml-panel" id="bb-wml-panel-apparence" role="tabpanel" aria-labelledby="bb-wml-tab-apparence">
 			<div class="bb-wml-card">
-				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'Layout', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Structure appliquée à tous les e-mails activés.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'Layout', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Layout général des e-mails activés. Un e-mail peut avoir le sien dans l’onglet E-mails.', 'bb-woo-mail-layout' ); ?></p></div></div>
 				<div class="bb-wml-card__body">
 					<div class="bb-wml-layouts" role="radiogroup" aria-label="<?php esc_attr_e( 'Layout', 'bb-woo-mail-layout' ); ?>">
 						<?php foreach ( $layouts as $slug => $layout ) : ?>
@@ -502,15 +502,18 @@ final class SettingsPage {
 	}
 
 	/**
-	 * Onglet E-mails : activation et texte d'introduction, e-mail par e-mail.
+	 * Onglet E-mails : activation, layout et texte d'introduction, e-mail par e-mail.
 	 *
 	 * @param array<string,mixed>               $settings Réglages.
 	 * @param array<string,array<string,mixed>> $emails   E-mails du registre.
+	 * @param array<string,array<string,mixed>> $layouts  Layouts disponibles.
 	 */
-	private function panel_emails( array $settings, array $emails ): void {
+	private function panel_emails( array $settings, array $emails, array $layouts ): void {
 		$texts    = new DefaultTexts();
 		$defaults = $texts->by_id();
 		$intros   = (array) $settings['intros'];
+		$chosen   = (array) $settings['email_layouts'];
+		$general  = (string) ( $layouts[ $settings['layout'] ]['label'] ?? '' );
 		?>
 		<section class="bb-wml-panel" id="bb-wml-panel-emails" role="tabpanel" aria-labelledby="bb-wml-tab-emails" hidden>
 			<div class="bb-wml-card">
@@ -559,6 +562,21 @@ final class SettingsPage {
 								</div>
 								<span class="bb-wml-pill <?php echo $email['customer'] ? 'is-client' : 'is-admin'; ?>"><?php echo $email['customer'] ? esc_html__( 'Client', 'bb-woo-mail-layout' ) : esc_html__( 'Administrateur', 'bb-woo-mail-layout' ); ?></span>
 								<span class="bb-wml-src"><?php echo esc_html( '' !== $email['source'] ? $email['source'] : '—' ); ?></span>
+								<?php
+								/* translators: %s: titre de l'e-mail. */
+								$layout_label = sprintf( __( 'Layout : %s', 'bb-woo-mail-layout' ), $email['title'] );
+								?>
+								<select class="bb-wml-mail__layout" data-bb-mail-layout name="<?php echo esc_attr( self::id( 'email_layouts' ) . '[' . $id . ']' ); ?>" aria-label="<?php echo esc_attr( $layout_label ); ?>">
+									<option value="" data-bb-general>
+										<?php
+										/* translators: %s: nom du layout général. */
+										echo esc_html( sprintf( __( 'Général (%s)', 'bb-woo-mail-layout' ), $general ) );
+										?>
+									</option>
+									<?php foreach ( $layouts as $slug => $layout ) : ?>
+										<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( (string) ( $chosen[ $id ] ?? '' ), (string) $slug ); ?>><?php echo esc_html( $layout['label'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
 								<button type="button" class="bb-wml-intro-btn<?php echo $custom ? ' is-custom' : ''; ?>" aria-expanded="false" aria-controls="bb-wml-intro-<?php echo esc_attr( $id ); ?>">
 									<span class="bb-wml-dot" aria-hidden="true"></span><span class="bb-wml-intro-btn__label"><?php echo $custom ? esc_html__( 'Intro personnalisée', 'bb-woo-mail-layout' ) : esc_html__( 'Intro par défaut', 'bb-woo-mail-layout' ); ?></span>
 								</button>
@@ -879,6 +897,8 @@ final class SettingsPage {
 					'introCustom'   => __( 'Intro personnalisée', 'bb-woo-mail-layout' ),
 					'introDefault'  => __( 'Intro par défaut', 'bb-woo-mail-layout' ),
 					'nativeSuffix'  => __( 'rendu natif', 'bb-woo-mail-layout' ),
+					/* translators: %s: nom du layout général. */
+					'generalLayout' => __( 'Général (%s)', 'bb-woo-mail-layout' ),
 					/* translators: 1: largeur, 2: hauteur (px). */
 					'logoSize'      => __( 'Rendu actuel : %1$s × %2$s px.', 'bb-woo-mail-layout' ),
 					/* translators: %d: nombre d'informations renseignées. */

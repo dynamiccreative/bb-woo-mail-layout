@@ -462,16 +462,23 @@ final class LayoutRenderer {
 	 */
 	private function layout_for( ?\WC_Email $email ): array {
 		$layouts = self::available_layouts();
+		$slug    = (string) Options::get( 'layout' );
+
+		// Layout choisi pour cet e-mail dans l'onglet E-mails ('' = layout général).
+		$per_email = (array) Options::get( 'email_layouts' );
+		if ( $email && isset( $layouts[ (string) ( $per_email[ $email->id ] ?? '' ) ] ) ) {
+			$slug = (string) $per_email[ $email->id ];
+		}
 
 		/**
 		 * Force un layout (slug) pour un e-mail.
 		 *
-		 * @param string         $layout Slug du layout réglé.
+		 * @param string         $layout Slug du layout réglé (layout de l'e-mail s'il en a un, sinon layout général).
 		 * @param \WC_Email|null $email  E-mail.
 		 *
 		 * @since 1.0.0
 		 */
-		$slug = (string) apply_filters( 'bb_email_layout', (string) Options::get( 'layout' ), $email );
+		$slug = (string) apply_filters( 'bb_email_layout', $slug, $email );
 
 		$layout = $layouts[ $slug ] ?? $layouts['classique'] ?? reset( $layouts );
 		return is_array( $layout ) ? $layout : array();

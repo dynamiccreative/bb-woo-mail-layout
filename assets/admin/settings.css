@@ -744,10 +744,10 @@
 
 .bb-wml-mail__main {
 	display: grid;
-	grid-template-columns: 36px minmax(200px, 1.6fr) 110px minmax(110px, 1fr) 160px;
+	grid-template-columns: 36px minmax(200px, 1.6fr) 110px minmax(100px, 1fr) 150px 150px;
 	align-items: center;
 	gap: 12px;
-	min-width: 680px;
+	min-width: 820px;
 	padding: 10px 16px;
 }
 
@@ -1005,4 +1005,15 @@
 	.bb-wml * {
 		transition: none !important;
 	}
+}
+
+.bb-wml .bb-wml-mail__layout {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+}
+
+.bb-wml-mail__layout.is-custom {
+	border-color: var(--bb-blue);
+	color: var(--bb-blue);
 }

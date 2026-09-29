@@ -128,6 +128,9 @@
 			card.classList.toggle( 'is-checked', radio.checked );
 			if ( radio.checked ) {
 				$( '#bb-wml-sum-layout' ).textContent = radio.dataset.label;
+				$$( '[data-bb-general]' ).forEach( ( option ) => {
+					option.textContent = sprintf( i18n.generalLayout, radio.dataset.label );
+				} );
 			}
 		} );
 		$$( '.bb-wml-thumb' ).forEach( ( thumb ) => thumb.style.setProperty( '--bb-thumb', value( 'color_primary' ) || '#1f4e79' ) );
@@ -320,6 +323,14 @@
 		const text = $( '[data-bb-intro]', row );
 
 		$( '[data-bb-mail-toggle]', row ).addEventListener( 'change', () => syncMail( row ) );
+
+		const layout = $( '[data-bb-mail-layout]', row );
+		const syncLayout = () => layout.classList.toggle( 'is-custom', '' !== layout.value );
+		layout.addEventListener( 'change', () => {
+			syncLayout();
+			showInPreview( id );
+		} );
+		syncLayout();
 		button.addEventListener( 'click', () => {
 			box.hidden = ! box.hidden;
 			button.setAttribute( 'aria-expanded', String( ! box.hidden ) );

@@ -79,6 +79,7 @@ final class Options {
 			'custom_css'            => 'css',
 			'emails'                => 'map_bool',
 			'intros'                => 'map_textarea',
+			'email_layouts'         => 'map_layout',
 		);
 	}
 
@@ -125,6 +126,7 @@ final class Options {
 			'custom_css'            => '',
 			'emails'                => array(),
 			'intros'                => array(),
+			'email_layouts'         => array(),
 		);
 	}
 
@@ -140,7 +142,7 @@ final class Options {
 		$stored = is_array( $stored ) ? $stored : array();
 		$all    = array_merge( self::defaults(), $stored );
 
-		foreach ( array( 'emails', 'intros', 'featured_products' ) as $map ) {
+		foreach ( array( 'emails', 'intros', 'email_layouts', 'featured_products' ) as $map ) {
 			$all[ $map ] = is_array( $all[ $map ] ) ? $all[ $map ] : array();
 		}
 		return $all;
@@ -219,7 +221,7 @@ final class Options {
 		$value = self::sanitize_value( $schema[ $key ], $raw, self::defaults()[ $key ] );
 
 		// Les tableaux par e-mail sont fusionnés : un e-mail absent du formulaire garde sa valeur.
-		if ( in_array( $schema[ $key ], array( 'map_bool', 'map_textarea' ), true ) ) {
+		if ( in_array( $schema[ $key ], array( 'map_bool', 'map_textarea', 'map_layout' ), true ) ) {
 			$current = self::get( $key );
 			$value   = array_merge( is_array( $current ) ? $current : array(), $value );
 		}
@@ -296,6 +298,18 @@ final class Options {
 					$id = self::sanitize_email_id( (string) $id );
 					if ( '' !== $id ) {
 						$out[ $id ] = in_array( $flag, array( 'yes', '1', 1, true ), true ) ? 'yes' : 'no';
+					}
+				}
+				return $out;
+
+			case 'map_layout':
+				// Slug de layout par e-mail ; '' = layout général (conservé pour que la fusion l'emporte sur l'ancienne valeur).
+				$out     = array();
+				$layouts = LayoutRenderer::available_layouts();
+				foreach ( is_array( $raw ) ? $raw : array() as $id => $slug ) {
+					$id = self::sanitize_email_id( (string) $id );
+					if ( '' !== $id && is_string( $slug ) ) {
+						$out[ $id ] = array_key_exists( $slug, $layouts ) ? $slug : '';
 					}
 				}
 				return $out;
