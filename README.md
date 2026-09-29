@@ -36,8 +36,19 @@ Réglages : une option sérialisée `bb_woo_mail_layout` (versionnée, migrée �
 | `bb_email_override_templates` | filtre `( string[] $templates )` | Templates de contenu surchargés (retirer une entrée pour revenir au template natif). |
 | `bb_email_css` | filtre `( string $css, ?WC_Email $email )` | CSS final avant inlining. |
 | `bb_email_prepare_simulation` | action `( WC_Email $email, WC_Order $order )` | Compléter les propriétés d'un e-mail tiers pour l'aperçu / le test. |
+| `bb_email_locale` | filtre `( string $locale, mixed $object )` | Locale de rendu d'un e-mail client (vide = pas de bascule). Appliqué seulement si WPML ou Polylang est actif. |
+| `bb_email_order_language` | filtre `( string $code, mixed $object )` | Code langue d'une commande pour une extension non détectée (ex. stockage HPOS propre à une extension). |
+| `bb_email_admin_uses_order_language` | filtre `( bool $enabled, WC_Email $email )` | Rendre aussi les e-mails admin dans la langue de la commande (faux par défaut). |
 | `bb_email_conflicting_plugins` | filtre `( string[] $patterns )` | Fragments de dossiers de plugins signalés comme concurrents. |
 | `bb_email_disabled_wc_features` | filtre `( string[] $options )` | Options de fonctionnalités WooCommerce neutralisées (appliqué au chargement : à utiliser depuis un mu-plugin). |
+
+## Traductions et multilingue
+
+- Chaînes source en français, domaine `bb-woo-mail-layout`, `languages/bb-woo-mail-layout.pot`. Traductions livrées : `en_US`, `en_GB`.
+- Textes saisis dans l'admin (horaires, nom légal, adresse, mentions, intros) : traduisibles dans WPML (`wpml-config.xml`, admin-texts) et Polylang (Langues → Traductions de chaînes).
+- Langue d'un e-mail client : langue de la commande (WPML `wpml_language` ; Polylang `pll_get_post_language()`), sinon langue du profil du client, sinon langue du site. **Aucune bascule sans WPML ni Polylang** : WooCommerce écrit alors ses propres textes dans la langue du site et l'e-mail serait à moitié traduit.
+- E-mails admin : langue du site (filtre `bb_email_admin_uses_order_language` pour suivre la commande).
+- Testé avec Polylang 3.8 (site fr_FR, langues fr/en). WPML : à valider sur un site équipé.
 
 ## Ajouter un layout
 

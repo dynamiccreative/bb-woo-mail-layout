@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,10 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.0.4 =
+* Traduction anglaise (en_US, en_GB).
+* Multilingue : langue de la commande (WPML, Polylang), sinon langue du profil du client ; aucune bascule sans WPML ni Polylang. Nouveaux filtres bb_email_locale, bb_email_order_language, bb_email_admin_uses_order_language.
 
 = 1.0.3 =
 * Mises à jour automatiques depuis GitHub (mécanisme maison GitHubUpdater).

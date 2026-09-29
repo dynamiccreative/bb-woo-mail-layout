@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4
+
+- Traduction anglaise livrée (`en_US`, `en_GB`) : libellés du layout, textes d'introduction par défaut, administration.
+- Multilingue : l'e-mail client est rendu dans la langue de la commande (WPML `wpml_language`, Polylang), à défaut dans la langue du profil du client. Aucune bascule sans WPML ni Polylang (évite un e-mail à moitié traduit).
+- Nouveaux filtres : `bb_email_locale`, `bb_email_order_language`, `bb_email_admin_uses_order_language` (e-mails admin dans la langue de la commande, désactivé par défaut).
+
 ## 1.0.3
 
 - Mises à jour automatiques depuis GitHub (mécanisme maison `GitHubUpdater`, comme DC Visibility / GéoPrestations) : une nouvelle version poussée sur `main` est proposée dans Extensions.

@@ -84,19 +84,46 @@ final class Wpml {
 	}
 
 	/**
-	 * Bascule langue et locale sur celles de l'objet de l'e-mail.
+	 * Une extension multilingue (WPML ou Polylang) est-elle active ?
+	 *
+	 * Sans elle, WooCommerce écrit ses propres textes dans la langue du site : basculer la langue
+	 * du layout produirait un e-mail à moitié traduit. On ne bascule donc jamais dans ce cas.
+	 */
+	public static function is_multilingual(): bool {
+		return function_exists( 'pll_current_language' ) || has_filter( 'wpml_current_language' );
+	}
+
+	/**
+	 * Bascule langue et locale sur celles du destinataire de l'e-mail.
+	 *
+	 * Ordre : langue de la commande (WPML `wpml_language`, Polylang), filtre `bb_email_order_language`,
+	 * puis langue du profil du client. Rien n'est fait sans WPML ni Polylang.
 	 *
 	 * @param mixed $subject Objet de l'e-mail : commande, utilisateur ou autre.
 	 */
 	public function switch_for( $subject ): void {
-		$language = $this->language_of( $subject );
-		$locale   = $language ? $this->locale_of( $language ) : '';
-
-		if ( $subject instanceof \WP_User && '' === $locale ) {
-			$locale = get_user_locale( $subject );
+		if ( ! self::is_multilingual() ) {
+			return;
 		}
 
-		if ( $language && has_action( 'wpml_switch_language' ) ) {
+		$language = $this->language_of( $subject );
+		$locale   = '' !== $language ? $this->locale_of( $language ) : $this->user_locale_of( $subject );
+
+		/**
+		 * Locale utilisée pour rendre un e-mail client (vide = pas de bascule).
+		 *
+		 * @param string $locale  Locale détectée (ex. « en_US »).
+		 * @param mixed  $subject Objet de l'e-mail (commande, utilisateur…).
+		 *
+		 * @since 1.0.4
+		 */
+		$locale = (string) apply_filters( 'bb_email_locale', $locale, $subject );
+
+		if ( '' === $language && '' !== $locale ) {
+			$language = $this->language_for_locale( $locale );
+		}
+
+		if ( '' !== $language && has_action( 'wpml_switch_language' ) ) {
 			/**
 			 * Hook WPML : langue courante.
 			 *
@@ -110,7 +137,7 @@ final class Wpml {
 			 */
 			do_action( 'wpml_switch_language', $language ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- API WPML.
 		}
-		$this->language = $language ? $language : null;
+		$this->language = '' !== $language ? $language : null;
 
 		if ( '' !== $locale && determine_locale() !== $locale ) {
 			$this->switched_locale = switch_to_locale( $locale );
@@ -138,19 +165,69 @@ final class Wpml {
 	}
 
 	/**
-	 * Code langue de la commande / de l'utilisateur.
+	 * Code langue (WPML / Polylang) de la commande.
 	 *
 	 * @param mixed $subject Objet de l'e-mail.
 	 */
 	private function language_of( $subject ): string {
+		$language = '';
 		if ( $subject instanceof \WC_Order ) {
+			// WPML (WCML) : métadonnée de commande, compatible HPOS.
 			$language = (string) $subject->get_meta( 'wpml_language' );
 			if ( '' === $language && function_exists( 'pll_get_post_language' ) ) {
-				$language = (string) pll_get_post_language( $subject->get_id() );
+				$language = (string) pll_get_post_language( $subject->get_id(), 'slug' );
 			}
-			return $language;
 		}
-		// Utilisateur : pas de code langue, switch_for() se rabat sur get_user_locale().
+
+		/**
+		 * Code langue d'une commande pour une extension non détectée (ex. stockage HPOS spécifique).
+		 *
+		 * @param string $language Code langue détecté (peut être vide).
+		 * @param mixed  $subject  Objet de l'e-mail.
+		 *
+		 * @since 1.0.4
+		 */
+		return (string) apply_filters( 'bb_email_order_language', $language, $subject );
+	}
+
+	/**
+	 * Langue choisie dans le profil du client (vide si non définie : la langue du site s'applique).
+	 *
+	 * @param mixed $subject Commande ou utilisateur.
+	 */
+	private function user_locale_of( $subject ): string {
+		$user_id = 0;
+		if ( $subject instanceof \WP_User ) {
+			$user_id = $subject->ID;
+		} elseif ( $subject instanceof \WC_Order ) {
+			$user_id = $subject->get_customer_id();
+		}
+		return $user_id ? (string) get_user_meta( $user_id, 'locale', true ) : '';
+	}
+
+	/**
+	 * Code langue WPML / Polylang correspondant à une locale.
+	 *
+	 * @param string $locale Locale (ex. « en_US »).
+	 */
+	private function language_for_locale( string $locale ): string {
+		/**
+		 * Hook WPML : langues actives.
+		 *
+		 * @since 1.0.4
+		 */
+		$wpml = apply_filters( 'wpml_active_languages', null ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- API WPML.
+		foreach ( is_array( $wpml ) ? $wpml : array() as $code => $data ) {
+			if ( ( $data['default_locale'] ?? '' ) === $locale ) {
+				return (string) $code;
+			}
+		}
+		if ( function_exists( 'PLL' ) && isset( PLL()->model ) ) {
+			$pll = PLL()->model->get_language( $locale );
+			if ( $pll && ! empty( $pll->slug ) ) {
+				return (string) $pll->slug;
+			}
+		}
 		return '';
 	}
 

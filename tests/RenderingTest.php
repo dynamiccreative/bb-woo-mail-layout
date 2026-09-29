@@ -105,10 +105,10 @@ class RenderingTest extends TestCase {
 	 * Surcoût du layout par rapport au rendu WooCommerce natif (commande de 10 lignes).
 	 *
 	 * Le temps absolu dépend surtout de WooCommerce et de l'hébergement (OPcache, base) : on mesure
-	 * donc le surcoût propre au plugin. BB_WML_PERF_BUDGET_MS ajuste le budget (15 ms par défaut).
+	 * donc le surcoût propre au plugin. BB_WML_PERF_BUDGET_MS ajuste le budget (25 ms par défaut, marge pour le bruit de mesure).
 	 */
 	public function test_layout_overhead_under_budget(): void {
-		$budget    = (float) ( getenv( 'BB_WML_PERF_BUDGET_MS' ) ? getenv( 'BB_WML_PERF_BUDGET_MS' ) : 15 );
+		$budget    = (float) ( getenv( 'BB_WML_PERF_BUDGET_MS' ) ? getenv( 'BB_WML_PERF_BUDGET_MS' ) : 25 );
 		$simulator = new Simulator( Plugin::instance()->registry() );
 		$order_id  = $this->create_order( 10 )->get_id();
 

@@ -142,9 +142,11 @@ final class Plugin {
 	private static function register_updater(): void {
 		require_once BB_WML_DIR . 'lib/GitHubUpdater.php';
 
-		// La bibliothèque retire « WP_PLUGIN_DIR/ » du chemin puis le découpe en dossier/fichier :
-		// sous Windows, __FILE__ contient des antislashs et ce découpage échoue (erreur fatale).
-		$updater = new \BB_WML_GitHubUpdater( WP_PLUGIN_DIR . '/' . plugin_basename( BB_WML_FILE ) );
+		// La bibliothèque retire « WP_PLUGIN_DIR/ » du chemin puis le découpe en dossier/fichier.
+		// __FILE__ ne s'y prête pas toujours (antislashs sous Windows, lien symbolique, chemin court) :
+		// on reconstruit « WP_PLUGIN_DIR/dossier/fichier.php » à partir des noms réels.
+		$file    = WP_PLUGIN_DIR . '/' . basename( dirname( BB_WML_FILE ) ) . '/' . basename( BB_WML_FILE );
+		$updater = new \BB_WML_GitHubUpdater( $file );
 		$updater->setBranch( 'main' );
 		$updater->setAccessToken( (string) get_option( 'bb_wml_github_access_token', '' ) );
 		$updater->setPluginIcon( 'https://raw.githubusercontent.com/dynamiccreative/setting-plugin/main/img/icon-256x256.png' );
@@ -168,7 +170,7 @@ final class Plugin {
 	 * Charge les traductions du plugin (chaînes source en français).
 	 */
 	public function load_textdomain(): void {
-		load_plugin_textdomain( 'bb-woo-mail-layout', false, dirname( plugin_basename( BB_WML_FILE ) ) . '/languages' );
+		load_plugin_textdomain( 'bb-woo-mail-layout', false, basename( dirname( BB_WML_FILE ) ) . '/languages' );
 	}
 
 	/**

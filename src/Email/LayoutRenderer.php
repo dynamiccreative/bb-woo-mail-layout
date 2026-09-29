@@ -144,9 +144,31 @@ final class LayoutRenderer {
 			return;
 		}
 		$this->stack[] = $email;
-		if ( 1 === count( $this->stack ) && $this->applies_to( $email ) && $email->is_customer_email() ) {
+		if ( 1 === count( $this->stack ) && $this->applies_to( $email ) && $this->uses_recipient_language( $email ) ) {
 			$this->wpml->switch_for( $email->object );
 		}
+	}
+
+	/**
+	 * L'e-mail doit-il être rendu dans la langue de la commande ?
+	 * Oui pour les e-mails client ; les e-mails admin restent dans la langue du site, sauf filtre.
+	 *
+	 * @param \WC_Email $email E-mail.
+	 */
+	private function uses_recipient_language( \WC_Email $email ): bool {
+		if ( $email->is_customer_email() ) {
+			return true;
+		}
+
+		/**
+		 * Rendre aussi les e-mails admin dans la langue de la commande (désactivé par défaut).
+		 *
+		 * @param bool      $enabled Faux par défaut.
+		 * @param \WC_Email $email   E-mail admin.
+		 *
+		 * @since 1.0.4
+		 */
+		return (bool) apply_filters( 'bb_email_admin_uses_order_language', false, $email );
 	}
 
 	/**
@@ -336,7 +358,10 @@ final class LayoutRenderer {
 	 */
 	public function render_header( string $heading, ?\WC_Email $email ): void {
 		$email = $email ?? $this->current_email();
-		$this->include_part( 'header', $this->view_vars( $email, $heading ) );
+		$vars  = $this->view_vars( $email, $heading );
+		// CSS du layout pour le <style> du <head> (calculé ici seulement : inutile au pied de page).
+		$vars['css'] = str_replace( '</', '<\/', $this->css( $email ) );
+		$this->include_part( 'header', $vars );
 
 		/**
 		 * Juste avant le contenu WooCommerce (après titre et intro).
@@ -444,7 +469,6 @@ final class LayoutRenderer {
 			'site_url'        => home_url( '/' ),
 			'colors'          => $this->colors( $settings ),
 			'google_font_url' => $this->google_font_url( $settings ),
-			'css'             => str_replace( '</', '<\/', $this->css( $email ) ),
 			'logo'            => $this->logo( $settings, $site_title ),
 			'intro_html'      => 'yes' === $settings['show_intro'] ? $this->intro_html( $email ) : '',
 			'help'            => $this->help( $settings ),

@@ -20,6 +20,21 @@ abstract class TestCase extends \WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 		update_option( BB_WML_OPTION, Options::defaults() );
+
+		// Le site de test est en en_US : sans ceci, la traduction anglaise du plugin s'appliquerait.
+		// Les tests vérifient les chaînes source (françaises) ; LanguageTest couvre l'anglais.
+		add_filter( 'override_load_textdomain', array( $this, 'keep_source_strings' ), 10, 2 );
+		unload_textdomain( 'bb-woo-mail-layout' );
+	}
+
+	/**
+	 * Empêche le chargement des traductions du plugin (les hooks sont restaurés après chaque test).
+	 *
+	 * @param bool   $override Valeur courante.
+	 * @param string $domain   Domaine de texte.
+	 */
+	public function keep_source_strings( $override, $domain ): bool {
+		return 'bb-woo-mail-layout' === $domain ? true : (bool) $override;
 	}
 
 	/**
