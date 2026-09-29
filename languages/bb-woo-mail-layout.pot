@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29 14:09+0000\n"
+"POT-Creation-Date: 2026-09-29 14:24+0000\n"
 "X-Domain: bb-woo-mail-layout\n"
 
 #: src/Settings/LogoChecker.php:81
@@ -83,594 +83,602 @@ msgstr ""
 msgid "Type invalide pour « %s »."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:85 src/Settings/SettingsPage.php:201
+#: src/Settings/SettingsPage.php:84
+msgid "Mise en forme des e-mails"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:85
+msgid "Mise en forme e-mails"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:121 src/Settings/SettingsPage.php:237
 msgid "Mise en forme bleuebuzz"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:203 src/Settings/SettingsPage.php:276 src/Settings/SettingsPage.php:278
+#: src/Settings/SettingsPage.php:239 src/Settings/SettingsPage.php:312 src/Settings/SettingsPage.php:314
 msgid "Layout"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:204
+#: src/Settings/SettingsPage.php:240
 msgid "e-mails mis en forme"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:210
+#: src/Settings/SettingsPage.php:246
 msgid "Logo vérifié"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:211
+#: src/Settings/SettingsPage.php:247
 msgid "Logo inaccessible"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:211
+#: src/Settings/SettingsPage.php:247
 msgid "Logo non vérifié"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:218
+#: src/Settings/SettingsPage.php:254
 msgid "Envoyer un e-mail de test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:221
+#: src/Settings/SettingsPage.php:257
 msgid "Sections"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:224
+#: src/Settings/SettingsPage.php:260
 msgid "Apparence"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:225
+#: src/Settings/SettingsPage.php:261
 msgid "Contenu"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:226
+#: src/Settings/SettingsPage.php:262
 msgid "E-mails"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:227
+#: src/Settings/SettingsPage.php:263
 msgid "Outils"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:252
+#: src/Settings/SettingsPage.php:288
 msgid "Modifications non enregistrées"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:253
+#: src/Settings/SettingsPage.php:289
 msgid "Enregistrer les modifications"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:268
+#: src/Settings/SettingsPage.php:304
 msgid "Fond clair, bandeau coloré sous le logo."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:269
+#: src/Settings/SettingsPage.php:305
 msgid "Tout blanc, simple filet de couleur."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:270
+#: src/Settings/SettingsPage.php:306
 msgid "Barre d’accent, photos produit dans la commande."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:276
+#: src/Settings/SettingsPage.php:312
 msgid "Layout général des e-mails activés. Un e-mail peut avoir le sien dans l’onglet E-mails."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:295
+#: src/Settings/SettingsPage.php:331
 msgid "Logo"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:295
+#: src/Settings/SettingsPage.php:331
 msgid "Affiché en tête d’e-mail, avec un lien vers la boutique."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:296
+#: src/Settings/SettingsPage.php:332
 msgid "Afficher le logo"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:302
+#: src/Settings/SettingsPage.php:338
 msgid "Aucun logo"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:305
+#: src/Settings/SettingsPage.php:341
 msgid "Choisir une image"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:306
+#: src/Settings/SettingsPage.php:342
 msgid "Retirer"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:307
+#: src/Settings/SettingsPage.php:343
 msgid "Image de la médiathèque de ce site (PNG ou JPG)."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:311
+#: src/Settings/SettingsPage.php:347
 msgid "URL de l’image"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:317
+#: src/Settings/SettingsPage.php:353
 msgid "Largeur maximale"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:321
+#: src/Settings/SettingsPage.php:357
 msgid "Hauteur maximale"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:326
+#: src/Settings/SettingsPage.php:362
 msgid "La limite la plus contraignante l’emporte. Le logo n’est jamais agrandi au-delà de sa taille réelle."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:337
+#: src/Settings/SettingsPage.php:373
 msgid "Couleurs"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:337
+#: src/Settings/SettingsPage.php:373
 msgid "Cliquez sur une pastille pour choisir, ou saisissez le code hexadécimal."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:338
+#: src/Settings/SettingsPage.php:374
 msgid "Rétablir les couleurs par défaut"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:343
+#: src/Settings/SettingsPage.php:379
 msgid "Principale"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:343
+#: src/Settings/SettingsPage.php:379
 msgid "Bandeau, titres, liens"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:344
+#: src/Settings/SettingsPage.php:380
 msgid "Boutons"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:345
+#: src/Settings/SettingsPage.php:381
 msgid "Texte"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:346
+#: src/Settings/SettingsPage.php:382
 msgid "Bordures"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:346
+#: src/Settings/SettingsPage.php:382
 msgid "Vide : teinte calculée depuis le texte"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:347
+#: src/Settings/SettingsPage.php:383
 msgid "Fond extérieur"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:347
+#: src/Settings/SettingsPage.php:383
 msgid "Layout Classique uniquement"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:354
+#: src/Settings/SettingsPage.php:390
 msgid "Police"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:358
+#: src/Settings/SettingsPage.php:394
 msgid "Police du texte"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:367
+#: src/Settings/SettingsPage.php:403
 msgid "Google Font (repli sur Arial)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:375
+#: src/Settings/SettingsPage.php:411
 msgid "Nom de la Google Font"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:377
+#: src/Settings/SettingsPage.php:413
 msgid "Affichée par Apple Mail et iOS. Gmail et Outlook affichent la police de repli."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:395
+#: src/Settings/SettingsPage.php:431
 msgid "Blocs de l’e-mail"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:395
+#: src/Settings/SettingsPage.php:431
 msgid "Activez un bloc pour le régler. Un bloc désactivé n’apparaît dans aucun e-mail."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:398
+#: src/Settings/SettingsPage.php:434
 msgid "Paragraphe d’introduction"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:398
+#: src/Settings/SettingsPage.php:434
 msgid "Texte sous le titre, réglé e-mail par e-mail dans l’onglet E-mails."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:399
+#: src/Settings/SettingsPage.php:435
 msgid "Modifier les textes"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:402 layouts/classique/footer.php:25 layouts/sobre/footer.php:25 layouts/ecommerce/footer.php:25
+#: src/Settings/SettingsPage.php:438 layouts/classique/footer.php:25 layouts/sobre/footer.php:25 layouts/ecommerce/footer.php:25
 msgid "Besoin d’aide ?"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:402
+#: src/Settings/SettingsPage.php:438
 msgid "Masqué automatiquement si aucune information n’est renseignée."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:404
+#: src/Settings/SettingsPage.php:440
 msgid "Téléphone"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:405 src/Settings/SettingsPage.php:662
+#: src/Settings/SettingsPage.php:441 src/Settings/SettingsPage.php:698
 msgid "E-mail"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:407
+#: src/Settings/SettingsPage.php:443
 msgid "Horaires"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:407
+#: src/Settings/SettingsPage.php:443
 msgid "Du lundi au vendredi, de 9 h à 18 h"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:410
+#: src/Settings/SettingsPage.php:446
 msgid "Réseaux sociaux"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:410
+#: src/Settings/SettingsPage.php:446
 msgid "Seuls les réseaux dont l’URL est renseignée sont affichés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:429
+#: src/Settings/SettingsPage.php:465
 msgid "Produits mis en avant"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:429
+#: src/Settings/SettingsPage.php:465
 msgid "Jusqu’à 3 produits (photo, titre, prix) sous la commande, dans les e-mails envoyés au client."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:430
+#: src/Settings/SettingsPage.php:466
 msgid "Titre du bloc"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:430 src/Email/LayoutRenderer.php:905
+#: src/Settings/SettingsPage.php:466 src/Email/LayoutRenderer.php:905
 msgid "Vous aimerez aussi"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:432
+#: src/Settings/SettingsPage.php:468
 msgid "Choix des produits"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:436
+#: src/Settings/SettingsPage.php:472
 msgid "Manuel : les produits choisis ci-dessous"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:437
+#: src/Settings/SettingsPage.php:473
 msgid "Automatique : ventes croisées des produits commandés"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:438
+#: src/Settings/SettingsPage.php:474
 msgid "Automatique : produits apparentés aux produits commandés"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:445
+#: src/Settings/SettingsPage.php:481
 msgid "Ventes croisées réglées dans chaque fiche produit (onglet Produits liés), complétées par des produits de mêmes catégories ou étiquettes. Les produits déjà commandés sont exclus."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:446
+#: src/Settings/SettingsPage.php:482
 msgid "Produits de mêmes catégories ou étiquettes que ceux de la commande (sélection variable d’un e-mail à l’autre). Les produits déjà commandés sont exclus."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:450
+#: src/Settings/SettingsPage.php:486
 msgid "Produits (3 maximum)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:451
+#: src/Settings/SettingsPage.php:487
 msgid "Produits de complément (3 maximum, facultatif)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:455
+#: src/Settings/SettingsPage.php:491
 msgid "Rechercher un produit…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:466
+#: src/Settings/SettingsPage.php:502
 msgid "Utilisés si la sélection automatique trouve moins de 3 produits, et dans les e-mails sans commande (création de compte…)."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:467
+#: src/Settings/SettingsPage.php:503
 msgid "Les produits non publiés ou masqués du catalogue sont ignorés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:472
+#: src/Settings/SettingsPage.php:508
 msgid "Pied de page"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:472
+#: src/Settings/SettingsPage.php:508
 msgid "Nom légal, adresse et mentions."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:474
+#: src/Settings/SettingsPage.php:510
 msgid "Nom légal"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:476
+#: src/Settings/SettingsPage.php:512
 msgid "Adresse"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:482
+#: src/Settings/SettingsPage.php:518
 msgid "Afficher le lien vers la boutique"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:485
+#: src/Settings/SettingsPage.php:521
 msgid "Mentions"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:504
+#: src/Settings/SettingsPage.php:540
 msgid "Gras, lien et saut de ligne uniquement. Placeholders autorisés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:512
+#: src/Settings/SettingsPage.php:548
 msgid "Avancé : CSS personnalisé"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:514
+#: src/Settings/SettingsPage.php:550
 msgid "Ajouté après le CSS du layout (il l’emporte). Balises, @import et scripts sont retirés. Jetons (cliquer pour insérer) :"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:546
+#: src/Settings/SettingsPage.php:582
 msgid "E-mails mis en forme"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:546
+#: src/Settings/SettingsPage.php:582
 msgid "Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail désactivé garde le rendu WooCommerce natif. Les sujets et titres se règlent dans chaque e-mail WooCommerce."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:548
+#: src/Settings/SettingsPage.php:584
 msgid "Filtrer par destinataire"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:549
+#: src/Settings/SettingsPage.php:585
 msgid "Tous"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:549 src/Settings/SettingsPage.php:594
+#: src/Settings/SettingsPage.php:585 src/Settings/SettingsPage.php:630
 msgid "Client"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:549 src/Settings/SettingsPage.php:594
+#: src/Settings/SettingsPage.php:585 src/Settings/SettingsPage.php:630
 msgid "Administrateur"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:551
+#: src/Settings/SettingsPage.php:587
 msgid "Rechercher un e-mail"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:553
+#: src/Settings/SettingsPage.php:589
 msgid "Tout activer"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:554
+#: src/Settings/SettingsPage.php:590
 msgid "Tout désactiver"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:558
+#: src/Settings/SettingsPage.php:594
 msgid "Placeholders des textes (cliquer pour insérer dans le champ ouvert) :"
 msgstr ""
 
 #. translators: %s: titre de l'e-mail.
-#: src/Settings/SettingsPage.php:585
+#: src/Settings/SettingsPage.php:621
 msgid "Mettre en forme : %s"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:592
+#: src/Settings/SettingsPage.php:628
 msgid "Sujet et titre"
 msgstr ""
 
 #. translators: %s: titre de l'e-mail.
-#: src/Settings/SettingsPage.php:598
+#: src/Settings/SettingsPage.php:634
 msgid "Layout : %s"
 msgstr ""
 
 #. translators: %s: nom du layout général.
-#: src/Settings/SettingsPage.php:604 src/Settings/SettingsPage.php:950
+#: src/Settings/SettingsPage.php:640 src/Settings/SettingsPage.php:986
 msgid "Général (%s)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:612 src/Settings/SettingsPage.php:946
+#: src/Settings/SettingsPage.php:648 src/Settings/SettingsPage.php:982
 msgid "Textes personnalisés"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:612 src/Settings/SettingsPage.php:947
+#: src/Settings/SettingsPage.php:648 src/Settings/SettingsPage.php:983
 msgid "Textes par défaut"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:617
+#: src/Settings/SettingsPage.php:653
 msgid "Introduction"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:619
+#: src/Settings/SettingsPage.php:655
 msgid "Vide : le texte par défaut (en gris) est utilisé. Une ligne vide sépare deux paragraphes."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:622
+#: src/Settings/SettingsPage.php:658
 msgid "Pré-en-tête"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:623
+#: src/Settings/SettingsPage.php:659
 msgid "Vide : début de l’introduction"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:624
+#: src/Settings/SettingsPage.php:660
 msgid "Texte affiché sous le sujet dans la boîte de réception (140 caractères au plus), invisible dans l’e-mail."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:628
+#: src/Settings/SettingsPage.php:664
 msgid "Bouton : libellé"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:629
+#: src/Settings/SettingsPage.php:665
 msgid "Vide : libellé du lien choisi"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:632
+#: src/Settings/SettingsPage.php:668
 msgid "Bouton : lien"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:633
+#: src/Settings/SettingsPage.php:669
 msgid "{tracking_url} ou https://…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:636
+#: src/Settings/SettingsPage.php:672
 msgid "Bouton affiché sous l’introduction. Lien vide : pas de bouton. Un placeholder sans valeur pour la commande (ex. {tracking_url} sans numéro de suivi) masque le bouton."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:640
+#: src/Settings/SettingsPage.php:676
 msgid "Aucun e-mail ne correspond à cette recherche."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:658
+#: src/Settings/SettingsPage.php:694
 msgid "E-mail de test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:658
+#: src/Settings/SettingsPage.php:694
 msgid "Envoie l’e-mail choisi avec les données d’une vraie commande, ou d’une commande fictive. Les modifications non enregistrées sont prises en compte."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:666
+#: src/Settings/SettingsPage.php:702
 msgid "Commande utilisée comme jeu de données"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:671
+#: src/Settings/SettingsPage.php:707
 msgid "Destinataire du test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:675
+#: src/Settings/SettingsPage.php:711
 msgid "Envoyer l’e-mail de test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:682
+#: src/Settings/SettingsPage.php:718
 msgid "Import / export"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:682
+#: src/Settings/SettingsPage.php:718
 msgid "Copier la mise en forme d’un site à l’autre."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:685
+#: src/Settings/SettingsPage.php:721
 msgid "Exporter les réglages (JSON)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:689
+#: src/Settings/SettingsPage.php:725
 msgid "Importer…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:692
+#: src/Settings/SettingsPage.php:728
 msgid "L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:693
+#: src/Settings/SettingsPage.php:729
 msgid "Remplacer les réglages"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:694
+#: src/Settings/SettingsPage.php:730
 msgid "Annuler"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:711 src/Settings/SettingsPage.php:713
+#: src/Settings/SettingsPage.php:747 src/Settings/SettingsPage.php:749
 msgid "Aperçu"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:714 src/Settings/SettingsPage.php:940
+#: src/Settings/SettingsPage.php:750 src/Settings/SettingsPage.php:976
 msgid "Mis à jour en direct"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:717
+#: src/Settings/SettingsPage.php:753
 msgid "E-mail à prévisualiser"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:718
+#: src/Settings/SettingsPage.php:754
 msgid "Commande utilisée pour l’aperçu"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:719
+#: src/Settings/SettingsPage.php:755
 msgid "Largeur de l’aperçu"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:720
+#: src/Settings/SettingsPage.php:756
 msgid "Ordinateur"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:720
+#: src/Settings/SettingsPage.php:756
 msgid "Mobile"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:724
+#: src/Settings/SettingsPage.php:760
 msgid "Aperçu de l’e-mail"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:814
+#: src/Settings/SettingsPage.php:850
 msgid "Auto"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:854 src/Settings/SettingsPage.php:948
+#: src/Settings/SettingsPage.php:890 src/Settings/SettingsPage.php:984
 msgid "rendu natif"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:887
+#: src/Settings/SettingsPage.php:923
 msgid "Commande fictive (exemple)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:938
+#: src/Settings/SettingsPage.php:974
 msgid "Choisir le logo"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:939
+#: src/Settings/SettingsPage.php:975
 msgid "Utiliser cette image"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:941
+#: src/Settings/SettingsPage.php:977
 msgid "Mise à jour…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:942
+#: src/Settings/SettingsPage.php:978
 msgid "Envoi en cours…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:943
+#: src/Settings/SettingsPage.php:979
 msgid "Import en cours…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:944
+#: src/Settings/SettingsPage.php:980
 msgid "Une erreur est survenue."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:945
+#: src/Settings/SettingsPage.php:981
 msgid "Choisissez d’abord un fichier JSON exporté depuis cette page."
 msgstr ""
 
 #. translators: 1: largeur, 2: hauteur (px).
-#: src/Settings/SettingsPage.php:952
+#: src/Settings/SettingsPage.php:988
 msgid "Rendu actuel : %1$s × %2$s px."
 msgstr ""
 
 #. translators: %d: nombre d'informations renseignées.
-#: src/Settings/SettingsPage.php:954
+#: src/Settings/SettingsPage.php:990
 msgid "%d / 3 renseignés"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:955
+#: src/Settings/SettingsPage.php:991
 msgid "Vide : bloc masqué"
 msgstr ""
 
 #. translators: %d: nombre de réseaux.
-#: src/Settings/SettingsPage.php:957
+#: src/Settings/SettingsPage.php:993
 msgid "%d réseau(x)"
 msgstr ""
 
 #. translators: %d: nombre de produits.
-#: src/Settings/SettingsPage.php:959
+#: src/Settings/SettingsPage.php:995
 msgid "%d / 3 produits"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:960
+#: src/Settings/SettingsPage.php:996
 msgid "Automatique"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:973
+#: src/Settings/SettingsPage.php:1009
 msgid "Réglages"
 msgstr ""
 
@@ -716,314 +724,6 @@ msgstr ""
 
 #: src/Email/LayoutRenderer.php:653
 msgid "En savoir plus"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:28
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre commande n° {order_number} a été partiellement remboursée. Le montant sera crédité sur votre moyen de paiement d’origine dans les prochains jours."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:33
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Le paiement de votre commande n° {order_number} du {order_date} n’a pas abouti. Vous pouvez le relancer à tout moment grâce au bouton ci-dessous."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:34
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Une commande a été créée pour vous sur {site_title}. Vous en trouverez le détail ci-dessous, ainsi qu’un lien pour la régler quand vous le souhaitez."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:61
-msgid ""
-"Vous avez reçu une nouvelle commande de {customer_first_name} {customer_last_name}.\n"
-"\n"
-"Commande n° {order_number} du {order_date}, d’un montant de {order_total}. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:62
-msgid "La commande n° {order_number} de {customer_first_name} {customer_last_name} a été annulée. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:63
-msgid "Le paiement de la commande n° {order_number} de {customer_first_name} {customer_last_name} a échoué. La commande est en attente de paiement. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:64
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Nous avons bien reçu votre commande n° {order_number}. Elle est en attente jusqu’à la confirmation de votre paiement. Vous en trouverez le récapitulatif ci-dessous."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:65
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Merci pour votre commande ! Nous avons bien reçu votre commande n° {order_number} et nous la préparons dès maintenant. Vous en trouverez le récapitulatif ci-dessous."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:66
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Bonne nouvelle : votre commande n° {order_number} est terminée. Si elle doit vous être livrée, elle est désormais en route. {tracking_url}\n"
-"\n"
-"Merci pour votre confiance !"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:67
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre commande n° {order_number} a été annulée. S’il s’agit d’une erreur, n’hésitez pas à nous contacter."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:68
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Le paiement de votre commande n° {order_number} n’a malheureusement pas abouti. Vous pouvez réessayer depuis votre espace client ou nous contacter si le problème persiste."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:69
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre commande n° {order_number} a été remboursée. Le montant sera crédité sur votre moyen de paiement d’origine dans les prochains jours."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:70
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Une note a été ajoutée à votre commande n° {order_number} :"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:71
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Voici le détail de votre commande n° {order_number} passée le {order_date}."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:72
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Merci d’avoir créé votre compte sur {site_title}. Depuis votre espace client, vous pouvez suivre vos commandes et gérer vos informations personnelles."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:73
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Nous avons reçu une demande de réinitialisation du mot de passe de votre compte sur {site_title}. Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet e-mail : votre mot de passe restera inchangé."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:88
-msgid ""
-"Nouvelle commande de renouvellement d’abonnement de {customer_first_name} {customer_last_name}.\n"
-"\n"
-"Commande n° {order_number} du {order_date}, d’un montant de {order_total}. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:89
-msgid "{customer_first_name} {customer_last_name} a modifié son abonnement (commande n° {order_number}, {order_total}). {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:90
-msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} a été annulé. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:91
-msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} est arrivé à expiration. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:92
-msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} a été suspendu. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:93
-msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} a été réactivé. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:94
-msgid "Le paiement du renouvellement n° {order_number} de {customer_first_name} {customer_last_name} a échoué. Une nouvelle tentative de paiement automatique est programmée. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:97
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Merci ! Le renouvellement de votre abonnement est bien enregistré (commande n° {order_number}). Vous en trouverez le récapitulatif ci-dessous."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:98
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre commande de renouvellement n° {order_number} est terminée. Merci pour votre fidélité !"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:99
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Nous avons bien reçu votre commande de renouvellement n° {order_number}. Elle est en attente jusqu’à la confirmation de votre paiement."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:100
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"La modification de votre abonnement est bien prise en compte. Vous trouverez ci-dessous le détail de la commande n° {order_number}."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:101
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Le renouvellement de votre abonnement est à régler (commande n° {order_number}, {order_total}). Vous pouvez le payer dès maintenant : {payment_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:102
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Le paiement du renouvellement de votre abonnement (commande n° {order_number}) n’a pas abouti. Une nouvelle tentative sera faite automatiquement ; vous pouvez aussi régler la commande dès maintenant : {payment_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:103
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Petit rappel : votre abonnement n° {order_number} sera renouvelé automatiquement le {next_payment_date}. Aucune action n’est nécessaire de votre part. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:104
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre abonnement n° {order_number} arrive à échéance le {next_payment_date}. Pensez à le renouveler depuis votre espace client pour ne pas l’interrompre. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:105
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre période d’essai se termine bientôt. Votre abonnement n° {order_number} se poursuivra automatiquement, avec un premier paiement le {next_payment_date}. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:106
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre période d’essai se termine bientôt. Pour poursuivre votre abonnement n° {order_number}, un paiement sera nécessaire le {next_payment_date}. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:107
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre abonnement n° {order_number} prendra fin le {subscription_end_date}. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:110
-msgid ""
-"Nouvelle réservation de {customer_first_name} {customer_last_name} : « {booking_product} », le {booking_date}.\n"
-"\n"
-"Si elle doit être confirmée, validez-la depuis l’administration. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:111
-msgid "La réservation de {customer_first_name} {customer_last_name} (« {booking_product} », le {booking_date}) a été annulée. {order_url}"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:112
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Bonne nouvelle : votre réservation « {booking_product} » du {booking_date} est confirmée. Vous en trouverez le détail ci-dessous."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:113
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre réservation « {booking_product} » du {booking_date} a été annulée. S’il s’agit d’une erreur, n’hésitez pas à nous contacter."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:114
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Petit rappel : votre réservation « {booking_product} » a lieu le {booking_date}. Nous avons hâte de vous accueillir !"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:115
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Nous avons bien reçu votre demande de réservation « {booking_product} » pour le {booking_date}. Elle est en attente de confirmation : vous recevrez un e-mail dès qu’elle sera validée."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:116
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Voici un message concernant votre réservation « {booking_product} » du {booking_date} :"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:119
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre adhésion « {membership_plan} » est désormais active. Profitez dès maintenant de vos avantages membres sur {site_title}."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:120
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre adhésion « {membership_plan} » arrive bientôt à échéance. Renouvelez-la pour continuer à profiter de vos avantages."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:121
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre adhésion « {membership_plan} » a pris fin. Vous pouvez la renouveler à tout moment depuis votre espace client."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:122
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Votre adhésion « {membership_plan} » a pris fin il y a quelque temps. Envie de retrouver vos avantages membres ? Renouvelez-la en quelques clics."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:123
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Une note a été ajoutée à votre adhésion « {membership_plan} » :"
-msgstr ""
-
-#: src/Email/DefaultTexts.php:134
-msgid ""
-"Bonjour {customer_first_name},\n"
-"\n"
-"Vous trouverez ci-dessous les informations concernant : « {email_title} »."
-msgstr ""
-
-#: src/Email/DefaultTexts.php:135
-msgid "Notification de la boutique {site_title} : « {email_title} »."
 msgstr ""
 
 #: src/Email/Placeholders.php:32
@@ -1136,6 +836,314 @@ msgstr ""
 
 #: src/Email/Placeholders.php:157
 msgid "Suivre mon colis"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:28
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande n° {order_number} a été partiellement remboursée. Le montant sera crédité sur votre moyen de paiement d’origine dans les prochains jours."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:33
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Le paiement de votre commande n° {order_number} du {order_date} n’a pas abouti. Vous pouvez le relancer à tout moment grâce au bouton ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:34
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Une commande a été créée pour vous sur {site_title}. Vous en trouverez le détail ci-dessous, ainsi qu’un lien pour la régler quand vous le souhaitez."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:71
+msgid ""
+"Vous avez reçu une nouvelle commande de {customer_first_name} {customer_last_name}.\n"
+"\n"
+"Commande n° {order_number} du {order_date}, d’un montant de {order_total}. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:72
+msgid "La commande n° {order_number} de {customer_first_name} {customer_last_name} a été annulée. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:73
+msgid "Le paiement de la commande n° {order_number} de {customer_first_name} {customer_last_name} a échoué. La commande est en attente de paiement. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:74
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Nous avons bien reçu votre commande n° {order_number}. Elle est en attente jusqu’à la confirmation de votre paiement. Vous en trouverez le récapitulatif ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:75
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Merci pour votre commande ! Nous avons bien reçu votre commande n° {order_number} et nous la préparons dès maintenant. Vous en trouverez le récapitulatif ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:76
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Bonne nouvelle : votre commande n° {order_number} est terminée. Si elle doit vous être livrée, elle est désormais en route. {tracking_url}\n"
+"\n"
+"Merci pour votre confiance !"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:77
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande n° {order_number} a été annulée. S’il s’agit d’une erreur, n’hésitez pas à nous contacter."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:78
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Le paiement de votre commande n° {order_number} n’a malheureusement pas abouti. Vous pouvez réessayer depuis votre espace client ou nous contacter si le problème persiste."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:79
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande n° {order_number} a été remboursée. Le montant sera crédité sur votre moyen de paiement d’origine dans les prochains jours."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:80
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Une note a été ajoutée à votre commande n° {order_number} :"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:81
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Voici le détail de votre commande n° {order_number} passée le {order_date}."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:82
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Merci d’avoir créé votre compte sur {site_title}. Depuis votre espace client, vous pouvez suivre vos commandes et gérer vos informations personnelles."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:83
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Nous avons reçu une demande de réinitialisation du mot de passe de votre compte sur {site_title}. Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet e-mail : votre mot de passe restera inchangé."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:98
+msgid ""
+"Nouvelle commande de renouvellement d’abonnement de {customer_first_name} {customer_last_name}.\n"
+"\n"
+"Commande n° {order_number} du {order_date}, d’un montant de {order_total}. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:99
+msgid "{customer_first_name} {customer_last_name} a modifié son abonnement (commande n° {order_number}, {order_total}). {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:100
+msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} a été annulé. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:101
+msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} est arrivé à expiration. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:102
+msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} a été suspendu. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:103
+msgid "L’abonnement n° {order_number} de {customer_first_name} {customer_last_name} a été réactivé. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:104
+msgid "Le paiement du renouvellement n° {order_number} de {customer_first_name} {customer_last_name} a échoué. Une nouvelle tentative de paiement automatique est programmée. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:107
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Merci ! Le renouvellement de votre abonnement est bien enregistré (commande n° {order_number}). Vous en trouverez le récapitulatif ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:108
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre commande de renouvellement n° {order_number} est terminée. Merci pour votre fidélité !"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:109
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Nous avons bien reçu votre commande de renouvellement n° {order_number}. Elle est en attente jusqu’à la confirmation de votre paiement."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:110
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"La modification de votre abonnement est bien prise en compte. Vous trouverez ci-dessous le détail de la commande n° {order_number}."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:111
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Le renouvellement de votre abonnement est à régler (commande n° {order_number}, {order_total}). Vous pouvez le payer dès maintenant : {payment_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:112
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Le paiement du renouvellement de votre abonnement (commande n° {order_number}) n’a pas abouti. Une nouvelle tentative sera faite automatiquement ; vous pouvez aussi régler la commande dès maintenant : {payment_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:113
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Petit rappel : votre abonnement n° {order_number} sera renouvelé automatiquement le {next_payment_date}. Aucune action n’est nécessaire de votre part. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:114
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre abonnement n° {order_number} arrive à échéance le {next_payment_date}. Pensez à le renouveler depuis votre espace client pour ne pas l’interrompre. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:115
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre période d’essai se termine bientôt. Votre abonnement n° {order_number} se poursuivra automatiquement, avec un premier paiement le {next_payment_date}. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:116
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre période d’essai se termine bientôt. Pour poursuivre votre abonnement n° {order_number}, un paiement sera nécessaire le {next_payment_date}. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:117
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre abonnement n° {order_number} prendra fin le {subscription_end_date}. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:120
+msgid ""
+"Nouvelle réservation de {customer_first_name} {customer_last_name} : « {booking_product} », le {booking_date}.\n"
+"\n"
+"Si elle doit être confirmée, validez-la depuis l’administration. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:121
+msgid "La réservation de {customer_first_name} {customer_last_name} (« {booking_product} », le {booking_date}) a été annulée. {order_url}"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:122
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Bonne nouvelle : votre réservation « {booking_product} » du {booking_date} est confirmée. Vous en trouverez le détail ci-dessous."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:123
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre réservation « {booking_product} » du {booking_date} a été annulée. S’il s’agit d’une erreur, n’hésitez pas à nous contacter."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:124
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Petit rappel : votre réservation « {booking_product} » a lieu le {booking_date}. Nous avons hâte de vous accueillir !"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:125
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Nous avons bien reçu votre demande de réservation « {booking_product} » pour le {booking_date}. Elle est en attente de confirmation : vous recevrez un e-mail dès qu’elle sera validée."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:126
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Voici un message concernant votre réservation « {booking_product} » du {booking_date} :"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:129
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre adhésion « {membership_plan} » est désormais active. Profitez dès maintenant de vos avantages membres sur {site_title}."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:130
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre adhésion « {membership_plan} » arrive bientôt à échéance. Renouvelez-la pour continuer à profiter de vos avantages."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:131
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre adhésion « {membership_plan} » a pris fin. Vous pouvez la renouveler à tout moment depuis votre espace client."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:132
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Votre adhésion « {membership_plan} » a pris fin il y a quelque temps. Envie de retrouver vos avantages membres ? Renouvelez-la en quelques clics."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:133
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Une note a été ajoutée à votre adhésion « {membership_plan} » :"
+msgstr ""
+
+#: src/Email/DefaultTexts.php:144
+msgid ""
+"Bonjour {customer_first_name},\n"
+"\n"
+"Vous trouverez ci-dessous les informations concernant : « {email_title} »."
+msgstr ""
+
+#: src/Email/DefaultTexts.php:145
+msgid "Notification de la boutique {site_title} : « {email_title} »."
 msgstr ""
 
 #: src/Admin/Notices.php:59 src/Admin/Notices.php:76

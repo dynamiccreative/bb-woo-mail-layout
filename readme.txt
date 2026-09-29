@@ -34,7 +34,7 @@ Ce n'est pas un builder : la mise en forme est maîtrisée par le code, le clien
 
 1. Téléverser le zip dans Extensions → Ajouter.
 2. Activer l'extension (WooCommerce doit être actif).
-3. Régler la mise en forme dans WooCommerce → Réglages → E-mails → Mise en forme bleuebuzz.
+3. Régler la mise en forme dans WooCommerce → Mise en forme e-mails (ou Réglages → E-mails → Mise en forme bleuebuzz).
 4. Envoyer un e-mail de test depuis la même page.
 
 == Frequently Asked Questions ==

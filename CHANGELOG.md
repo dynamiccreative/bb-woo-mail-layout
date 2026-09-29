@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0 (en cours)
+
+- Filtre `bb_email_default_texts` : une extension déclare le texte d'intro par défaut de ses propres e-mails (utilisé par BB Woo Review Request).
+- Accès direct : sous-menu **WooCommerce → Mise en forme e-mails** (juste sous Réglages, capacité `manage_woocommerce`), lien vers l'onglet de réglages, surligné quand il est ouvert.
+
 ## 1.4.0
 
 - **Pré-en-tête** (texte affiché sous le sujet dans la boîte de réception) : réglable par e-mail dans l'onglet E-mails, placeholders acceptés ; vide = début de l'intro. Tronqué à 140 caractères, masqué dans le corps de l'e-mail, suivi d'espaces invisibles pour que le client mail n'affiche pas la suite du corps. Filtre `bb_email_preheader`.

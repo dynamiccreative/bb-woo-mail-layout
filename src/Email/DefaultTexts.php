@@ -48,7 +48,17 @@ final class DefaultTexts {
 	 * @return array<string, string>
 	 */
 	public function by_id(): array {
-		return array_merge( $this->native(), $this->extensions() );
+		$defaults = array_merge( $this->native(), $this->extensions() );
+
+		/**
+		 * Textes d'introduction par défaut, par identifiant d'e-mail (texte brut, placeholders non remplacés).
+		 * Permet à une extension de fournir le texte de ses propres e-mails au lieu de l'intro générique.
+		 *
+		 * @param array<string, string> $texts Identifiant => texte.
+		 *
+		 * @since 1.5.0
+		 */
+		return array_filter( (array) apply_filters( 'bb_email_default_texts', $defaults ), 'is_string' );
 	}
 
 	/**

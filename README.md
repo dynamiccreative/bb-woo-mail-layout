@@ -4,7 +4,7 @@ Plugin WordPress bleuebuzz de mise en forme des e-mails transactionnels WooComme
 
 - WordPress ≥ 6.4, WooCommerce ≥ 8.0, PHP ≥ 8.1. Compatible HPOS.
 - Zéro dépendance runtime (autoloader PSR-4 embarqué ; Composer sert uniquement aux outils de dev).
-- Réglages : **WooCommerce → Réglages → E-mails → Mise en forme bleuebuzz**.
+- Réglages : **WooCommerce → Mise en forme e-mails** (raccourci vers WooCommerce → Réglages → E-mails → Mise en forme bleuebuzz).
 
 ## Fonctionnement
 
@@ -28,6 +28,7 @@ Réglages : une option sérialisée `bb_woo_mail_layout` (versionnée, migrée �
 | `bb_email_enabled` | filtre `( bool $enabled, string $email_id )` | Forcer l'activation du layout. |
 | `bb_email_placeholders` | filtre `( array $values, ?WC_Email $email )` | Ajouter des placeholders : `'{cle}' => 'texte'` ou `[ 'url' => …, 'label' => … ]` (rendu en lien). |
 | `bb_email_intro_text` | filtre `( string $text, WC_Email $email )` | Texte d'intro brut (avant placeholders). |
+| `bb_email_default_texts` | filtre `( array $texts )` | Textes d'intro par défaut, `email_id => texte` : une extension y déclare le texte de ses e-mails (affiché aussi comme texte par défaut dans l'onglet E-mails). |
 | `bb_email_preheader` | filtre `( string $text, WC_Email $email )` | Pré-en-tête (texte brut, placeholders remplacés ; vide = aucun). Par défaut : texte saisi, sinon début de l'intro, 140 caractères au plus. |
 | `bb_email_action_button` | filtre `( ?array $button, WC_Email $email )` | Bouton d'action sous l'intro : `[ 'url' => …, 'label' => … ]`, ou `null` pour ne rien afficher. |
 | `bb_email_before_content` | action `( ?WC_Email $email )` | Après titre et intro, avant le contenu WooCommerce. |

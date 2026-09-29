@@ -50,6 +50,10 @@ final class SettingsPage {
 		add_action( 'woocommerce_admin_field_bb_wml_app', array( $this, 'render_app' ) );
 		add_action( 'woocommerce_admin_field_bb_wml_value', array( $this, 'field_value' ) );
 
+		// Après WooCommerce (sous-menu « Réglages » enregistré en priorité 50).
+		add_action( 'admin_menu', array( $this, 'add_menu' ), 60 );
+		add_filter( 'submenu_file', array( $this, 'highlight_menu' ) );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'admin_body_class', array( $this, 'body_class' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( BB_WML_FILE ), array( $this, 'action_links' ) );
@@ -60,6 +64,38 @@ final class SettingsPage {
 	 */
 	public static function url(): string {
 		return admin_url( 'admin.php?page=wc-settings&tab=email&section=' . self::SECTION );
+	}
+
+	/**
+	 * Adresse relative de la page, utilisée comme identifiant du sous-menu.
+	 */
+	private static function menu_slug(): string {
+		return 'admin.php?page=wc-settings&tab=email&section=' . self::SECTION;
+	}
+
+	/**
+	 * Sous-menu WooCommerce → « Mise en forme e-mails » : lien direct vers l'onglet de réglages.
+	 *
+	 * L'identifiant est l'adresse de la page : WordPress l'utilise tel quel comme lien, sans page ni rendu en double.
+	 */
+	public function add_menu(): void {
+		add_submenu_page(
+			'woocommerce',
+			__( 'Mise en forme des e-mails', 'bb-woo-mail-layout' ),
+			__( 'Mise en forme e-mails', 'bb-woo-mail-layout' ),
+			'manage_woocommerce',
+			self::menu_slug()
+		);
+	}
+
+	/**
+	 * Surligne le sous-menu sur notre onglet (sinon WordPress surligne « Réglages »).
+	 *
+	 * @param mixed $submenu_file Sous-menu courant.
+	 * @return mixed
+	 */
+	public function highlight_menu( $submenu_file ) {
+		return self::is_current_page() ? self::menu_slug() : $submenu_file;
 	}
 
 	/**

@@ -28,4 +28,6 @@ Effort : estimation de développement. Valeur : ★ utile, ★★ attendu par le
 
 ## Hors périmètre, volontairement
 
-Builder glisser-déposer, e-mails marketing, relance de paniers abandonnés : exclus par le cahier des charges, et ce choix reste pertinent. Seule exception à envisager : une **demande d'avis après achat**, très demandée par les commerçants, plutôt sous forme de plugin séparé.
+Builder glisser-déposer, e-mails marketing, relance de paniers abandonnés : exclus par le cahier des charges, et ce choix reste pertinent. Les paniers abandonnés relèvent de l'outil d'e-mailing du client (Brevo, Klaviyo…) : capture d'e-mail sur le checkout, consentement et statistiques hors de portée d'un plugin de mise en forme, et ces e-mails ne passent pas par WooCommerce.
+
+Seule exception retenue : la **demande d'avis après achat**, développée dans un plugin séparé, **BB Woo Review Request** (`../bb-woo-review-request`, v0.1.0). Il fonctionne seul (e-mail WooCommerce standard) et, quand ce plugin est actif, il est mis en page par le layout via ses hooks publics (`bb_email_default_texts` ajouté en 1.5.0, `bb_email_intro_text`, `bb_email_action_button`), sans dépendance dans un sens ni dans l'autre. Les principes de ce plugin restent intacts : aucun code marketing, aucun tracking, rien en front.
