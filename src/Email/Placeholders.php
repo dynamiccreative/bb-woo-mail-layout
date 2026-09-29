@@ -19,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Placeholders {
 
+	/** Placeholders dont la valeur est un lien : proposés comme lien du bouton d'action. */
+	public const LINKS = array( '{order_url}', '{payment_url}', '{tracking_url}', '{site_url}' );
+
 	/**
 	 * Placeholders documentés (pour l'aide de l'admin).
 	 *
@@ -26,23 +29,62 @@ final class Placeholders {
 	 */
 	public static function documented(): array {
 		return array(
-			'{site_title}'          => __( 'Nom du site', 'bb-woo-mail-layout' ),
-			'{site_url}'            => __( 'Lien vers le site', 'bb-woo-mail-layout' ),
-			'{customer_first_name}' => __( 'Prénom du client', 'bb-woo-mail-layout' ),
-			'{customer_last_name}'  => __( 'Nom du client', 'bb-woo-mail-layout' ),
-			'{order_number}'        => __( 'Numéro de commande', 'bb-woo-mail-layout' ),
-			'{order_date}'          => __( 'Date de commande', 'bb-woo-mail-layout' ),
-			'{order_total}'         => __( 'Total de la commande', 'bb-woo-mail-layout' ),
-			'{order_url}'           => __( 'Lien « Voir ma commande »', 'bb-woo-mail-layout' ),
-			'{tracking_url}'        => __( 'Lien de suivi du colis (si fourni par l’extension d’expédition)', 'bb-woo-mail-layout' ),
-			'{admin_email}'         => __( 'E-mail de l’administrateur', 'bb-woo-mail-layout' ),
-			'{shop_phone}'          => __( 'Téléphone de la boutique', 'bb-woo-mail-layout' ),
-			'{billing_address}'     => __( 'Adresse de facturation', 'bb-woo-mail-layout' ),
-			'{shipping_address}'    => __( 'Adresse de livraison', 'bb-woo-mail-layout' ),
-			'{payment_method}'      => __( 'Moyen de paiement', 'bb-woo-mail-layout' ),
-			'{shipping_method}'     => __( 'Mode de livraison', 'bb-woo-mail-layout' ),
-			'{payment_url}'         => __( 'Lien « Payer ma commande » (commande à régler uniquement)', 'bb-woo-mail-layout' ),
-			'{order_meta:clé}'      => __( 'Métadonnée de commande (ex. {order_meta:_numero_client})', 'bb-woo-mail-layout' ),
+			'{site_title}'            => __( 'Nom du site', 'bb-woo-mail-layout' ),
+			'{site_url}'              => __( 'Lien vers le site', 'bb-woo-mail-layout' ),
+			'{customer_first_name}'   => __( 'Prénom du client', 'bb-woo-mail-layout' ),
+			'{customer_last_name}'    => __( 'Nom du client', 'bb-woo-mail-layout' ),
+			'{order_number}'          => __( 'Numéro de commande', 'bb-woo-mail-layout' ),
+			'{order_date}'            => __( 'Date de commande', 'bb-woo-mail-layout' ),
+			'{order_total}'           => __( 'Total de la commande', 'bb-woo-mail-layout' ),
+			'{order_url}'             => __( 'Lien « Voir ma commande »', 'bb-woo-mail-layout' ),
+			'{tracking_url}'          => __( 'Lien de suivi du colis (si fourni par l’extension d’expédition)', 'bb-woo-mail-layout' ),
+			'{admin_email}'           => __( 'E-mail de l’administrateur', 'bb-woo-mail-layout' ),
+			'{shop_phone}'            => __( 'Téléphone de la boutique', 'bb-woo-mail-layout' ),
+			'{billing_address}'       => __( 'Adresse de facturation', 'bb-woo-mail-layout' ),
+			'{shipping_address}'      => __( 'Adresse de livraison', 'bb-woo-mail-layout' ),
+			'{payment_method}'        => __( 'Moyen de paiement', 'bb-woo-mail-layout' ),
+			'{shipping_method}'       => __( 'Mode de livraison', 'bb-woo-mail-layout' ),
+			'{payment_url}'           => __( 'Lien « Payer ma commande » (commande à régler uniquement)', 'bb-woo-mail-layout' ),
+			'{order_meta:clé}'        => __( 'Métadonnée de commande (ex. {order_meta:_numero_client})', 'bb-woo-mail-layout' ),
+			'{next_payment_date}'     => __( 'Date du prochain paiement (WooCommerce Subscriptions)', 'bb-woo-mail-layout' ),
+			'{subscription_end_date}' => __( 'Date de fin de l’abonnement (WooCommerce Subscriptions)', 'bb-woo-mail-layout' ),
+			'{booking_product}'       => __( 'Prestation réservée (WooCommerce Bookings)', 'bb-woo-mail-layout' ),
+			'{booking_date}'          => __( 'Date et heure de la réservation (WooCommerce Bookings)', 'bb-woo-mail-layout' ),
+			'{membership_plan}'       => __( 'Formule d’adhésion (WooCommerce Memberships)', 'bb-woo-mail-layout' ),
+		);
+	}
+
+	/**
+	 * Commande et client liés à l'objet d'un e-mail.
+	 *
+	 * Commande (dont abonnement WC_Subscription) ou utilisateur : directement. Réservation
+	 * (WooCommerce Bookings) et adhésion (WooCommerce Memberships) : commande et client rattachés,
+	 * détectés par leurs méthodes (get_order(), get_user() / get_customer_id()) sans dépendre des classes.
+	 *
+	 * @param mixed $subject Objet de l'e-mail.
+	 * @return array{order:\WC_Order|null,user:\WP_User|null}
+	 */
+	public static function context( $subject ): array {
+		$order = $subject instanceof \WC_Order ? $subject : null;
+		$user  = $subject instanceof \WP_User ? $subject : null;
+
+		if ( ! $order && ! $user && is_object( $subject ) ) {
+			if ( method_exists( $subject, 'get_order' ) ) {
+				$linked = $subject->get_order();
+				$order  = $linked instanceof \WC_Order ? $linked : null;
+			}
+			if ( method_exists( $subject, 'get_user' ) ) {
+				$linked = $subject->get_user();
+				$user   = $linked instanceof \WP_User ? $linked : null;
+			} elseif ( method_exists( $subject, 'get_customer_id' ) ) {
+				$linked = get_user_by( 'id', (int) $subject->get_customer_id() );
+				$user   = $linked instanceof \WP_User ? $linked : null;
+			}
+		}
+
+		return array(
+			'order' => $order,
+			'user'  => $user,
 		);
 	}
 
@@ -53,9 +95,10 @@ final class Placeholders {
 	 * @return array<string, mixed> Valeurs (texte ou lien [ url, label ]) ; le filtre peut en ajouter.
 	 */
 	public function values( ?\WC_Email $email ): array {
-		$object = $email ? $email->object : null;
-		$order  = $object instanceof \WC_Order ? $object : null;
-		$user   = $object instanceof \WP_User ? $object : null;
+		$object  = $email ? $email->object : null;
+		$context = self::context( $object );
+		$order   = $context['order'];
+		$user    = $context['user'];
 
 		$values = array(
 			'{site_title}'          => wp_specialchars_decode( (string) get_option( 'blogname' ), ENT_QUOTES ),
@@ -88,9 +131,12 @@ final class Placeholders {
 			$values['{order_total}']         = html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' );
 
 			$is_admin_email        = ! $email->is_customer_email();
+			$is_subscription       = is_a( $order, 'WC_Subscription' );
 			$values['{order_url}'] = array(
 				'url'   => $is_admin_email ? $order->get_edit_order_url() : $order->get_view_order_url(),
-				'label' => $is_admin_email ? __( 'Voir la commande', 'bb-woo-mail-layout' ) : __( 'Voir ma commande', 'bb-woo-mail-layout' ),
+				'label' => $is_subscription
+					? ( $is_admin_email ? __( 'Voir l’abonnement', 'bb-woo-mail-layout' ) : __( 'Voir mon abonnement', 'bb-woo-mail-layout' ) )
+					: ( $is_admin_email ? __( 'Voir la commande', 'bb-woo-mail-layout' ) : __( 'Voir ma commande', 'bb-woo-mail-layout' ) ),
 			);
 
 			$values['{billing_address}']  = array( 'html' => (string) $order->get_formatted_billing_address() );
@@ -111,10 +157,13 @@ final class Placeholders {
 					'label' => __( 'Suivre mon colis', 'bb-woo-mail-layout' ),
 				);
 			}
-		} elseif ( $user ) {
+		}
+		if ( $user && '' === $values['{customer_first_name}'] ) {
 			$values['{customer_first_name}'] = $user->first_name ? $user->first_name : $user->display_name;
 			$values['{customer_last_name}']  = (string) $user->last_name;
 		}
+
+		$values = array_merge( $values, self::extension_values( $object, $values ) );
 
 		/**
 		 * Ajoute ou modifie des placeholders.
@@ -125,6 +174,65 @@ final class Placeholders {
 		 * @since 1.0.0
 		 */
 		return (array) apply_filters( 'bb_email_placeholders', $values, $email );
+	}
+
+	/**
+	 * Placeholders propres à WooCommerce Subscriptions, Bookings et Memberships (vides sinon).
+	 * Méthodes testées avec method_exists() : aucune dépendance aux classes de ces extensions.
+	 *
+	 * @param mixed                $subject Objet de l'e-mail.
+	 * @param array<string, mixed> $values  Valeurs déjà calculées.
+	 * @return array<string, string>
+	 */
+	private static function extension_values( $subject, array $values ): array {
+		$out = array(
+			'{next_payment_date}'     => '',
+			'{subscription_end_date}' => '',
+			'{booking_product}'       => '',
+			'{booking_date}'          => '',
+			'{membership_plan}'       => '',
+		);
+		if ( ! is_object( $subject ) ) {
+			return $out;
+		}
+
+		// Abonnement : l'objet est la commande de renouvellement ou l'abonnement lui-même.
+		$subscription = is_a( $subject, 'WC_Subscription' ) ? $subject : null;
+		if ( ! $subscription && $subject instanceof \WC_Order && function_exists( 'wcs_get_subscriptions_for_order' ) ) {
+			$related      = wcs_get_subscriptions_for_order( $subject, array( 'order_type' => 'any' ) );
+			$subscription = is_array( $related ) && $related ? reset( $related ) : null;
+		}
+		if ( is_object( $subscription ) && method_exists( $subscription, 'get_date_to_display' ) ) {
+			$out['{next_payment_date}']     = (string) $subscription->get_date_to_display( 'next_payment' );
+			$out['{subscription_end_date}'] = (string) $subscription->get_date_to_display( 'end' );
+		}
+
+		// Réservation (WooCommerce Bookings).
+		if ( is_a( $subject, 'WC_Booking' ) ) {
+			$product                  = method_exists( $subject, 'get_product' ) ? $subject->get_product() : null;
+			$out['{booking_product}'] = $product instanceof \WC_Product ? $product->get_name() : '';
+			if ( method_exists( $subject, 'get_start_date' ) ) {
+				$out['{booking_date}'] = (string) $subject->get_start_date();
+			} elseif ( method_exists( $subject, 'get_start' ) && $subject->get_start() ) {
+				$out['{booking_date}'] = date_i18n( wc_date_format() . ' ' . wc_time_format(), (int) $subject->get_start() );
+			}
+		}
+
+		// Adhésion (WooCommerce Memberships).
+		if ( is_a( $subject, 'WC_Memberships_User_Membership' ) && method_exists( $subject, 'get_plan' ) ) {
+			$plan                     = $subject->get_plan();
+			$out['{membership_plan}'] = is_object( $plan ) && method_exists( $plan, 'get_name' ) ? (string) $plan->get_name() : '';
+		}
+
+		// Réservation d'un invité : nom saisi à la réservation.
+		if ( '' === $values['{customer_first_name}'] && method_exists( $subject, 'get_customer' ) ) {
+			$customer = $subject->get_customer();
+			if ( is_object( $customer ) && ! empty( $customer->name ) ) {
+				$out['{customer_first_name}'] = (string) $customer->name;
+			}
+		}
+
+		return $out;
 	}
 
 	/**

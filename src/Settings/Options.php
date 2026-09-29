@@ -34,6 +34,11 @@ final class Options {
 	/** Nombre maximal de produits mis en avant. */
 	public const MAX_FEATURED = 3;
 
+	/**
+	 * Source des produits mis en avant. Hors « manual », les produits choisis complètent la sélection automatique.
+	 */
+	public const FEATURED_SOURCES = array( 'manual', 'cross_sells', 'related' );
+
 	/** Taille maximale du CSS personnalisé (octets). */
 	public const MAX_CUSTOM_CSS = 20000;
 
@@ -76,10 +81,14 @@ final class Options {
 			'show_featured'         => 'bool',
 			'featured_title'        => 'text',
 			'featured_products'     => 'ids',
+			'featured_source'       => 'featured_source',
 			'custom_css'            => 'css',
 			'emails'                => 'map_bool',
 			'intros'                => 'map_textarea',
 			'email_layouts'         => 'map_layout',
+			'preheaders'            => 'map_text',
+			'button_labels'         => 'map_text',
+			'button_urls'           => 'map_link',
 		);
 	}
 
@@ -123,10 +132,14 @@ final class Options {
 			'show_featured'         => 'no',
 			'featured_title'        => '',
 			'featured_products'     => array(),
+			'featured_source'       => 'manual',
 			'custom_css'            => '',
 			'emails'                => array(),
 			'intros'                => array(),
 			'email_layouts'         => array(),
+			'preheaders'            => array(),
+			'button_labels'         => array(),
+			'button_urls'           => array(),
 		);
 	}
 
@@ -142,7 +155,7 @@ final class Options {
 		$stored = is_array( $stored ) ? $stored : array();
 		$all    = array_merge( self::defaults(), $stored );
 
-		foreach ( array( 'emails', 'intros', 'email_layouts', 'featured_products' ) as $map ) {
+		foreach ( array( 'emails', 'intros', 'email_layouts', 'preheaders', 'button_labels', 'button_urls', 'featured_products' ) as $map ) {
 			$all[ $map ] = is_array( $all[ $map ] ) ? $all[ $map ] : array();
 		}
 		return $all;
@@ -221,7 +234,7 @@ final class Options {
 		$value = self::sanitize_value( $schema[ $key ], $raw, self::defaults()[ $key ] );
 
 		// Les tableaux par e-mail sont fusionnés : un e-mail absent du formulaire garde sa valeur.
-		if ( in_array( $schema[ $key ], array( 'map_bool', 'map_textarea', 'map_layout' ), true ) ) {
+		if ( str_starts_with( $schema[ $key ], 'map_' ) ) {
 			$current = self::get( $key );
 			$value   = array_merge( is_array( $current ) ? $current : array(), $value );
 		}
@@ -278,6 +291,9 @@ final class Options {
 			case 'layout':
 				return is_string( $raw ) && array_key_exists( $raw, LayoutRenderer::available_layouts() ) ? $raw : $fallback;
 
+			case 'featured_source':
+				return is_string( $raw ) && in_array( $raw, self::FEATURED_SOURCES, true ) ? $raw : $fallback;
+
 			case 'font':
 				return is_string( $raw ) && array_key_exists( $raw, self::FONTS ) ? $raw : $fallback;
 
@@ -315,11 +331,23 @@ final class Options {
 				return $out;
 
 			case 'map_textarea':
+			case 'map_text':
 				$out = array();
 				foreach ( is_array( $raw ) ? $raw : array() as $id => $text ) {
 					$id = self::sanitize_email_id( (string) $id );
 					if ( '' !== $id && is_scalar( $text ) ) {
-						$out[ $id ] = sanitize_textarea_field( (string) $text );
+						$out[ $id ] = 'map_text' === $type ? sanitize_text_field( (string) $text ) : sanitize_textarea_field( (string) $text );
+					}
+				}
+				return $out;
+
+			case 'map_link':
+				// Lien du bouton par e-mail : un placeholder seul ({order_url}…) ou une URL http(s).
+				$out = array();
+				foreach ( is_array( $raw ) ? $raw : array() as $id => $link ) {
+					$id = self::sanitize_email_id( (string) $id );
+					if ( '' !== $id && is_scalar( $link ) ) {
+						$out[ $id ] = self::sanitize_link( (string) $link );
 					}
 				}
 				return $out;
@@ -334,6 +362,19 @@ final class Options {
 	 */
 	public static function sanitize_email_id( string $id ): string {
 		return (string) preg_replace( '/[^A-Za-z0-9_\-]/', '', $id );
+	}
+
+	/**
+	 * Lien de bouton : placeholder seul (ex. « {tracking_url} ») ou URL http(s) ; sinon vide.
+	 *
+	 * @param string $link Valeur saisie.
+	 */
+	public static function sanitize_link( string $link ): string {
+		$link = trim( $link );
+		if ( preg_match( '/^\{[a-z_]+\}$/', $link ) ) {
+			return $link;
+		}
+		return esc_url_raw( $link, array( 'http', 'https' ) );
 	}
 
 	/**

@@ -26,3 +26,14 @@ parameters:
 		-
 			message: '#^Function (pll_[a-z_]+|PLL) not found\.$#'
 			path: src/Compat/Wpml.php
+		# WooCommerce Subscriptions, Bookings, Memberships optionnels (extensions payantes, sans stubs),
+		# protégés par function_exists() / is_a() / method_exists().
+		-
+			message: '#^(Function wcs_get_subscriptions_for_order not found|Call to method [a-z_]+\(\) on an unknown class (WC_Booking|WC_Memberships_User_Membership))\.$#'
+			path: src/Email/Placeholders.php
+		# WP-CLI : classe chargée uniquement en ligne de commande (pas de stubs installés).
+		-
+			message: '#^(Call to static method [a-z_]+\(\) on an unknown class WP_CLI|Function WP_CLI\\Utils\\format_items not found)\.$#'
+			paths:
+				- src/Cli/Command.php
+				- src/Plugin.php

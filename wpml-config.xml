@@ -9,6 +9,12 @@
 			<key name="intros">
 				<key name="*" />
 			</key>
+			<key name="preheaders">
+				<key name="*" />
+			</key>
+			<key name="button_labels">
+				<key name="*" />
+			</key>
 		</key>
 	</admin-texts>
 </wpml-config>

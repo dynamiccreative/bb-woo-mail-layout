@@ -62,9 +62,16 @@ final class Wpml {
 				pll_register_string( $key, (string) $settings[ $key ], self::PLL_GROUP, in_array( $key, array( 'footer_address', 'footer_text' ), true ) );
 			}
 		}
-		foreach ( $settings['intros'] as $id => $text ) {
-			if ( '' !== (string) $text ) {
-				pll_register_string( 'intro_' . $id, (string) $text, self::PLL_GROUP, true );
+		$maps = array(
+			'intros'        => 'intro_',
+			'preheaders'    => 'preheader_',
+			'button_labels' => 'button_label_',
+		);
+		foreach ( $maps as $map => $prefix ) {
+			foreach ( $settings[ $map ] as $id => $text ) {
+				if ( '' !== (string) $text ) {
+					pll_register_string( $prefix . $id, (string) $text, self::PLL_GROUP, 'intros' === $map );
+				}
 			}
 		}
 	}

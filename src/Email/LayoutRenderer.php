@@ -21,6 +21,9 @@ final class LayoutRenderer {
 	private const HEADER = 'emails/email-header.php';
 	private const FOOTER = 'emails/email-footer.php';
 
+	/** Longueur maximale du pré-en-tête (les clients mail en affichent 90 à 140 caractères). */
+	private const PREHEADER_MAX = 140;
+
 	/**
 	 * E-mails en cours de rendu (templates imbriqués).
 	 *
@@ -152,7 +155,9 @@ final class LayoutRenderer {
 		}
 		$this->stack[] = $email;
 		if ( 1 === count( $this->stack ) && $this->applies_to( $email ) && $this->uses_recipient_language( $email ) ) {
-			$this->wpml->switch_for( $email->object );
+			// Réservation, adhésion : langue de la commande ou du client rattachés.
+			$context = Placeholders::context( $email->object );
+			$this->wpml->switch_for( $context['order'] ?? $context['user'] ?? $email->object );
 		}
 	}
 
@@ -374,6 +379,9 @@ final class LayoutRenderer {
 		$vars  = $this->view_vars( $email, $heading );
 		// CSS du layout pour le <style> du <head> (calculé ici seulement : inutile au pied de page).
 		$vars['css'] = str_replace( '</', '<\/', $this->css( $email ) );
+		// Pré-en-tête et bouton d'action : propres à l'en-tête, comme le CSS.
+		$vars['preheader_html'] = $this->preheader_html( $email );
+		$vars['button_html']    = $this->action_button_html( $email );
 		$this->include_part( 'header', $vars );
 
 		/**
@@ -524,10 +532,27 @@ final class LayoutRenderer {
 	 * @param \WC_Email|null $email E-mail.
 	 */
 	public function intro_html( ?\WC_Email $email ): string {
-		if ( ! $email ) {
+		$text = $email ? $this->intro_text( $email ) : '';
+		if ( '' === $text ) {
 			return '';
 		}
 
+		$html = '';
+		foreach ( (array) preg_split( '/\R\s*\R/', $text ) as $paragraph ) {
+			$paragraph = trim( (string) $paragraph );
+			if ( '' !== $paragraph ) {
+				$html .= '<p>' . nl2br( $this->placeholders->to_html( $paragraph, $email ), false ) . '</p>';
+			}
+		}
+		return $html;
+	}
+
+	/**
+	 * Texte d'intro brut (placeholders non remplacés) : texte saisi, sinon texte par défaut.
+	 *
+	 * @param \WC_Email $email E-mail.
+	 */
+	private function intro_text( \WC_Email $email ): string {
 		$intros = Options::get( 'intros' );
 		$custom = trim( (string) ( is_array( $intros ) ? ( $intros[ $email->id ] ?? '' ) : '' ) );
 		$custom = '' !== $custom ? $this->wpml->translate( 'intro_' . $email->id, $custom ) : '';
@@ -541,19 +566,138 @@ final class LayoutRenderer {
 		 *
 		 * @since 1.0.0
 		 */
-		$text = trim( (string) apply_filters( 'bb_email_intro_text', $text, $email ) );
-		if ( '' === $text ) {
+		return trim( (string) apply_filters( 'bb_email_intro_text', $text, $email ) );
+	}
+
+	/**
+	 * Pré-en-tête : texte affiché sous le sujet dans la boîte de réception, masqué dans l'e-mail.
+	 * Texte saisi pour l'e-mail, sinon début de l'intro ; placeholders remplacés.
+	 *
+	 * @param \WC_Email|null $email E-mail.
+	 */
+	public function preheader( ?\WC_Email $email ): string {
+		if ( ! $email ) {
 			return '';
 		}
 
-		$html = '';
-		foreach ( (array) preg_split( '/\R\s*\R/', $text ) as $paragraph ) {
-			$paragraph = trim( (string) $paragraph );
-			if ( '' !== $paragraph ) {
-				$html .= '<p>' . nl2br( $this->placeholders->to_html( $paragraph, $email ), false ) . '</p>';
-			}
+		$preheaders = (array) Options::get( 'preheaders' );
+		$text       = trim( (string) ( $preheaders[ $email->id ] ?? '' ) );
+		$text       = '' !== $text ? $this->wpml->translate( 'preheader_' . $email->id, $text ) : $this->intro_text( $email );
+		$text       = self::plain( $this->placeholders->to_html( $text, $email ) );
+		if ( mb_strlen( $text ) > self::PREHEADER_MAX ) {
+			$text = rtrim( mb_substr( $text, 0, self::PREHEADER_MAX - 1 ) ) . '…';
 		}
-		return $html;
+
+		/**
+		 * Texte du pré-en-tête (texte brut ; vide = pas de pré-en-tête).
+		 *
+		 * @param string    $text  Texte.
+		 * @param \WC_Email $email E-mail.
+		 *
+		 * @since 1.4.0
+		 */
+		return trim( (string) apply_filters( 'bb_email_preheader', $text, $email ) );
+	}
+
+	/**
+	 * Pré-en-tête masqué, suivi d'espaces invisibles : les clients mail n'affichent pas
+	 * le début du corps (« Voir ma commande », adresse…) à la suite du texte.
+	 *
+	 * Classe « -emogrifier-keep » obligatoire : après l'inlining, WooCommerce supprime les éléments
+	 * en display:none (HtmlPruner::removeElementsWithDisplayNone()), sauf ceux qui la portent.
+	 *
+	 * @param \WC_Email|null $email E-mail.
+	 */
+	public function preheader_html( ?\WC_Email $email ): string {
+		$text = $this->preheader( $email );
+		if ( '' === $text ) {
+			return '';
+		}
+		return sprintf(
+			'<div class="bb-preheader -emogrifier-keep" style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">%1$s%2$s</div>',
+			esc_html( $text ),
+			str_repeat( '&#847;&zwnj;&nbsp;', 40 )
+		);
+	}
+
+	/**
+	 * Bouton d'action réglé pour l'e-mail (lien : placeholder ou URL). Rien si le lien est vide
+	 * pour cette commande (ex. {tracking_url} sans numéro de suivi).
+	 *
+	 * @param \WC_Email|null $email E-mail.
+	 * @return array{url:string,label:string}|null
+	 */
+	public function action_button( ?\WC_Email $email ): ?array {
+		if ( ! $email ) {
+			return null;
+		}
+
+		$urls   = (array) Options::get( 'button_urls' );
+		$labels = (array) Options::get( 'button_labels' );
+		$link   = (string) ( $urls[ $email->id ] ?? '' );
+		$label  = trim( (string) ( $labels[ $email->id ] ?? '' ) );
+		$label  = '' !== $label ? self::plain( $this->placeholders->to_html( $this->wpml->translate( 'button_label_' . $email->id, $label ), $email ) ) : '';
+		$url    = '';
+
+		if ( str_starts_with( $link, '{' ) ) {
+			$value = $this->placeholders->values( $email )[ $link ] ?? '';
+			if ( is_array( $value ) && isset( $value['url'] ) && is_string( $value['url'] ) ) {
+				$url   = $value['url'];
+				$label = '' !== $label ? $label : (string) ( $value['label'] ?? '' );
+			}
+		} else {
+			$url = $link;
+		}
+		$button = '' !== $url ? array(
+			'url'   => $url,
+			'label' => '' !== $label ? $label : __( 'En savoir plus', 'bb-woo-mail-layout' ),
+		) : null;
+
+		/**
+		 * Bouton d'action affiché après l'intro (null = pas de bouton).
+		 *
+		 * @param array{url:string,label:string}|null $button Bouton réglé.
+		 * @param \WC_Email                           $email  E-mail.
+		 *
+		 * @since 1.4.0
+		 */
+		return self::normalize_button( apply_filters( 'bb_email_action_button', $button, $email ) );
+	}
+
+	/**
+	 * Bouton renvoyé par un filtre tiers (forme non garantie).
+	 *
+	 * @param mixed $button Valeur filtrée.
+	 * @return array{url:string,label:string}|null
+	 */
+	private static function normalize_button( mixed $button ): ?array {
+		if ( ! is_array( $button ) || empty( $button['url'] ) || ! is_string( $button['url'] ) ) {
+			return null;
+		}
+		return array(
+			'url'   => $button['url'],
+			'label' => isset( $button['label'] ) && is_string( $button['label'] ) ? $button['label'] : '',
+		);
+	}
+
+	/**
+	 * HTML du bouton d'action.
+	 *
+	 * @param \WC_Email|null $email E-mail.
+	 */
+	public function action_button_html( ?\WC_Email $email ): string {
+		$button = $this->action_button( $email );
+		return $button ? '<div class="bb-action">' . $this->button( $button['url'], $button['label'] ) . '</div>' : '';
+	}
+
+	/**
+	 * HTML → texte brut sur une ligne.
+	 *
+	 * @param string $html HTML.
+	 */
+	private static function plain( string $html ): string {
+		$text = html_entity_decode( wp_strip_all_tags( $html ), ENT_QUOTES, 'UTF-8' );
+		return trim( (string) preg_replace( '/\s+/u', ' ', $text ) );
 	}
 
 	/**
@@ -723,12 +867,12 @@ final class LayoutRenderer {
 			return '';
 		}
 
-		$ids = $email->is_customer_email() ? (array) $settings['featured_products'] : array();
+		$ids = $email->is_customer_email() ? $this->featured_ids( $settings, $email ) : array();
 
 		/**
 		 * Produits mis en avant pour un e-mail (tableau vide = pas de bloc).
 		 *
-		 * @param int[]     $ids   Identifiants de produits (3 maximum affichés).
+		 * @param int[]     $ids   Identifiants de produits, par ordre de priorité (les 3 premiers visibles sont affichés).
 		 * @param \WC_Email $email E-mail.
 		 *
 		 * @since 1.1.0
@@ -736,7 +880,10 @@ final class LayoutRenderer {
 		$ids = (array) apply_filters( 'bb_email_featured_products', $ids, $email );
 
 		$products = array();
-		foreach ( array_slice( array_map( 'absint', $ids ), 0, Options::MAX_FEATURED ) as $id ) {
+		foreach ( array_unique( array_map( 'absint', $ids ) ) as $id ) {
+			if ( count( $products ) >= Options::MAX_FEATURED ) {
+				break;
+			}
 			$product = $id ? wc_get_product( $id ) : null;
 			if ( ! $product instanceof \WC_Product || 'publish' !== $product->get_status() || ! $product->is_visible() ) {
 				continue;
@@ -762,6 +909,57 @@ final class LayoutRenderer {
 			include $bb_file;
 		} )( BB_WML_DIR . 'layouts/partials/featured-products.php', $title, $products );
 		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Candidats au bloc « produits mis en avant », par ordre de priorité.
+	 *
+	 * - manual : produits choisis dans l'admin.
+	 * - cross_sells : ventes croisées des produits commandés, puis produits apparentés, puis produits choisis.
+	 * - related : produits apparentés (catégories / étiquettes) des produits commandés, puis produits choisis.
+	 *
+	 * Les produits de la commande sont exclus des suggestions automatiques. Sans commande
+	 * (e-mails de compte), seuls les produits choisis sont proposés.
+	 *
+	 * @param array<string,mixed> $settings Réglages.
+	 * @param \WC_Email           $email    E-mail.
+	 * @return int[]
+	 */
+	private function featured_ids( array $settings, \WC_Email $email ): array {
+		$manual = array_map( 'absint', (array) $settings['featured_products'] );
+		$source = (string) ( $settings['featured_source'] ?? 'manual' );
+		$order  = $email->object instanceof \WC_Order ? $email->object : null;
+		if ( 'manual' === $source || ! $order ) {
+			return $manual;
+		}
+
+		$ordered = array();
+		foreach ( $order->get_items() as $item ) {
+			if ( $item instanceof \WC_Order_Item_Product && $item->get_product_id() ) {
+				$ordered[] = $item->get_product_id();
+			}
+		}
+		$ordered = array_values( array_unique( $ordered ) );
+
+		// Marge : certains candidats seront écartés (non publiés, masqués, en rupture masquée).
+		$wanted = Options::MAX_FEATURED * 2;
+		$auto   = array();
+		if ( 'cross_sells' === $source ) {
+			foreach ( $ordered as $product_id ) {
+				$product = wc_get_product( $product_id );
+				if ( $product instanceof \WC_Product ) {
+					$auto = array_merge( $auto, array_map( 'absint', $product->get_cross_sell_ids() ) );
+				}
+			}
+		}
+		foreach ( $ordered as $product_id ) {
+			if ( count( array_unique( array_diff( $auto, $ordered ) ) ) >= $wanted ) {
+				break;
+			}
+			$auto = array_merge( $auto, array_map( 'absint', wc_get_related_products( $product_id, $wanted, $ordered ) ) );
+		}
+
+		return array_values( array_unique( array_merge( array_diff( $auto, $ordered ), $manual ) ) );
 	}
 
 	/**

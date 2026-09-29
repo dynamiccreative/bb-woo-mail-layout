@@ -429,7 +429,27 @@ final class SettingsPage {
 					<?php self::block_open( 'show_featured', __( 'Produits mis en avant', 'bb-woo-mail-layout' ), __( 'Jusqu’à 3 produits (photo, titre, prix) sous la commande, dans les e-mails envoyés au client.', 'bb-woo-mail-layout' ), $settings ); ?>
 						<?php self::text_field( 'featured_title', __( 'Titre du bloc', 'bb-woo-mail-layout' ), $settings, 'text', __( 'Vous aimerez aussi', 'bb-woo-mail-layout' ) ); ?>
 						<div class="bb-wml-field">
-							<label for="bb-wml-featured-products"><?php esc_html_e( 'Produits (3 maximum)', 'bb-woo-mail-layout' ); ?></label>
+							<label for="bb-wml-featured-source"><?php esc_html_e( 'Choix des produits', 'bb-woo-mail-layout' ); ?></label>
+							<select id="bb-wml-featured-source" name="<?php echo esc_attr( self::id( 'featured_source' ) ); ?>">
+								<?php
+								$sources = array(
+									'manual'      => __( 'Manuel : les produits choisis ci-dessous', 'bb-woo-mail-layout' ),
+									'cross_sells' => __( 'Automatique : ventes croisées des produits commandés', 'bb-woo-mail-layout' ),
+									'related'     => __( 'Automatique : produits apparentés aux produits commandés', 'bb-woo-mail-layout' ),
+								);
+								?>
+								<?php foreach ( $sources as $source => $label ) : ?>
+									<option value="<?php echo esc_attr( $source ); ?>" <?php selected( (string) $settings['featured_source'], $source ); ?>><?php echo esc_html( $label ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<p class="bb-wml-hint" data-bb-show-if="featured_source=cross_sells"><?php esc_html_e( 'Ventes croisées réglées dans chaque fiche produit (onglet Produits liés), complétées par des produits de mêmes catégories ou étiquettes. Les produits déjà commandés sont exclus.', 'bb-woo-mail-layout' ); ?></p>
+							<p class="bb-wml-hint" data-bb-show-if="featured_source=related"><?php esc_html_e( 'Produits de mêmes catégories ou étiquettes que ceux de la commande (sélection variable d’un e-mail à l’autre). Les produits déjà commandés sont exclus.', 'bb-woo-mail-layout' ); ?></p>
+						</div>
+						<div class="bb-wml-field">
+							<label for="bb-wml-featured-products">
+								<span data-bb-show-if="featured_source=manual"><?php esc_html_e( 'Produits (3 maximum)', 'bb-woo-mail-layout' ); ?></span>
+								<span data-bb-show-if="featured_source!=manual"><?php esc_html_e( 'Produits de complément (3 maximum, facultatif)', 'bb-woo-mail-layout' ); ?></span>
+							</label>
 							<select id="bb-wml-featured-products" class="wc-product-search" multiple="multiple" style="width:100%;"
 								name="<?php echo esc_attr( self::id( 'featured_products' ) ); ?>[]"
 								data-placeholder="<?php esc_attr_e( 'Rechercher un produit…', 'bb-woo-mail-layout' ); ?>"
@@ -442,7 +462,10 @@ final class SettingsPage {
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
-							<p class="bb-wml-hint"><?php esc_html_e( 'Les produits non publiés ou masqués du catalogue sont ignorés.', 'bb-woo-mail-layout' ); ?></p>
+							<p class="bb-wml-hint">
+								<span data-bb-show-if="featured_source!=manual"><?php esc_html_e( 'Utilisés si la sélection automatique trouve moins de 3 produits, et dans les e-mails sans commande (création de compte…).', 'bb-woo-mail-layout' ); ?></span>
+								<?php esc_html_e( 'Les produits non publiés ou masqués du catalogue sont ignorés.', 'bb-woo-mail-layout' ); ?>
+							</p>
 						</div>
 					</div></div>
 
@@ -512,6 +535,9 @@ final class SettingsPage {
 		$texts    = new DefaultTexts();
 		$defaults = $texts->by_id();
 		$intros   = (array) $settings['intros'];
+		$preheads = (array) $settings['preheaders'];
+		$blabels  = (array) $settings['button_labels'];
+		$burls    = (array) $settings['button_urls'];
 		$chosen   = (array) $settings['email_layouts'];
 		$general  = (string) ( $layouts[ $settings['layout'] ]['label'] ?? '' );
 		?>
@@ -529,18 +555,23 @@ final class SettingsPage {
 					</div>
 				</div>
 				<div class="bb-wml-toolbar is-tokens">
-					<span class="bb-wml-hint"><?php esc_html_e( 'Placeholders des introductions (cliquer pour insérer dans le texte ouvert) :', 'bb-woo-mail-layout' ); ?></span>
+					<span class="bb-wml-hint"><?php esc_html_e( 'Placeholders des textes (cliquer pour insérer dans le champ ouvert) :', 'bb-woo-mail-layout' ); ?></span>
 					<div class="bb-wml-tokens" data-bb-target="intro">
 						<?php foreach ( Placeholders::documented() as $placeholder => $label ) : ?>
 							<button type="button" class="bb-wml-token" title="<?php echo esc_attr( $label ); ?>"><?php echo esc_html( $placeholder ); ?></button>
 						<?php endforeach; ?>
 					</div>
 				</div>
+				<datalist id="bb-wml-link-tokens">
+					<?php foreach ( array_intersect_key( Placeholders::documented(), array_flip( Placeholders::LINKS ) ) as $placeholder => $label ) : ?>
+						<option value="<?php echo esc_attr( $placeholder ); ?>"><?php echo esc_html( $label ); ?></option>
+					<?php endforeach; ?>
+				</datalist>
 				<div class="bb-wml-mails">
 					<?php foreach ( $emails as $id => $email ) : ?>
 						<?php
 						$enabled = $this->registry->is_enabled( $id );
-						$custom  = '' !== (string) ( $intros[ $id ] ?? '' );
+						$custom  = '' !== ( $intros[ $id ] ?? '' ) . ( $preheads[ $id ] ?? '' ) . ( $blabels[ $id ] ?? '' ) . ( $burls[ $id ] ?? '' );
 						?>
 						<div class="bb-wml-mail<?php echo $enabled ? '' : ' is-off'; ?>" data-bb-mail="<?php echo esc_attr( $id ); ?>" data-bb-client="<?php echo $email['customer'] ? '1' : '0'; ?>" data-bb-search="<?php echo esc_attr( strtolower( $email['title'] . ' ' . $id ) ); ?>">
 							<div class="bb-wml-mail__main">
@@ -578,12 +609,31 @@ final class SettingsPage {
 									<?php endforeach; ?>
 								</select>
 								<button type="button" class="bb-wml-intro-btn<?php echo $custom ? ' is-custom' : ''; ?>" aria-expanded="false" aria-controls="bb-wml-intro-<?php echo esc_attr( $id ); ?>">
-									<span class="bb-wml-dot" aria-hidden="true"></span><span class="bb-wml-intro-btn__label"><?php echo $custom ? esc_html__( 'Intro personnalisée', 'bb-woo-mail-layout' ) : esc_html__( 'Intro par défaut', 'bb-woo-mail-layout' ); ?></span>
+									<span class="bb-wml-dot" aria-hidden="true"></span><span class="bb-wml-intro-btn__label"><?php echo $custom ? esc_html__( 'Textes personnalisés', 'bb-woo-mail-layout' ) : esc_html__( 'Textes par défaut', 'bb-woo-mail-layout' ); ?></span>
 								</button>
 							</div>
 							<div class="bb-wml-mail__intro" id="bb-wml-intro-<?php echo esc_attr( $id ); ?>" hidden>
-								<textarea rows="4" data-bb-intro name="<?php echo esc_attr( self::id( 'intros' ) . '[' . $id . ']' ); ?>" placeholder="<?php echo esc_attr( $defaults[ $id ] ?? $texts->generic( $email['customer'] ) ); ?>" aria-label="<?php echo esc_attr( $email['title'] ); ?>"><?php echo esc_textarea( (string) ( $intros[ $id ] ?? '' ) ); ?></textarea>
-								<p class="bb-wml-hint"><?php esc_html_e( 'Vide : le texte par défaut (en gris) est utilisé. Une ligne vide sépare deux paragraphes.', 'bb-woo-mail-layout' ); ?></p>
+								<div class="bb-wml-field">
+									<label for="bb-wml-intro-text-<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Introduction', 'bb-woo-mail-layout' ); ?></label>
+									<textarea id="bb-wml-intro-text-<?php echo esc_attr( $id ); ?>" rows="4" data-bb-intro name="<?php echo esc_attr( self::id( 'intros' ) . '[' . $id . ']' ); ?>" placeholder="<?php echo esc_attr( $defaults[ $id ] ?? $texts->generic( $email['customer'] ) ); ?>"><?php echo esc_textarea( (string) ( $intros[ $id ] ?? '' ) ); ?></textarea>
+									<p class="bb-wml-hint"><?php esc_html_e( 'Vide : le texte par défaut (en gris) est utilisé. Une ligne vide sépare deux paragraphes.', 'bb-woo-mail-layout' ); ?></p>
+								</div>
+								<div class="bb-wml-field">
+									<label for="bb-wml-preheader-<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Pré-en-tête', 'bb-woo-mail-layout' ); ?></label>
+									<input type="text" id="bb-wml-preheader-<?php echo esc_attr( $id ); ?>" data-bb-intro name="<?php echo esc_attr( self::id( 'preheaders' ) . '[' . $id . ']' ); ?>" value="<?php echo esc_attr( (string) ( $preheads[ $id ] ?? '' ) ); ?>" placeholder="<?php esc_attr_e( 'Vide : début de l’introduction', 'bb-woo-mail-layout' ); ?>">
+									<p class="bb-wml-hint"><?php esc_html_e( 'Texte affiché sous le sujet dans la boîte de réception (140 caractères au plus), invisible dans l’e-mail.', 'bb-woo-mail-layout' ); ?></p>
+								</div>
+								<div class="bb-wml-row">
+									<div class="bb-wml-field">
+										<label for="bb-wml-button-label-<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Bouton : libellé', 'bb-woo-mail-layout' ); ?></label>
+										<input type="text" id="bb-wml-button-label-<?php echo esc_attr( $id ); ?>" data-bb-intro name="<?php echo esc_attr( self::id( 'button_labels' ) . '[' . $id . ']' ); ?>" value="<?php echo esc_attr( (string) ( $blabels[ $id ] ?? '' ) ); ?>" placeholder="<?php esc_attr_e( 'Vide : libellé du lien choisi', 'bb-woo-mail-layout' ); ?>">
+									</div>
+									<div class="bb-wml-field">
+										<label for="bb-wml-button-url-<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Bouton : lien', 'bb-woo-mail-layout' ); ?></label>
+										<input type="text" id="bb-wml-button-url-<?php echo esc_attr( $id ); ?>" list="bb-wml-link-tokens" data-bb-intro name="<?php echo esc_attr( self::id( 'button_urls' ) . '[' . $id . ']' ); ?>" value="<?php echo esc_attr( (string) ( $burls[ $id ] ?? '' ) ); ?>" placeholder="<?php esc_attr_e( '{tracking_url} ou https://…', 'bb-woo-mail-layout' ); ?>" spellcheck="false">
+									</div>
+								</div>
+								<p class="bb-wml-hint"><?php esc_html_e( 'Bouton affiché sous l’introduction. Lien vide : pas de bouton. Un placeholder sans valeur pour la commande (ex. {tracking_url} sans numéro de suivi) masque le bouton.', 'bb-woo-mail-layout' ); ?></p>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -605,7 +655,7 @@ final class SettingsPage {
 		?>
 		<section class="bb-wml-panel bb-wml-tools" id="bb-wml-panel-outils" role="tabpanel" aria-labelledby="bb-wml-tab-outils" hidden>
 			<div class="bb-wml-card">
-				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'E-mail de test', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Envoie l’e-mail choisi avec les données d’une vraie commande. Les modifications non enregistrées sont prises en compte.', 'bb-woo-mail-layout' ); ?></p></div></div>
+				<div class="bb-wml-card__head"><div><h3><?php esc_html_e( 'E-mail de test', 'bb-woo-mail-layout' ); ?></h3><p><?php esc_html_e( 'Envoie l’e-mail choisi avec les données d’une vraie commande, ou d’une commande fictive. Les modifications non enregistrées sont prises en compte.', 'bb-woo-mail-layout' ); ?></p></div></div>
 				<div class="bb-wml-card__body">
 					<div class="bb-wml-row">
 						<div class="bb-wml-field">
@@ -818,9 +868,6 @@ final class SettingsPage {
 	private static function order_select( string $html_id, array $orders, string $label = '' ): void {
 		?>
 		<select id="<?php echo esc_attr( $html_id ); ?>" <?php echo '' !== $label ? 'aria-label="' . esc_attr( $label ) . '"' : ''; ?>>
-			<?php if ( ! $orders ) : ?>
-				<option value="0"><?php esc_html_e( 'Aucune commande sur ce site', 'bb-woo-mail-layout' ); ?></option>
-			<?php endif; ?>
 			<?php foreach ( $orders as $order ) : ?>
 				<option value="<?php echo (int) $order->get_id(); ?>">
 					<?php
@@ -836,6 +883,8 @@ final class SettingsPage {
 					?>
 				</option>
 			<?php endforeach; ?>
+			<?php /* 0 : commande fictive, jamais enregistrée (seul choix sur un site sans commande). */ ?>
+			<option value="0"><?php esc_html_e( 'Commande fictive (exemple)', 'bb-woo-mail-layout' ); ?></option>
 		</select>
 		<?php
 	}
@@ -894,8 +943,8 @@ final class SettingsPage {
 					'importing'     => __( 'Import en cours…', 'bb-woo-mail-layout' ),
 					'error'         => __( 'Une erreur est survenue.', 'bb-woo-mail-layout' ),
 					'chooseFile'    => __( 'Choisissez d’abord un fichier JSON exporté depuis cette page.', 'bb-woo-mail-layout' ),
-					'introCustom'   => __( 'Intro personnalisée', 'bb-woo-mail-layout' ),
-					'introDefault'  => __( 'Intro par défaut', 'bb-woo-mail-layout' ),
+					'introCustom'   => __( 'Textes personnalisés', 'bb-woo-mail-layout' ),
+					'introDefault'  => __( 'Textes par défaut', 'bb-woo-mail-layout' ),
 					'nativeSuffix'  => __( 'rendu natif', 'bb-woo-mail-layout' ),
 					/* translators: %s: nom du layout général. */
 					'generalLayout' => __( 'Général (%s)', 'bb-woo-mail-layout' ),
@@ -908,6 +957,7 @@ final class SettingsPage {
 					'socialCount'   => __( '%d réseau(x)', 'bb-woo-mail-layout' ),
 					/* translators: %d: nombre de produits. */
 					'featuredCount' => __( '%d / 3 produits', 'bb-woo-mail-layout' ),
+					'featuredAuto'  => __( 'Automatique', 'bb-woo-mail-layout' ),
 				),
 			)
 		);

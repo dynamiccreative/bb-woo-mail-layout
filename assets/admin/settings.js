@@ -116,9 +116,11 @@
 	};
 
 	const syncUi = () => {
+		// « clé » (non vide), « clé=valeur » ou « clé!=valeur ».
 		$$( '[data-bb-show-if]' ).forEach( ( el ) => {
-			const [ key, expected ] = el.dataset.bbShowIf.split( '=' );
-			el.hidden = undefined === expected ? ! value( key ) : value( key ) !== expected;
+			const [ , key, not, expected ] = el.dataset.bbShowIf.match( /^([^!=]+)(!?)=?(.*)$/ );
+			const shown = '' === expected && ! el.dataset.bbShowIf.includes( '=' ) ? !! value( key ) : value( key ) === expected;
+			el.hidden = not ? shown : ! shown;
 		} );
 		$$( '[data-bb-block]' ).forEach( ( block ) => block.classList.toggle( 'is-off', ! value( block.dataset.bbBlock ) ) );
 
@@ -149,7 +151,10 @@
 		summary( 'show_help', help ? sprintf( i18n.helpFilled, help ) : i18n.helpEmpty );
 		summary( 'show_social', sprintf( i18n.socialCount, $$( '[data-bb-social]' ).filter( ( el ) => el.value.trim() ).length ) );
 		const products = $( '#bb-wml-featured-products' );
-		summary( 'show_featured', sprintf( i18n.featuredCount, products ? products.selectedOptions.length : 0 ) );
+		summary(
+			'show_featured',
+			'manual' === value( 'featured_source' ) ? sprintf( i18n.featuredCount, products ? products.selectedOptions.length : 0 ) : i18n.featuredAuto
+		);
 
 		const toggles = $$( '[data-bb-mail-toggle]' );
 		$( '#bb-wml-sum-mails' ).textContent = toggles.filter( ( el ) => el.checked ).length + ' / ' + toggles.length;
@@ -320,7 +325,8 @@
 		const id = row.dataset.bbMail;
 		const button = $( '.bb-wml-intro-btn', row );
 		const box = $( '.bb-wml-mail__intro', row );
-		const text = $( '[data-bb-intro]', row );
+		// Intro, pré-en-tête, libellé et lien du bouton.
+		const texts = $$( '[data-bb-intro]', row );
 
 		$( '[data-bb-mail-toggle]', row ).addEventListener( 'change', () => syncMail( row ) );
 
@@ -335,16 +341,18 @@
 			box.hidden = ! box.hidden;
 			button.setAttribute( 'aria-expanded', String( ! box.hidden ) );
 			if ( ! box.hidden ) {
-				text.focus();
+				texts[ 0 ].focus();
 				showInPreview( id );
 			}
 		} );
-		text.addEventListener( 'input', () => {
-			const custom = '' !== text.value.trim();
-			button.classList.toggle( 'is-custom', custom );
-			$( '.bb-wml-intro-btn__label', button ).textContent = custom ? i18n.introCustom : i18n.introDefault;
-			showInPreview( id, true );
-		} );
+		texts.forEach( ( text ) =>
+			text.addEventListener( 'input', () => {
+				const custom = texts.some( ( el ) => '' !== el.value.trim() );
+				button.classList.toggle( 'is-custom', custom );
+				$( '.bb-wml-intro-btn__label', button ).textContent = custom ? i18n.introCustom : i18n.introDefault;
+				showInPreview( id, true );
+			} )
+		);
 	} );
 
 	/* ---- Jetons et placeholders : insertion au curseur ---- */

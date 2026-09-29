@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,11 +17,13 @@ Mise en forme brandée et 100 % française des e-mails transactionnels WooCommer
 BB Woo Mail Layout remplace l'en-tête, le pied et le style de tous les e-mails WooCommerce (y compris ceux des extensions : Colissimo, GLS, Stripe, factures PDF…) par un layout codé par l'agence, compatible Outlook, Gmail, Apple Mail et les webmails français.
 
 * Trois layouts : « Classique » (fond clair, bandeau coloré), « Sobre » (tout blanc, filet de couleur) et « E-commerce » (photos produit dans le tableau de commande).
-* Bloc « Produits mis en avant » (3 produits : photo, titre, prix) et CSS personnalisé.
+* Bloc « Produits mis en avant » (3 produits : photo, titre, prix), choisis à la main ou automatiquement (ventes croisées, produits apparentés), et CSS personnalisé.
 * Logo, couleurs, police, bloc « Besoin d'aide ? », réseaux sociaux, pied de page légal.
-* Textes d'introduction français rédigés pour chaque e-mail natif, modifiables, avec placeholders.
+* Textes d'introduction français rédigés pour chaque e-mail natif et pour WooCommerce Subscriptions, Bookings et Memberships, modifiables, avec placeholders.
+* Par e-mail : pré-en-tête (texte affiché sous le sujet dans la boîte de réception) et bouton d'action (« Suivre mon colis », « Voir ma commande », lien libre…).
 * Activation e-mail par e-mail : un e-mail désactivé garde le rendu WooCommerce natif.
-* Aperçu en direct (600 px, ordinateur ou mobile) et e-mail de test avec une commande réelle, via le pipeline d'envoi de WooCommerce, sans avoir à enregistrer.
+* Aperçu en direct (600 px, ordinateur ou mobile) et e-mail de test avec une commande réelle ou une commande fictive, via le pipeline d'envoi de WooCommerce, sans avoir à enregistrer.
+* Commandes WP-CLI (`wp bb-mail`) : export / import des réglages, envoi de toute la série d'e-mails de test.
 * Import / export JSON des réglages pour dupliquer un site.
 * Contrôle du logo (alerte si l'image ne répond pas en 200).
 * Compatible HPOS, WPML et Polylang. Aucun appel externe, aucune télémétrie, aucun chargement en front.
@@ -50,6 +52,14 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.4.0 =
+* Pré-en-tête réglable par e-mail (par défaut : début de l'intro).
+* Bouton d'action par e-mail sous l'intro (placeholder de lien ou URL ; masqué si le lien est vide pour la commande).
+* Commande fictive pour l'aperçu et l'e-mail de test, même sur un site sans commande.
+* Commandes WP-CLI : wp bb-mail list, export, import, test (--all).
+* Produits mis en avant automatiques (ventes croisées ou produits apparentés à la commande), le choix manuel restant possible.
+* Textes français pour les e-mails de WooCommerce Subscriptions, Bookings et Memberships.
 
 = 1.3.0 =
 * Layout par e-mail : chaque e-mail peut avoir son propre layout (onglet E-mails), ou suivre le layout général.

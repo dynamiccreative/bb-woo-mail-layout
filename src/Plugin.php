@@ -10,6 +10,7 @@ namespace BB\WooMailLayout;
 use BB\WooMailLayout\Admin\Notices;
 use BB\WooMailLayout\Admin\Preview;
 use BB\WooMailLayout\Admin\TestEmail;
+use BB\WooMailLayout\Cli\Command;
 use BB\WooMailLayout\Compat\Wpml;
 use BB\WooMailLayout\Email\DefaultTexts;
 use BB\WooMailLayout\Email\EmailRegistry;
@@ -128,6 +129,10 @@ final class Plugin {
 			( new TestEmail( $this->registry ) )->register();
 			( new ImportExport() )->register();
 			( new Notices() )->register();
+		}
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'bb-mail', new Command( $this->registry ) );
 		}
 	}
 

@@ -34,6 +34,7 @@ $bb_colors = $v['colors'];
 	</style>
 </head>
 <body class="bb-body bb-layout-sobre" bgcolor="#ffffff" style="background-color:#ffffff;">
+<?php echo $v['preheader_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- échappé dans LayoutRenderer::preheader_html(). ?>
 <table role="presentation" class="bb-wrapper" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background-color:#ffffff;">
 	<tr>
 		<td class="bb-wrapper-cell" align="center" valign="top">
@@ -61,4 +62,7 @@ $bb_colors = $v['colors'];
 						<?php endif; ?>
 						<?php if ( '' !== $v['intro_html'] ) : ?>
 							<div class="bb-intro"><?php echo wp_kses_post( $v['intro_html'] ); ?></div>
+						<?php endif; ?>
+						<?php if ( '' !== $v['button_html'] ) : ?>
+							<?php echo $v['button_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- échappé dans LayoutRenderer::button(). ?>
 						<?php endif; ?>

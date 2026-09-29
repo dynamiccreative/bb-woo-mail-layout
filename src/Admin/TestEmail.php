@@ -56,17 +56,35 @@ final class TestEmail {
 		$to       = isset( $_POST['to'] ) ? sanitize_email( wp_unslash( $_POST['to'] ) ) : '';
 		$to       = '' !== $to ? $to : (string) get_option( 'admin_email' );
 
-		if ( ! is_email( $to ) ) {
-			wp_send_json_error( array( 'message' => __( 'Adresse destinataire invalide.', 'bb-woo-mail-layout' ) ) );
-		}
-
 		DraftSettings::apply_from_request();
 
-		$simulator = new Simulator( $this->registry );
+		try {
+			$message = $this->send( $email_id, $order_id, $to );
+		} catch ( \Throwable $e ) {
+			wp_send_json_error( array( 'message' => $e->getMessage() ) );
+		}
+
+		wp_send_json_success( array( 'message' => $message ) );
+	}
+
+	/**
+	 * Envoie un e-mail de test (utilisé aussi par WP-CLI).
+	 *
+	 * @param string $email_id Identifiant de l'e-mail.
+	 * @param int    $order_id Commande (0 = commande fictive).
+	 * @param string $to       Destinataire.
+	 * @return string Message de succès.
+	 * @throws \RuntimeException Destinataire invalide, e-mail introuvable ou échec de wp_mail.
+	 */
+	public function send( string $email_id, int $order_id, string $to ): string {
+		if ( ! is_email( $to ) ) {
+			throw new \RuntimeException( esc_html__( 'Adresse destinataire invalide.', 'bb-woo-mail-layout' ) );
+		}
+
 		add_action( 'wp_mail_failed', array( $this, 'capture_error' ) );
 
 		try {
-			$email = $simulator->prepare( $email_id, $order_id );
+			$email = ( new Simulator( $this->registry ) )->prepare( $email_id, $order_id );
 			$email->setup_locale();
 			try {
 				/* translators: %s: sujet de l'e-mail. */
@@ -75,27 +93,25 @@ final class TestEmail {
 			} finally {
 				$email->restore_locale();
 			}
-		} catch ( \Throwable $e ) {
-			wp_send_json_error( array( 'message' => $e->getMessage() ) );
+		} finally {
+			remove_action( 'wp_mail_failed', array( $this, 'capture_error' ) );
 		}
 
+		// Erreur remise à zéro après lecture : WP-CLI enchaîne plusieurs envois avec la même instance.
+		$error            = $this->mail_error;
+		$this->mail_error = '';
+
 		if ( ! $sent ) {
-			wp_send_json_error(
-				array(
-					'message' => '' !== $this->mail_error
-						/* translators: %s: erreur renvoyée par wp_mail. */
-						? sprintf( __( 'Échec de l’envoi : %s', 'bb-woo-mail-layout' ), $this->mail_error )
-						: __( 'Échec de l’envoi (wp_mail a renvoyé false). Vérifiez la configuration SMTP.', 'bb-woo-mail-layout' ),
-				)
+			throw new \RuntimeException(
+				'' !== $error
+					/* translators: %s: erreur renvoyée par wp_mail. */
+					? esc_html( sprintf( __( 'Échec de l’envoi : %s', 'bb-woo-mail-layout' ), $error ) )
+					: esc_html__( 'Échec de l’envoi (wp_mail a renvoyé false). Vérifiez la configuration SMTP.', 'bb-woo-mail-layout' )
 			);
 		}
 
-		wp_send_json_success(
-			array(
-				/* translators: 1: titre de l'e-mail, 2: destinataire. */
-				'message' => sprintf( __( 'E-mail « %1$s » envoyé à %2$s.', 'bb-woo-mail-layout' ), $email->get_title(), $to ),
-			)
-		);
+		/* translators: 1: titre de l'e-mail, 2: destinataire. */
+		return sprintf( __( 'E-mail « %1$s » envoyé à %2$s.', 'bb-woo-mail-layout' ), $email->get_title(), $to );
 	}
 
 	/**

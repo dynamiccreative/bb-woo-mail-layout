@@ -18,6 +18,28 @@ final class Simulator {
 	/** E-mails dont l'objet est un utilisateur et non une commande. */
 	public const ACCOUNT_EMAILS = array( 'customer_new_account', 'customer_reset_password', 'customer_verify_email' );
 
+	/** Numéro affiché pour la commande fictive. */
+	public const SAMPLE_NUMBER = '1234';
+
+	/** Statut de la commande fictive selon l'e-mail (par défaut : en cours). */
+	private const SAMPLE_STATUSES = array(
+		'customer_on_hold_order'   => 'on-hold',
+		'customer_completed_order' => 'completed',
+		'customer_invoice'         => 'pending',
+		'customer_failed_order'    => 'failed',
+		'failed_order'             => 'failed',
+		'customer_cancelled_order' => 'cancelled',
+		'cancelled_order'          => 'cancelled',
+		'customer_refunded_order'  => 'refunded',
+	);
+
+	/**
+	 * Commande fictive (créée une fois par instance).
+	 *
+	 * @var \WC_Order|null
+	 */
+	private ?\WC_Order $sample = null;
+
 	/**
 	 * Constructeur.
 	 *
@@ -47,7 +69,7 @@ final class Simulator {
 	 * Clone de l'e-mail, alimenté avec la commande.
 	 *
 	 * @param string $email_id Identifiant de l'e-mail.
-	 * @param int    $order_id Commande (0 = aucune).
+	 * @param int    $order_id Commande (0 = commande fictive ; utilisateur courant pour les e-mails de compte).
 	 * @throws \RuntimeException E-mail ou commande introuvable.
 	 */
 	public function prepare( string $email_id, int $order_id ): \WC_Email {
@@ -68,7 +90,7 @@ final class Simulator {
 		}
 
 		if ( ! $order instanceof \WC_Order ) {
-			throw new \RuntimeException( esc_html__( 'Choisissez une commande pour cet e-mail.', 'bb-woo-mail-layout' ) );
+			$order = $this->sample_order( $email->id );
 		}
 
 		self::set( $email, 'object', $order );
@@ -92,7 +114,7 @@ final class Simulator {
 			self::set( $email, 'customer_note', __( 'Ceci est un exemple de note ajoutée à la commande par la boutique.', 'bb-woo-mail-layout' ) );
 		}
 		if ( 'customer_refunded_order' === $email->id ) {
-			$refunds = $order->get_refunds();
+			$refunds = $order->get_id() ? $order->get_refunds() : array();
 			self::set( $email, 'partial_refund', $refunds && (float) $order->get_total_refunded() < (float) $order->get_total() );
 			self::set( $email, 'refund', $refunds ? reset( $refunds ) : null );
 		}
@@ -108,6 +130,113 @@ final class Simulator {
 		do_action( 'bb_email_prepare_simulation', $email, $order );
 
 		return $email;
+	}
+
+	/**
+	 * Commande fictive, jamais enregistrée : aperçu et test sur un site sans commande.
+	 *
+	 * Rien n'est écrit en base : les lignes sont ajoutées sans save() (add_product() enregistrerait
+	 * la ligne) et l'identifiant reste 0 (aucune lecture de métadonnées d'une vraie commande).
+	 * Produits : les derniers produits publiés du site (photos réelles), sinon des produits d'exemple.
+	 *
+	 * @param string $email_id E-mail (fixe le statut affiché).
+	 */
+	public function sample_order( string $email_id = '' ): \WC_Order {
+		if ( ! $this->sample ) {
+			$this->sample = $this->build_sample_order();
+		}
+		$this->sample->set_status( self::SAMPLE_STATUSES[ $email_id ] ?? 'processing' );
+		// Aucun remboursement : évite une requête « parent = 0 » dans WC_Order::get_refunds().
+		wp_cache_set( \WC_Cache_Helper::get_cache_prefix( 'orders' ) . 'refund_ids0', array(), 'orders' );
+		return $this->sample;
+	}
+
+	/**
+	 * Construit la commande fictive.
+	 */
+	private function build_sample_order(): \WC_Order {
+		$order = new \WC_Order();
+		$order->set_currency( get_woocommerce_currency() );
+		$order->set_date_created( time() );
+		$order->set_order_key( 'wc_order_exemple' );
+		$order->set_payment_method_title( __( 'Carte bancaire', 'bb-woo-mail-layout' ) );
+
+		$address = array(
+			'first_name' => 'Camille',
+			'last_name'  => 'Martin',
+			'company'    => '',
+			'address_1'  => __( '12 rue des Oliviers', 'bb-woo-mail-layout' ),
+			'address_2'  => '',
+			'city'       => 'Aix-en-Provence',
+			'state'      => '',
+			'postcode'   => '13100',
+			'country'    => 'FR',
+		);
+		foreach ( $address as $field => $value ) {
+			$order->{'set_billing_' . $field}( $value );
+			$order->{'set_shipping_' . $field}( $value );
+		}
+		$order->set_billing_email( 'camille.martin@example.com' );
+		$order->set_billing_phone( '06 12 34 56 78' );
+
+		$products = wc_get_products(
+			array(
+				'status'  => 'publish',
+				'type'    => array( 'simple' ),
+				'limit'   => 2,
+				'orderby' => 'date',
+				'order'   => 'DESC',
+			)
+		);
+		$products = is_array( $products ) ? $products : array();
+		if ( ! $products ) {
+			foreach ( array(
+				__( 'Produit d’exemple', 'bb-woo-mail-layout' )        => '24.90',
+				__( 'Second produit d’exemple', 'bb-woo-mail-layout' ) => '12.50',
+			) as $name => $price ) {
+				$product = new \WC_Product_Simple();
+				$product->set_name( $name );
+				$product->set_regular_price( $price );
+				$product->set_price( $price );
+				$products[] = $product;
+			}
+		}
+
+		$subtotal = 0.0;
+		foreach ( array_values( $products ) as $i => $product ) {
+			$qty       = 0 === $i ? 2 : 1;
+			$line      = (float) $product->get_price() * $qty;
+			$subtotal += $line;
+
+			$item = new \WC_Order_Item_Product();
+			$item->set_props(
+				array(
+					'name'       => $product->get_name(),
+					'product_id' => $product->get_id(),
+					'quantity'   => $qty,
+					'subtotal'   => $line,
+					'total'      => $line,
+				)
+			);
+			$order->add_item( $item );
+		}
+
+		$shipping_total = 6.90;
+		$shipping       = new \WC_Order_Item_Shipping();
+		$shipping->set_method_title( __( 'Livraison à domicile', 'bb-woo-mail-layout' ) );
+		$shipping->set_total( (string) $shipping_total );
+		$order->add_item( $shipping );
+
+		$order->set_shipping_total( (string) $shipping_total );
+		$order->set_total( (string) ( $subtotal + $shipping_total ) );
+
+		add_filter(
+			'woocommerce_order_number',
+			static fn( $number, $subject ) => $subject === $order ? self::SAMPLE_NUMBER : $number,
+			10,
+			2
+		);
+		return $order;
 	}
 
 	/**
@@ -140,6 +269,11 @@ final class Simulator {
 		$user = $order ? $order->get_user() : false;
 		if ( ! $user instanceof \WP_User ) {
 			$user = wp_get_current_user();
+		}
+		// WP-CLI sans --user : aucun utilisateur connecté, on prend le compte de l'administrateur du site.
+		if ( ! $user->exists() ) {
+			$admin = get_user_by( 'email', (string) get_option( 'admin_email' ) );
+			$user  = $admin instanceof \WP_User ? $admin : $user;
 		}
 
 		$props = array(

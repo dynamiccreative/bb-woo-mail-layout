@@ -817,7 +817,7 @@
 
 .bb-wml-mail__intro {
 	display: grid;
-	gap: 6px;
+	gap: 12px;
 	padding: 0 16px 14px 64px;
 }
 
