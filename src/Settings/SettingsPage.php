@@ -137,7 +137,7 @@ final class SettingsPage {
 			),
 			array(
 				'title' => __( 'Image', 'bb-woo-mail-layout' ),
-				'desc'  => __( 'Image de la médiathèque de ce site (PNG ou JPG). Hauteur affichée : 80 px maximum.', 'bb-woo-mail-layout' ),
+				'desc'  => __( 'Image de la médiathèque de ce site (PNG ou JPG).', 'bb-woo-mail-layout' ),
 				'id'    => self::id( 'logo_url' ),
 				'type'  => 'bb_wml_media',
 			),
@@ -155,6 +155,19 @@ final class SettingsPage {
 					'min'  => 50,
 					'max'  => 600,
 					'step' => 10,
+				),
+			),
+			array(
+				'title'             => __( 'Hauteur maximale (px)', 'bb-woo-mail-layout' ),
+				'desc'              => __( 'La plus contraignante des deux limites l’emporte : un logo carré de 200 px de large avec 80 px de haut maximum s’affiche en 80 × 80 px. Le logo n’est jamais agrandi au-delà de sa taille réelle.', 'bb-woo-mail-layout' ),
+				'id'                => self::id( 'logo_max_height' ),
+				'type'              => 'number',
+				'default'           => $d['logo_max_height'],
+				'css'               => 'width:90px;',
+				'custom_attributes' => array(
+					'min'  => 20,
+					'max'  => 300,
+					'step' => 5,
 				),
 			),
 			array(

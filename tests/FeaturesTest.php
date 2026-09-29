@@ -119,6 +119,44 @@ class FeaturesTest extends TestCase {
 		$this->assertStringNotContainsString( '{order_meta', $html );
 	}
 
+	public function test_logo_size_uses_both_limits_without_upscaling(): void {
+		$order = $this->create_order();
+		$logo  = function ( int $side ): int {
+			$id = self::factory()->attachment->create( array( 'post_mime_type' => 'image/png' ) );
+			update_post_meta( $id, '_wp_attached_file', "logo-$side.png" );
+			wp_update_attachment_metadata(
+				$id,
+				array(
+					'width'  => $side,
+					'height' => $side,
+					'file'   => "logo-$side.png",
+				)
+			);
+			return $id;
+		};
+		$size  = function ( int $logo, int $max_w, int $max_h ) use ( $order ): string {
+			Options::replace(
+				array(
+					'logo_url'        => 'https://example.org/wp-content/uploads/logo-' . $logo . '.png',
+					'logo_id'         => $logo,
+					'logo_max_width'  => $max_w,
+					'logo_max_height' => $max_h,
+				)
+			);
+			preg_match( '/class="bb-header".*?(<img[^>]*>)/s', $this->render( 'customer_processing_order', $order ), $m );
+			preg_match( '/width="(\d+)" height="(\d+)"/', $m[1] ?? '', $wh );
+			return ( $wh[1] ?? '?' ) . 'x' . ( $wh[2] ?? '?' );
+		};
+
+		$big   = $logo( 400 );
+		$small = $logo( 100 );
+
+		$this->assertSame( '80x80', $size( $big, 200, 80 ), 'Logo carré : la hauteur maximale l’emporte.' );
+		$this->assertSame( '200x200', $size( $big, 200, 300 ), 'La largeur maximale l’emporte.' );
+		$this->assertSame( '100x100', $size( $small, 200, 150 ), 'Jamais agrandi au-delà de sa taille réelle.' );
+		$this->assertSame( 300, Options::sanitize_field( 'logo_max_height', '999' ), 'Hauteur bornée à 300 px.' );
+	}
+
 	public function test_border_color_setting(): void {
 		$this->assertSame( '', Options::sanitize_field( 'color_border', 'pas une couleur' ) );
 

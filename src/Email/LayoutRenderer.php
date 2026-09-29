@@ -550,34 +550,36 @@ final class LayoutRenderer {
 	}
 
 	/**
-	 * Logo et dimensions (hauteur max 80 px, largeur max réglée).
+	 * Logo et dimensions : largeur et hauteur maximales réglées, sans jamais agrandir l'image.
 	 *
 	 * @param array<string,mixed> $settings   Réglages.
 	 * @param string              $site_title Nom du site (alt).
-	 * @return array{url:string,width:int|null,height:int|null,max_width:int,alt:string}|null
+	 * @return array{url:string,width:int|null,height:int|null,max_width:int,max_height:int,alt:string}|null
 	 */
 	private function logo( array $settings, string $site_title ): ?array {
 		if ( 'yes' !== $settings['show_logo'] || '' === $settings['logo_url'] ) {
 			return null;
 		}
 
-		$max_width = (int) $settings['logo_max_width'];
-		$width     = null;
-		$height    = null;
+		$max_width  = (int) $settings['logo_max_width'];
+		$max_height = (int) $settings['logo_max_height'];
+		$width      = null;
+		$height     = null;
 
 		[ $natural_w, $natural_h ] = $this->logo_natural_size( $settings );
 		if ( $natural_w > 0 && $natural_h > 0 ) {
-			// Largeur réglée, hauteur plafonnée à 80 px, jamais d'agrandissement.
-			$width  = max( 1, (int) min( $max_width, $natural_w, floor( $natural_w * 80 / $natural_h ) ) );
+			// La plus contraignante des deux limites l'emporte (proportions conservées), jamais d'agrandissement.
+			$width  = max( 1, (int) min( $max_width, $natural_w, floor( $natural_w * $max_height / $natural_h ) ) );
 			$height = max( 1, (int) round( $natural_h * $width / $natural_w ) );
 		}
 
 		return array(
-			'url'       => (string) $settings['logo_url'],
-			'width'     => $width,
-			'height'    => $height,
-			'max_width' => $max_width,
-			'alt'       => $site_title,
+			'url'        => (string) $settings['logo_url'],
+			'width'      => $width,
+			'height'     => $height,
+			'max_width'  => $max_width,
+			'max_height' => $max_height,
+			'alt'        => $site_title,
 		);
 	}
 

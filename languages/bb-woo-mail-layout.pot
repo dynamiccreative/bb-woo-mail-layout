@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29 08:50+0000\n"
+"POT-Creation-Date: 2026-09-29 09:03+0000\n"
 "X-Domain: bb-woo-mail-layout\n"
 
 #: src/Settings/LogoChecker.php:81
@@ -116,346 +116,354 @@ msgid "Image"
 msgstr ""
 
 #: src/Settings/SettingsPage.php:140
-msgid "Image de la médiathèque de ce site (PNG ou JPG). Hauteur affichée : 80 px maximum."
+msgid "Image de la médiathèque de ce site (PNG ou JPG)."
 msgstr ""
 
 #: src/Settings/SettingsPage.php:149
 msgid "Largeur maximale (px)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:166
-msgid "Couleurs et police"
+#: src/Settings/SettingsPage.php:161
+msgid "Hauteur maximale (px)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:171
-msgid "Couleur principale"
-msgstr ""
-
-#: src/Settings/SettingsPage.php:172
-msgid "Bandeau, titres, liens."
+#: src/Settings/SettingsPage.php:162
+msgid "La plus contraignante des deux limites l’emporte : un logo carré de 200 px de large avec 80 px de haut maximum s’affiche en 80 × 80 px. Le logo n’est jamais agrandi au-delà de sa taille réelle."
 msgstr ""
 
 #: src/Settings/SettingsPage.php:179
+msgid "Couleurs et police"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:184
+msgid "Couleur principale"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:185
+msgid "Bandeau, titres, liens."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:192
 msgid "Couleur des boutons"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:186
+#: src/Settings/SettingsPage.php:199
 msgid "Couleur du texte"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:193
+#: src/Settings/SettingsPage.php:206
 msgid "Couleur des bordures"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:194
+#: src/Settings/SettingsPage.php:207
 msgid "Tableau de commande, adresses, séparateurs. Vide : teinte calculée depuis la couleur du texte."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:201
+#: src/Settings/SettingsPage.php:214
 msgid "Couleur de fond extérieur"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:202
+#: src/Settings/SettingsPage.php:215
 msgid "Layout Classique uniquement."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:209
+#: src/Settings/SettingsPage.php:222
 msgid "Police"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:219
+#: src/Settings/SettingsPage.php:232
 msgid "Google Font (repli sur Arial)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:223
+#: src/Settings/SettingsPage.php:236
 msgid "Nom de la Google Font"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:224
+#: src/Settings/SettingsPage.php:237
 msgid "Ex. : Montserrat. Affichée par Apple Mail et iOS ; Gmail et Outlook affichent la police de repli."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:236
+#: src/Settings/SettingsPage.php:249
 msgid "Blocs affichés"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:241
+#: src/Settings/SettingsPage.php:254
 msgid "Blocs"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:242
+#: src/Settings/SettingsPage.php:255
 msgid "Paragraphe d’introduction"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:249
+#: src/Settings/SettingsPage.php:262
 msgid "Bloc « Besoin d’aide ? »"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:256 src/Settings/SettingsPage.php:302
+#: src/Settings/SettingsPage.php:269 src/Settings/SettingsPage.php:315
 msgid "Réseaux sociaux"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:263 src/Settings/SettingsPage.php:334
+#: src/Settings/SettingsPage.php:276 src/Settings/SettingsPage.php:347
 msgid "Pied de page"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:275 layouts/classique/footer.php:25 layouts/sobre/footer.php:25 layouts/ecommerce/footer.php:25
+#: src/Settings/SettingsPage.php:288 layouts/classique/footer.php:25 layouts/sobre/footer.php:25 layouts/ecommerce/footer.php:25
 msgid "Besoin d’aide ?"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:277
+#: src/Settings/SettingsPage.php:290
 msgid "Le bloc n’apparaît que si au moins une information est renseignée."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:281
+#: src/Settings/SettingsPage.php:294
 msgid "Téléphone"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:286 src/Settings/SettingsPage.php:630 src/Settings/SettingsPage.php:718
+#: src/Settings/SettingsPage.php:299 src/Settings/SettingsPage.php:643 src/Settings/SettingsPage.php:731
 msgid "E-mail"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:291
+#: src/Settings/SettingsPage.php:304
 msgid "Horaires"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:294
+#: src/Settings/SettingsPage.php:307
 msgid "Du lundi au vendredi, de 9 h à 18 h"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:304
+#: src/Settings/SettingsPage.php:317
 msgid "Seuls les réseaux dont l’URL est renseignée sont affichés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:339
+#: src/Settings/SettingsPage.php:352
 msgid "Nom légal"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:344
+#: src/Settings/SettingsPage.php:357
 msgid "Adresse"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:350 src/Email/Placeholders.php:30
+#: src/Settings/SettingsPage.php:363 src/Email/Placeholders.php:30
 msgid "Lien vers le site"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:351
+#: src/Settings/SettingsPage.php:364
 msgid "Afficher le lien vers la boutique"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:357
+#: src/Settings/SettingsPage.php:370
 msgid "Mentions"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:358
+#: src/Settings/SettingsPage.php:371
 msgid "Gras, lien et saut de ligne uniquement. Placeholders autorisés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:368
+#: src/Settings/SettingsPage.php:381
 msgid "Produits mis en avant"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:370
+#: src/Settings/SettingsPage.php:383
 msgid "Jusqu’à 3 produits (photo, titre, prix) affichés sous la commande, dans les e-mails envoyés au client."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:374
+#: src/Settings/SettingsPage.php:387
 msgid "Bloc produits"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:375
+#: src/Settings/SettingsPage.php:388
 msgid "Afficher les produits mis en avant"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:381
+#: src/Settings/SettingsPage.php:394
 msgid "Titre du bloc"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:384 src/Email/LayoutRenderer.php:749
+#: src/Settings/SettingsPage.php:397 src/Email/LayoutRenderer.php:751
 msgid "Vous aimerez aussi"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:387
+#: src/Settings/SettingsPage.php:400
 msgid "Produits"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:388
+#: src/Settings/SettingsPage.php:401
 msgid "3 produits maximum. Les produits non publiés ou masqués du catalogue sont ignorés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:398
+#: src/Settings/SettingsPage.php:411
 msgid "CSS personnalisé"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:400
+#: src/Settings/SettingsPage.php:413
 msgid "Ajouté après le CSS du layout (il l’emporte). Jetons disponibles : {{primary}}, {{button}}, {{text}}, {{muted}}, {{border}}, {{soft}}, {{background}}, {{font}}. Balises, @import et scripts sont retirés."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:404
+#: src/Settings/SettingsPage.php:417
 msgid "CSS"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:416
+#: src/Settings/SettingsPage.php:429
 msgid "E-mails mis en forme"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:418
+#: src/Settings/SettingsPage.php:431
 msgid "Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail décoché garde le rendu WooCommerce natif."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:431
+#: src/Settings/SettingsPage.php:444
 msgid "Textes d’introduction"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:433
+#: src/Settings/SettingsPage.php:446
 msgid "Laisser vide pour utiliser le texte par défaut (affiché en gris). Une ligne vide sépare deux paragraphes."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:446
+#: src/Settings/SettingsPage.php:459
 msgid "Prévisualisation, test, import / export"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:538
+#: src/Settings/SettingsPage.php:551
 msgid "Choisir une image"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:539
+#: src/Settings/SettingsPage.php:552
 msgid "Retirer"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:568
+#: src/Settings/SettingsPage.php:581
 msgid "Rechercher un produit…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:629
+#: src/Settings/SettingsPage.php:642
 msgid "Actif"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:631
+#: src/Settings/SettingsPage.php:644
 msgid "ID"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:632
+#: src/Settings/SettingsPage.php:645
 msgid "Destinataire"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:633
+#: src/Settings/SettingsPage.php:646
 msgid "Source"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:634
+#: src/Settings/SettingsPage.php:647
 msgid "Statut"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:647
+#: src/Settings/SettingsPage.php:660
 msgid "Sujet et titre"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:650
+#: src/Settings/SettingsPage.php:663
 msgid "Client"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:650
+#: src/Settings/SettingsPage.php:663
 msgid "Administrateur"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:667
 msgid "Layout bleuebuzz"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:656
+#: src/Settings/SettingsPage.php:669
 msgid "Rendu WooCommerce"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:680
+#: src/Settings/SettingsPage.php:693
 msgid "Placeholders :"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:714
+#: src/Settings/SettingsPage.php:727
 msgid "Aperçu et e-mail de test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:716
+#: src/Settings/SettingsPage.php:729
 msgid "L’aperçu et le test utilisent les réglages enregistrés : enregistrez vos modifications avant."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:722
+#: src/Settings/SettingsPage.php:735
 msgid "rendu natif"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:728
+#: src/Settings/SettingsPage.php:741
 msgid "Commande utilisée comme jeu de données"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:731
+#: src/Settings/SettingsPage.php:744
 msgid "Aucune commande sur ce site"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:751
+#: src/Settings/SettingsPage.php:764
 msgid "Destinataire du test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:755
+#: src/Settings/SettingsPage.php:768
 msgid "Prévisualiser"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:756
+#: src/Settings/SettingsPage.php:769
 msgid "Envoyer un e-mail de test"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:759
+#: src/Settings/SettingsPage.php:772
 msgid "Aperçu de l’e-mail"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:763
+#: src/Settings/SettingsPage.php:776
 msgid "Import / export"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:766
+#: src/Settings/SettingsPage.php:779
 msgid "Exporter les réglages (JSON)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:770
+#: src/Settings/SettingsPage.php:783
 msgid "Importer"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:773
+#: src/Settings/SettingsPage.php:786
 msgid "L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:806
+#: src/Settings/SettingsPage.php:819
 msgid "Choisir le logo"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:807
+#: src/Settings/SettingsPage.php:820
 msgid "Utiliser cette image"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:808
+#: src/Settings/SettingsPage.php:821
 msgid "Génération de l’aperçu…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:809
+#: src/Settings/SettingsPage.php:822
 msgid "Envoi en cours…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:810
+#: src/Settings/SettingsPage.php:823
 msgid "Import en cours…"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:811
+#: src/Settings/SettingsPage.php:824
 msgid "Une erreur est survenue."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:812
+#: src/Settings/SettingsPage.php:825
 msgid "Choisissez un fichier JSON."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:813
+#: src/Settings/SettingsPage.php:826
 msgid "Remplacer tous les réglages de mise en forme par ceux du fichier ?"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:826
+#: src/Settings/SettingsPage.php:839
 msgid "Réglages"
 msgstr ""
 

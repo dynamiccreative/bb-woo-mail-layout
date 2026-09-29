@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- Logo : **hauteur maximale réglable** (80 px par défaut, 20 à 300 px). Auparavant fixée à 80 px, elle l'emportait sur la largeur maximale pour les logos carrés ou verticaux.
+
 ## 1.1.1
 
 - Réglage **Couleur des bordures** (tableau de commande, adresses, séparateurs) ; vide = teinte calculée depuis la couleur du texte.

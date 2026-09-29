@@ -46,7 +46,7 @@ $bb_colors = $v['colors'];
 								<?php if ( $v['logo']['width'] ) : ?>
 								<img src="<?php echo esc_url( $v['logo']['url'] ); ?>" alt="<?php echo esc_attr( $v['logo']['alt'] ); ?>" width="<?php echo (int) $v['logo']['width']; ?>" height="<?php echo (int) $v['logo']['height']; ?>" style="display:block;margin:0 auto;width:<?php echo (int) $v['logo']['width']; ?>px;max-width:100%;height:auto;border:0;">
 								<?php else : ?>
-								<img src="<?php echo esc_url( $v['logo']['url'] ); ?>" alt="<?php echo esc_attr( $v['logo']['alt'] ); ?>" style="display:block;margin:0 auto;width:auto;max-width:<?php echo (int) $v['logo']['max_width']; ?>px;height:auto;max-height:80px;border:0;">
+								<img src="<?php echo esc_url( $v['logo']['url'] ); ?>" alt="<?php echo esc_attr( $v['logo']['alt'] ); ?>" style="display:block;margin:0 auto;width:auto;max-width:<?php echo (int) $v['logo']['max_width']; ?>px;height:auto;max-height:<?php echo (int) $v['logo']['max_height']; ?>px;border:0;">
 								<?php endif; ?>
 							</a>
 						<?php else : ?>

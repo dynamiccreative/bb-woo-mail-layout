@@ -49,6 +49,7 @@ final class Options {
 			'logo_url'              => 'url',
 			'logo_id'               => 'int',
 			'logo_max_width'        => 'logo_width',
+			'logo_max_height'       => 'logo_height',
 			'color_primary'         => 'color',
 			'color_button'          => 'color',
 			'color_text'            => 'color',
@@ -94,6 +95,7 @@ final class Options {
 			'logo_url'              => '',
 			'logo_id'               => 0,
 			'logo_max_width'        => 200,
+			'logo_max_height'       => 80,
 			'color_primary'         => '#1f4e79',
 			'color_button'          => '#1f4e79',
 			'color_text'            => '#333333',
@@ -220,6 +222,10 @@ final class Options {
 			case 'logo_width':
 				$width = is_numeric( $raw ) ? absint( $raw ) : (int) $fallback;
 				return max( 50, min( 600, $width ) );
+
+			case 'logo_height':
+				$height = is_numeric( $raw ) ? absint( $raw ) : (int) $fallback;
+				return max( 20, min( 300, $height ) );
 
 			case 'color':
 				$color = is_string( $raw ) ? sanitize_hex_color( trim( $raw ) ) : null;
