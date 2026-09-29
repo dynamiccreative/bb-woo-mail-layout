@@ -56,7 +56,7 @@ final class DefaultTexts {
 		 *
 		 * @param array<string, string> $texts Identifiant => texte.
 		 *
-		 * @since 1.5.0
+		 * @since 1.4.1
 		 */
 		return array_filter( (array) apply_filters( 'bb_email_default_texts', $defaults ), 'is_string' );
 	}

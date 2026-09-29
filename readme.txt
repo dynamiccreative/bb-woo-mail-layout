@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.4.1 =
+* Accès direct : WooCommerce → Mise en forme e-mails.
+* Filtre bb_email_default_texts : une extension peut fournir le texte d'intro par défaut de ses e-mails.
 
 = 1.4.0 =
 * Pré-en-tête réglable par e-mail (par défaut : début de l'intro).
