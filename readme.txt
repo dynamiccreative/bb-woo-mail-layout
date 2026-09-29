@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,10 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.1.1 =
+* Réglage « Couleur des bordures ».
+* Filet au-dessus du sous-total ramené à 1 px (tous les layouts).
 
 = 1.1.0 =
 * Nouveau layout « E-commerce » : barre d’accent et photos produit dans le tableau de commande.

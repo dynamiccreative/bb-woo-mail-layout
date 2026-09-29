@@ -3,7 +3,7 @@
  * Plugin Name:          BB Woo Mail Layout
  * Plugin URI:           https://github.com/dynamiccreative/bb-woo-mail-layout
  * Description:          Mise en forme brandée et 100 % française des e-mails transactionnels WooCommerce (layout codé, réglages simples).
- * Version:              1.1.0
+ * Version:              1.1.1
  * Requires at least:    6.4
  * Tested up to:         7.1
  * Requires PHP:         8.1
@@ -22,7 +22,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BB_WML_VERSION', '1.1.0' );
+define( 'BB_WML_VERSION', '1.1.1' );
 define( 'BB_WML_FILE', __FILE__ );
 define( 'BB_WML_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BB_WML_URL', plugin_dir_url( __FILE__ ) );

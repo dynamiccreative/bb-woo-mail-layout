@@ -119,6 +119,18 @@ class FeaturesTest extends TestCase {
 		$this->assertStringNotContainsString( '{order_meta', $html );
 	}
 
+	public function test_border_color_setting(): void {
+		$this->assertSame( '', Options::sanitize_field( 'color_border', 'pas une couleur' ) );
+
+		Options::replace( array( 'color_border' => '#AA0000' ) );
+		$html = $this->render( 'customer_processing_order', $this->create_order() );
+		$this->assertMatchesRegularExpression( '/class="td bb-total-first"[^>]*border-top: 1px solid #a(a0)?00;/', $html, 'L’inliner peut abréger #aa0000 en #a00.' );
+
+		Options::replace( array() );
+		$html = $this->render( 'customer_processing_order', $this->create_order() );
+		$this->assertDoesNotMatchRegularExpression( '/#a(a0)?00\b/', $html, 'Vide : teinte calculée.' );
+	}
+
 	public function test_custom_css_is_applied(): void {
 		Options::replace( array( 'custom_css' => '.bb-heading { letter-spacing: 3px; }' ) );
 		$this->assertMatchesRegularExpression( '/class="bb-heading"[^>]*letter-spacing: 3px/', $this->render( 'customer_processing_order', $this->create_order() ) );

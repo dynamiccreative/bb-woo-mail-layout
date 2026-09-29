@@ -792,7 +792,8 @@ final class LayoutRenderer {
 			'text'         => $text,
 			'background'   => (string) $settings['color_background'],
 			'muted'        => self::mix( $text, '#ffffff', 0.65 ),
-			'border'       => self::mix( $text, '#ffffff', 0.18 ),
+			// Réglage « Couleur des bordures », sinon teinte calculée depuis la couleur du texte.
+			'border'       => '' !== (string) ( $settings['color_border'] ?? '' ) ? (string) $settings['color_border'] : self::mix( $text, '#ffffff', 0.18 ),
 			'soft'         => self::mix( $primary, '#ffffff', 0.06 ),
 		);
 	}

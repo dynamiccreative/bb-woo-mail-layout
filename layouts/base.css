@@ -145,7 +145,7 @@ h1.bb-heading {
 }
 
 .bb-main .bb-total-first {
-	border-top: 3px solid {{border}} !important;
+	border-top: 1px solid {{border}} !important;
 }
 
 .bb-main .wc-item-meta {

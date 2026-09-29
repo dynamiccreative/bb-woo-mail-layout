@@ -190,6 +190,14 @@ final class SettingsPage {
 				'default' => $d['color_text'],
 			),
 			array(
+				'title'   => __( 'Couleur des bordures', 'bb-woo-mail-layout' ),
+				'desc'    => __( 'Tableau de commande, adresses, séparateurs. Vide : teinte calculée depuis la couleur du texte.', 'bb-woo-mail-layout' ),
+				'id'      => self::id( 'color_border' ),
+				'type'    => 'color',
+				'css'     => 'width:6em;',
+				'default' => '',
+			),
+			array(
 				'title'   => __( 'Couleur de fond extérieur', 'bb-woo-mail-layout' ),
 				'desc'    => __( 'Layout Classique uniquement.', 'bb-woo-mail-layout' ),
 				'id'      => self::id( 'color_background' ),

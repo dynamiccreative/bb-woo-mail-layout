@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- Réglage **Couleur des bordures** (tableau de commande, adresses, séparateurs) ; vide = teinte calculée depuis la couleur du texte.
+- Filet au-dessus du sous-total ramené de 3 px à 1 px, pour tous les layouts.
+
 ## 1.1.0
 
 - Nouveau layout **E-commerce** : barre d'accent, en-tête de tableau coloré, photos produit dans le tableau de commande (en-tête `Product Images: yes` du `styles.css` d'un layout).

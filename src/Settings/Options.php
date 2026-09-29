@@ -53,6 +53,7 @@ final class Options {
 			'color_button'          => 'color',
 			'color_text'            => 'color',
 			'color_background'      => 'color',
+			'color_border'          => 'color_optional',
 			'font'                  => 'font',
 			'google_font'           => 'google_font',
 			'show_intro'            => 'bool',
@@ -97,6 +98,7 @@ final class Options {
 			'color_button'          => '#1f4e79',
 			'color_text'            => '#333333',
 			'color_background'      => '#f3f4f6',
+			'color_border'          => '',
 			'font'                  => 'arial',
 			'google_font'           => '',
 			'show_intro'            => 'yes',
@@ -222,6 +224,10 @@ final class Options {
 			case 'color':
 				$color = is_string( $raw ) ? sanitize_hex_color( trim( $raw ) ) : null;
 				return $color ? strtolower( $color ) : $fallback;
+
+			case 'color_optional':
+				$color = is_string( $raw ) ? sanitize_hex_color( trim( $raw ) ) : null;
+				return $color ? strtolower( $color ) : '';
 
 			case 'url':
 				return is_string( $raw ) ? esc_url_raw( trim( $raw ), array( 'http', 'https' ) ) : '';
