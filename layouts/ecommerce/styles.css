@@ -1,0 +1,68 @@
+/*
+ * Layout Name: E-commerce
+ * Description: Barre d'accent, bandeau coloré, photos produit dans le tableau de commande.
+ * Product Images: yes
+ */
+
+.bb-body,
+.bb-layout-ecommerce .bb-wrapper {
+	background-color: {{background}};
+}
+
+.bb-accent {
+	height: 4px;
+	font-size: 0;
+	line-height: 0;
+	background-color: {{button}};
+}
+
+.bb-header {
+	background-color: {{primary}};
+	padding: 28px 32px;
+}
+
+h1.bb-heading {
+	text-align: center;
+	font-size: 26px;
+}
+
+.bb-main table.td thead th {
+	background-color: {{primary}} !important;
+	color: {{primary_text}} !important;
+	border-color: {{primary}} !important;
+}
+
+/* Photo à gauche, nom à côté (float converti en align="left" par l'inliner : compatible Outlook). */
+.bb-order-table img {
+	display: block;
+	float: left;
+	width: 64px;
+	height: auto;
+	margin: 0 12px 4px 0;
+	border: 1px solid {{border}};
+	border-radius: 4px;
+}
+
+.bb-featured-title {
+	color: {{primary}};
+}
+
+.bb-featured-img {
+	border: 1px solid {{border}};
+	border-radius: 4px;
+}
+
+@media only screen and (max-width: 620px) {
+	.bb-header {
+		padding: 20px !important;
+	}
+
+	h1.bb-heading {
+		font-size: 22px !important;
+	}
+
+	.bb-order-table img {
+		width: 48px !important;
+		margin-right: 8px !important;
+	}
+}

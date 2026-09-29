@@ -8,12 +8,14 @@
  * @var WC_Order $order
  * @var bool     $sent_to_admin
  * @var bool     $plain_text
- * @var WC_Email $email
+ * @var mixed    $email   E-mail (argument de wc_get_template, non garanti).
  */
 
 defined( 'ABSPATH' ) || exit;
 
 $bb_align = is_rtl() ? 'right' : 'left';
+// Photos produit : selon le layout (en-tête « Product Images: yes » de son styles.css).
+$bb_images = \BB\WooMailLayout\Plugin::instance()->renderer()->shows_product_images( isset( $email ) && $email instanceof WC_Email ? $email : null );
 
 do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text, $email );
 ?>
@@ -54,8 +56,8 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 				$order,
 				array(
 					'show_sku'      => $sent_to_admin,
-					'show_image'    => false,
-					'image_size'    => array( 32, 32 ),
+					'show_image'    => $bb_images,
+					'image_size'    => array( 64, 64 ),
 					'plain_text'    => $plain_text,
 					'sent_to_admin' => $sent_to_admin,
 				)

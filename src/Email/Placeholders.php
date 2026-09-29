@@ -37,6 +37,12 @@ final class Placeholders {
 			'{tracking_url}'        => __( 'Lien de suivi du colis (si fourni par l’extension d’expédition)', 'bb-woo-mail-layout' ),
 			'{admin_email}'         => __( 'E-mail de l’administrateur', 'bb-woo-mail-layout' ),
 			'{shop_phone}'          => __( 'Téléphone de la boutique', 'bb-woo-mail-layout' ),
+			'{billing_address}'     => __( 'Adresse de facturation', 'bb-woo-mail-layout' ),
+			'{shipping_address}'    => __( 'Adresse de livraison', 'bb-woo-mail-layout' ),
+			'{payment_method}'      => __( 'Moyen de paiement', 'bb-woo-mail-layout' ),
+			'{shipping_method}'     => __( 'Mode de livraison', 'bb-woo-mail-layout' ),
+			'{payment_url}'         => __( 'Lien « Payer ma commande » (commande à régler uniquement)', 'bb-woo-mail-layout' ),
+			'{order_meta:clé}'      => __( 'Métadonnée de commande (ex. {order_meta:_numero_client})', 'bb-woo-mail-layout' ),
 		);
 	}
 
@@ -66,6 +72,11 @@ final class Placeholders {
 			'{tracking_url}'        => '',
 			'{admin_email}'         => (string) get_option( 'admin_email' ),
 			'{shop_phone}'          => (string) Options::get( 'contact_phone' ),
+			'{billing_address}'     => '',
+			'{shipping_address}'    => '',
+			'{payment_method}'      => '',
+			'{shipping_method}'     => '',
+			'{payment_url}'         => '',
 			'{email_title}'         => $email ? $email->get_title() : '',
 		);
 
@@ -82,6 +93,17 @@ final class Placeholders {
 				'label' => $is_admin_email ? __( 'Voir la commande', 'bb-woo-mail-layout' ) : __( 'Voir ma commande', 'bb-woo-mail-layout' ),
 			);
 
+			$values['{billing_address}']  = array( 'html' => (string) $order->get_formatted_billing_address() );
+			$values['{shipping_address}'] = array( 'html' => (string) $order->get_formatted_shipping_address() );
+			$values['{payment_method}']   = $order->get_payment_method_title();
+			$values['{shipping_method}']  = $order->get_shipping_method();
+			if ( $order->needs_payment() ) {
+				$values['{payment_url}'] = array(
+					'url'   => $order->get_checkout_payment_url(),
+					'label' => __( 'Payer ma commande', 'bb-woo-mail-layout' ),
+				);
+			}
+
 			$tracking = $this->tracking_url( $order );
 			if ( '' !== $tracking ) {
 				$values['{tracking_url}'] = array(
@@ -97,8 +119,8 @@ final class Placeholders {
 		/**
 		 * Ajoute ou modifie des placeholders.
 		 *
-		 * @param array<string, mixed> $values Placeholder => valeur (texte brut) ou lien [ 'url' => …, 'label' => … ].
-		 * @param \WC_Email|null                                        $email  E-mail en cours de rendu.
+		 * @param array<string, mixed> $values Placeholder => texte brut, lien [ 'url' => …, 'label' => … ] ou HTML [ 'html' => … ].
+		 * @param \WC_Email|null       $email  E-mail en cours de rendu.
 		 *
 		 * @since 1.0.0
 		 */
@@ -128,7 +150,9 @@ final class Placeholders {
 
 		$map = array();
 		foreach ( $this->values( $email ) as $placeholder => $value ) {
-			if ( is_array( $value ) ) {
+			if ( is_array( $value ) && isset( $value['html'] ) ) {
+				$map[ $placeholder ] = wp_kses_post( (string) $value['html'] );
+			} elseif ( is_array( $value ) ) {
 				$url                 = is_string( $value['url'] ?? null ) ? $value['url'] : '';
 				$label               = is_string( $value['label'] ?? null ) ? $value['label'] : $url;
 				$map[ $placeholder ] = '' === $url ? '' : sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html( $label ) );
@@ -137,9 +161,32 @@ final class Placeholders {
 			}
 		}
 		$html = strtr( $html, $map );
+		$html = $this->replace_order_meta( $html, $email );
 
 		// « Bonjour , » quand le prénom est vide.
 		return (string) preg_replace( '/[ \x{00A0}]+([,.])/u', '$1', $html );
+	}
+
+	/**
+	 * Remplace {order_meta:clé} par la métadonnée de la commande (valeurs scalaires uniquement, échappées).
+	 *
+	 * @param string         $html  HTML.
+	 * @param \WC_Email|null $email E-mail en cours de rendu.
+	 */
+	private function replace_order_meta( string $html, ?\WC_Email $email ): string {
+		if ( ! str_contains( $html, '{order_meta:' ) ) {
+			return $html;
+		}
+		$order = $email && $email->object instanceof \WC_Order ? $email->object : null;
+
+		return (string) preg_replace_callback(
+			'/\{order_meta:([A-Za-z0-9_\-]{1,100})\}/',
+			static function ( array $m ) use ( $order ): string {
+				$value = $order ? $order->get_meta( $m[1] ) : '';
+				return is_scalar( $value ) ? esc_html( (string) $value ) : '';
+			},
+			$html
+		);
 	}
 
 	/**

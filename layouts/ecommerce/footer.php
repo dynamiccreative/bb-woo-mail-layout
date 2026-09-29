@@ -1,6 +1,6 @@
 <?php
 /**
- * Layout « Classique » — pied : aide, réseaux sociaux, mentions.
+ * Layout « E-commerce » — pied : aide, réseaux sociaux, mentions.
  *
  * Variables : voir LayoutRenderer::view_vars().
  *

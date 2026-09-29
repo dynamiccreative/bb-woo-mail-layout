@@ -31,6 +31,12 @@ final class Options {
 
 	public const SOCIAL_NETWORKS = array( 'facebook', 'instagram', 'linkedin', 'tiktok', 'youtube' );
 
+	/** Nombre maximal de produits mis en avant. */
+	public const MAX_FEATURED = 3;
+
+	/** Taille maximale du CSS personnalisé (octets). */
+	public const MAX_CUSTOM_CSS = 20000;
+
 	/**
 	 * Schéma : clé => type d'assainissement.
 	 *
@@ -65,6 +71,10 @@ final class Options {
 			'footer_address'        => 'textarea',
 			'footer_show_site_link' => 'bool',
 			'footer_text'           => 'html',
+			'show_featured'         => 'bool',
+			'featured_title'        => 'text',
+			'featured_products'     => 'ids',
+			'custom_css'            => 'css',
 			'emails'                => 'map_bool',
 			'intros'                => 'map_textarea',
 		);
@@ -105,6 +115,10 @@ final class Options {
 			'footer_address'        => '',
 			'footer_show_site_link' => 'yes',
 			'footer_text'           => '',
+			'show_featured'         => 'no',
+			'featured_title'        => '',
+			'featured_products'     => array(),
+			'custom_css'            => '',
 			'emails'                => array(),
 			'intros'                => array(),
 		);
@@ -122,7 +136,7 @@ final class Options {
 		$stored = is_array( $stored ) ? $stored : array();
 		$all    = array_merge( self::defaults(), $stored );
 
-		foreach ( array( 'emails', 'intros' ) as $map ) {
+		foreach ( array( 'emails', 'intros', 'featured_products' ) as $map ) {
 			$all[ $map ] = is_array( $all[ $map ] ) ? $all[ $map ] : array();
 		}
 		return $all;
@@ -233,6 +247,14 @@ final class Options {
 			case 'google_font':
 				return is_string( $raw ) ? trim( (string) preg_replace( '/[^A-Za-z0-9 ]/', '', $raw ) ) : '';
 
+			case 'ids':
+				$raw = is_string( $raw ) ? explode( ',', $raw ) : $raw;
+				$ids = array_filter( array_map( 'absint', is_array( $raw ) ? $raw : array() ) );
+				return array_slice( array_values( array_unique( $ids ) ), 0, self::MAX_FEATURED );
+
+			case 'css':
+				return is_string( $raw ) ? self::sanitize_css( $raw ) : '';
+
 			case 'map_bool':
 				$out = array();
 				foreach ( is_array( $raw ) ? $raw : array() as $id => $flag ) {
@@ -263,6 +285,22 @@ final class Options {
 	 */
 	public static function sanitize_email_id( string $id ): string {
 		return (string) preg_replace( '/[^A-Za-z0-9_\-]/', '', $id );
+	}
+
+	/**
+	 * CSS personnalisé : texte brut, sans balise ni construction exécutable.
+	 *
+	 * Le CSS est écrit dans le <style> de l'e-mail : on retire toute balise (dont « </style> »),
+	 * les @import (appels externes) et les constructions historiques de scripts dans le CSS.
+	 *
+	 * @param string $css CSS saisi.
+	 */
+	public static function sanitize_css( string $css ): string {
+		$css = wp_strip_all_tags( $css );
+		$css = (string) preg_replace( '/@import[^;]*;?/i', '', $css );
+		$css = (string) preg_replace( '/expression\s*\(|javascript\s*:|behavior\s*:|-moz-binding/i', '', $css );
+		$css = str_replace( '<', '', $css );
+		return trim( substr( $css, 0, self::MAX_CUSTOM_CSS ) );
 	}
 
 	/**

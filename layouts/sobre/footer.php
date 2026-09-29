@@ -15,6 +15,7 @@ $bb_footer = $v['footer'];
 ?>
 					</td>
 				</tr>
+				<?php echo $v['featured_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- échappé dans layouts/partials/featured-products.php. ?>
 				<?php if ( $v['help'] ) : ?>
 					<tr>
 						<td class="bb-help" bgcolor="#ffffff">

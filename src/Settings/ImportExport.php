@@ -162,7 +162,7 @@ final class ImportExport {
 			if ( ! isset( $schema[ $key ] ) ) {
 				continue;
 			}
-			$is_map = str_starts_with( $schema[ $key ], 'map_' );
+			$is_map = str_starts_with( $schema[ $key ], 'map_' ) || 'ids' === $schema[ $key ];
 			$valid  = $is_map
 				? is_array( $value ) && count( array_filter( $value, 'is_scalar' ) ) === count( $value )
 				: is_scalar( $value );

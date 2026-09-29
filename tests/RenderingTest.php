@@ -26,7 +26,7 @@ class RenderingTest extends TestCase {
 	 */
 	public function provide_native_emails(): array {
 		$cases = array();
-		foreach ( array( 'classique', 'sobre' ) as $layout ) {
+		foreach ( array( 'classique', 'sobre', 'ecommerce' ) as $layout ) {
 			foreach ( EmailRegistry::NATIVE_IDS as $id ) {
 				$cases[ $layout . ' / ' . $id ] = array( $layout, $id );
 			}

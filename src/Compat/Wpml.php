@@ -57,7 +57,7 @@ final class Wpml {
 	 */
 	public function register_polylang_strings(): void {
 		$settings = Options::all();
-		foreach ( array( 'contact_hours', 'footer_legal_name', 'footer_address', 'footer_text' ) as $key ) {
+		foreach ( array( 'contact_hours', 'footer_legal_name', 'footer_address', 'footer_text', 'featured_title' ) as $key ) {
 			if ( '' !== (string) $settings[ $key ] ) {
 				pll_register_string( $key, (string) $settings[ $key ], self::PLL_GROUP, in_array( $key, array( 'footer_address', 'footer_text' ), true ) );
 			}

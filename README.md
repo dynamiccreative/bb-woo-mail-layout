@@ -36,6 +36,7 @@ Réglages : une option sérialisée `bb_woo_mail_layout` (versionnée, migrée �
 | `bb_email_override_templates` | filtre `( string[] $templates )` | Templates de contenu surchargés (retirer une entrée pour revenir au template natif). |
 | `bb_email_css` | filtre `( string $css, ?WC_Email $email )` | CSS final avant inlining. |
 | `bb_email_prepare_simulation` | action `( WC_Email $email, WC_Order $order )` | Compléter les propriétés d'un e-mail tiers pour l'aperçu / le test. |
+| `bb_email_featured_products` | filtre `( int[] $ids, WC_Email $email )` | Produits mis en avant pour un e-mail (vide = pas de bloc ; 3 affichés au maximum). |
 | `bb_email_locale` | filtre `( string $locale, mixed $object )` | Locale de rendu d'un e-mail client (vide = pas de bascule). Appliqué seulement si WPML ou Polylang est actif. |
 | `bb_email_order_language` | filtre `( string $code, mixed $object )` | Code langue d'une commande pour une extension non détectée (ex. stockage HPOS propre à une extension). |
 | `bb_email_admin_uses_order_language` | filtre `( bool $enabled, WC_Email $email )` | Rendre aussi les e-mails admin dans la langue de la commande (faux par défaut). |
@@ -56,6 +57,12 @@ Réglages : une option sérialisée `bb_woo_mail_layout` (versionnée, migrée �
 2. Renommer dans l'en-tête de `styles.css` : `Layout Name: Mon layout`.
 3. Adapter `header.php` (ouvre le document et la cellule de contenu) et `footer.php` (la referme). Les variables disponibles sont dans le tableau `$v` (voir `LayoutRenderer::view_vars()`) : `colors`, `logo`, `heading`, `intro_html`, `help`, `socials`, `footer`, `settings`, `site_title`, `site_url`, `lang`, `charset`, `google_font_url`, `email`.
 4. Jetons CSS disponibles : `{{primary}}`, `{{primary_text}}`, `{{button}}`, `{{button_text}}`, `{{text}}`, `{{muted}}`, `{{border}}`, `{{soft}}`, `{{background}}`, `{{font}}`.
+5. Pour afficher les photos produit dans le tableau de commande, ajouter `Product Images: yes` dans l'en-tête de `styles.css` (comme le layout E-commerce).
+6. Le bloc produits mis en avant est fourni par `$v['featured_html']` (gabarit commun `layouts/partials/featured-products.php`) : l'insérer dans `footer.php`.
+
+## Placeholders
+
+`{site_title}`, `{site_url}`, `{customer_first_name}`, `{customer_last_name}`, `{order_number}`, `{order_date}`, `{order_total}`, `{order_url}`, `{tracking_url}`, `{admin_email}`, `{shop_phone}`, `{billing_address}`, `{shipping_address}`, `{payment_method}`, `{shipping_method}`, `{payment_url}` (seulement si la commande est à régler), `{order_meta:clé}` (métadonnée scalaire de la commande). Extensible par `bb_email_placeholders` : valeur texte, lien `[ 'url' => …, 'label' => … ]` ou HTML `[ 'html' => … ]`.
 
 Le layout apparaît automatiquement dans le sélecteur. Depuis un thème, déclarer le dossier via `bb_email_layouts`.
 

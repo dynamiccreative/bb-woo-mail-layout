@@ -5,6 +5,7 @@
 			<key name="footer_legal_name" />
 			<key name="footer_address" />
 			<key name="footer_text" />
+			<key name="featured_title" />
 			<key name="intros">
 				<key name="*" />
 			</key>

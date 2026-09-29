@@ -38,7 +38,7 @@ final class LayoutRenderer {
 	/**
 	 * Cache des layouts disponibles.
 	 *
-	 * @var array<string, array{label:string, path:string}>|null
+	 * @var array<string, array{label:string, path:string, images?:bool}>|null
 	 */
 	private static ?array $layouts = null;
 
@@ -73,7 +73,7 @@ final class LayoutRenderer {
 	/**
 	 * Layouts disponibles : dossiers de `layouts/` contenant header.php, footer.php et styles.css.
 	 *
-	 * @return array<string, array{label:string, path:string}>
+	 * @return array<string, array{label:string, path:string, images?:bool}>
 	 */
 	public static function available_layouts(): array {
 		if ( null !== self::$layouts ) {
@@ -108,7 +108,7 @@ final class LayoutRenderer {
 	 * Lit un dossier de layout.
 	 *
 	 * @param string $dir Dossier.
-	 * @return array{label:string, path:string}|null
+	 * @return array{label:string, path:string, images:bool}|null
 	 */
 	private static function read_layout( string $dir ): ?array {
 		$dir = trailingslashit( $dir );
@@ -117,10 +117,17 @@ final class LayoutRenderer {
 				return null;
 			}
 		}
-		$data = get_file_data( $dir . 'styles.css', array( 'name' => 'Layout Name' ) );
+		$data = get_file_data(
+			$dir . 'styles.css',
+			array(
+				'name'   => 'Layout Name',
+				'images' => 'Product Images',
+			)
+		);
 		return array(
-			'label' => '' !== $data['name'] ? $data['name'] : ucfirst( basename( $dir ) ),
-			'path'  => $dir,
+			'label'  => '' !== $data['name'] ? $data['name'] : ucfirst( basename( $dir ) ),
+			'path'   => $dir,
+			'images' => 'yes' === strtolower( trim( $data['images'] ) ),
 		);
 	}
 
@@ -328,6 +335,12 @@ final class LayoutRenderer {
 		$css  = (string) file_get_contents( BB_WML_DIR . 'layouts/base.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$css .= "\n" . (string) file_get_contents( $layout . 'styles.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
+		// CSS personnalisé en dernier : il l'emporte ; les jetons {{primary}}… y sont aussi remplacés.
+		$custom = Options::sanitize_css( (string) $settings['custom_css'] );
+		if ( '' !== $custom ) {
+			$css .= "\n/* CSS personnalisé */\n" . $custom;
+		}
+
 		$tokens = array( '{{font}}' => Options::font_stack( $settings ) );
 		foreach ( $this->colors( $settings ) as $name => $value ) {
 			$tokens[ '{{' . $name . '}}' ] = $value;
@@ -428,6 +441,26 @@ final class LayoutRenderer {
 	 * @param \WC_Email|null $email E-mail.
 	 */
 	private function layout_path( ?\WC_Email $email ): string {
+		return trailingslashit( (string) $this->layout_for( $email )['path'] );
+	}
+
+	/**
+	 * Le layout de cet e-mail affiche-t-il les photos produit dans le tableau de commande ?
+	 * (en-tête « Product Images: yes » du styles.css du layout).
+	 *
+	 * @param \WC_Email|null $email E-mail.
+	 */
+	public function shows_product_images( ?\WC_Email $email ): bool {
+		return ! empty( $this->layout_for( $email )['images'] );
+	}
+
+	/**
+	 * Layout (label, dossier, options) d'un e-mail.
+	 *
+	 * @param \WC_Email|null $email E-mail.
+	 * @return array<string, mixed>
+	 */
+	private function layout_for( ?\WC_Email $email ): array {
 		$layouts = self::available_layouts();
 
 		/**
@@ -441,7 +474,7 @@ final class LayoutRenderer {
 		$slug = (string) apply_filters( 'bb_email_layout', (string) Options::get( 'layout' ), $email );
 
 		$layout = $layouts[ $slug ] ?? $layouts['classique'] ?? reset( $layouts );
-		return trailingslashit( $layout['path'] );
+		return is_array( $layout ) ? $layout : array();
 	}
 
 	/**
@@ -474,6 +507,7 @@ final class LayoutRenderer {
 			'help'            => $this->help( $settings ),
 			'socials'         => $this->socials( $settings ),
 			'footer'          => $this->footer( $settings, $email ),
+			'featured_html'   => $this->featured_html( $settings, $email ),
 		);
 	}
 
@@ -667,6 +701,58 @@ final class LayoutRenderer {
 			 */
 			'unsubscribe_url' => esc_url_raw( (string) apply_filters( 'bb_email_unsubscribe_url', '', $email ) ),
 		);
+	}
+
+	/**
+	 * Bloc « produits mis en avant » (jusqu'à 3 produits : photo, titre, prix), e-mails client uniquement.
+	 *
+	 * @param array<string,mixed> $settings Réglages.
+	 * @param \WC_Email|null      $email    E-mail.
+	 */
+	public function featured_html( array $settings, ?\WC_Email $email ): string {
+		if ( 'yes' !== $settings['show_featured'] || ! $email ) {
+			return '';
+		}
+
+		$ids = $email->is_customer_email() ? (array) $settings['featured_products'] : array();
+
+		/**
+		 * Produits mis en avant pour un e-mail (tableau vide = pas de bloc).
+		 *
+		 * @param int[]     $ids   Identifiants de produits (3 maximum affichés).
+		 * @param \WC_Email $email E-mail.
+		 *
+		 * @since 1.1.0
+		 */
+		$ids = (array) apply_filters( 'bb_email_featured_products', $ids, $email );
+
+		$products = array();
+		foreach ( array_slice( array_map( 'absint', $ids ), 0, Options::MAX_FEATURED ) as $id ) {
+			$product = $id ? wc_get_product( $id ) : null;
+			if ( ! $product instanceof \WC_Product || 'publish' !== $product->get_status() || ! $product->is_visible() ) {
+				continue;
+			}
+			$image      = $product->get_image_id() ? wp_get_attachment_image_src( (int) $product->get_image_id(), 'woocommerce_thumbnail' ) : false;
+			$products[] = array(
+				'name'       => $product->get_name(),
+				'url'        => (string) $product->get_permalink(),
+				'image'      => $image ? (string) $image[0] : wc_placeholder_img_src( 'woocommerce_thumbnail' ),
+				// Texte pour lecteurs d'écran (« Original price was… ») : masqué sur le site par CSS, visible dans un e-mail.
+				'price_html' => (string) preg_replace( '#<span[^>]*class="[^"]*screen-reader-text[^"]*"[^>]*>.*?</span>#s', '', (string) $product->get_price_html() ),
+			);
+		}
+		if ( ! $products ) {
+			return '';
+		}
+
+		$title = trim( (string) $settings['featured_title'] );
+		$title = '' !== $title ? $this->wpml->translate( 'featured_title', $title ) : __( 'Vous aimerez aussi', 'bb-woo-mail-layout' );
+
+		ob_start();
+		( static function ( string $bb_file, string $title, array $products ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- variables lues par le gabarit inclus.
+			include $bb_file;
+		} )( BB_WML_DIR . 'layouts/partials/featured-products.php', $title, $products );
+		return (string) ob_get_clean();
 	}
 
 	/**

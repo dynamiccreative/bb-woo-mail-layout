@@ -46,6 +46,7 @@ final class SettingsPage {
 		add_action( 'woocommerce_admin_field_bb_wml_emails', array( $this, 'field_emails' ) );
 		add_action( 'woocommerce_admin_field_bb_wml_intros', array( $this, 'field_intros' ) );
 		add_action( 'woocommerce_admin_field_bb_wml_tools', array( $this, 'field_tools' ) );
+		add_action( 'woocommerce_admin_field_bb_wml_products', array( $this, 'field_products' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( BB_WML_FILE ), array( $this, 'action_links' ) );
@@ -115,7 +116,7 @@ final class SettingsPage {
 				'type'    => 'select',
 				'options' => $layouts,
 				'default' => $d['layout'],
-				'desc'    => __( 'Classique : fond clair et bandeau coloré. Sobre : tout blanc, filet de couleur.', 'bb-woo-mail-layout' ),
+				'desc'    => __( 'Classique : fond clair et bandeau coloré. Sobre : tout blanc, filet de couleur. E-commerce : barre d’accent et photos produit dans le tableau de commande.', 'bb-woo-mail-layout' ),
 			),
 			array(
 				'type' => 'sectionend',
@@ -356,6 +357,54 @@ final class SettingsPage {
 				),
 
 				array(
+					'title' => __( 'Produits mis en avant', 'bb-woo-mail-layout' ),
+					'type'  => 'title',
+					'desc'  => __( 'Jusqu’à 3 produits (photo, titre, prix) affichés sous la commande, dans les e-mails envoyés au client.', 'bb-woo-mail-layout' ),
+					'id'    => 'bb_wml_featured',
+				),
+				array(
+					'title'   => __( 'Bloc produits', 'bb-woo-mail-layout' ),
+					'desc'    => __( 'Afficher les produits mis en avant', 'bb-woo-mail-layout' ),
+					'id'      => self::id( 'show_featured' ),
+					'type'    => 'checkbox',
+					'default' => 'no',
+				),
+				array(
+					'title'       => __( 'Titre du bloc', 'bb-woo-mail-layout' ),
+					'id'          => self::id( 'featured_title' ),
+					'type'        => 'text',
+					'placeholder' => __( 'Vous aimerez aussi', 'bb-woo-mail-layout' ),
+				),
+				array(
+					'title' => __( 'Produits', 'bb-woo-mail-layout' ),
+					'desc'  => __( '3 produits maximum. Les produits non publiés ou masqués du catalogue sont ignorés.', 'bb-woo-mail-layout' ),
+					'id'    => self::id( 'featured_products' ),
+					'type'  => 'bb_wml_products',
+				),
+				array(
+					'type' => 'sectionend',
+					'id'   => 'bb_wml_featured',
+				),
+
+				array(
+					'title' => __( 'CSS personnalisé', 'bb-woo-mail-layout' ),
+					'type'  => 'title',
+					'desc'  => __( 'Ajouté après le CSS du layout (il l’emporte). Jetons disponibles : {{primary}}, {{button}}, {{text}}, {{muted}}, {{border}}, {{soft}}, {{background}}, {{font}}. Balises, @import et scripts sont retirés.', 'bb-woo-mail-layout' ),
+					'id'    => 'bb_wml_css',
+				),
+				array(
+					'title'       => __( 'CSS', 'bb-woo-mail-layout' ),
+					'id'          => self::id( 'custom_css' ),
+					'type'        => 'textarea',
+					'css'         => 'width:100%;max-width:720px;height:12em;font-family:Consolas,Monaco,monospace;',
+					'placeholder' => ".bb-heading { letter-spacing: .5px; }\n.bb-featured-price { color: {{button}}; }",
+				),
+				array(
+					'type' => 'sectionend',
+					'id'   => 'bb_wml_css',
+				),
+
+				array(
 					'title' => __( 'E-mails mis en forme', 'bb-woo-mail-layout' ),
 					'type'  => 'title',
 					'desc'  => __( 'Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail décoché garde le rendu WooCommerce natif.', 'bb-woo-mail-layout' ),
@@ -494,6 +543,35 @@ final class SettingsPage {
 	 * Champ logo_id : l'input caché est rendu par field_media(), rien à afficher ici.
 	 */
 	public function field_hidden(): void {}
+
+	/**
+	 * Sélecteur de produits (recherche WooCommerce), 3 maximum.
+	 *
+	 * @param array<string,mixed> $field Champ.
+	 */
+	public function field_products( $field ): void {
+		$ids = (array) Options::get( 'featured_products' );
+		?>
+		<tr valign="top">
+			<th scope="row" class="titledesc"><label for="bb-wml-featured-products"><?php echo esc_html( $field['title'] ); ?></label></th>
+			<td class="forminp">
+				<select id="bb-wml-featured-products" class="wc-product-search" multiple="multiple" style="width:50%;min-width:320px;"
+					name="<?php echo esc_attr( self::id( 'featured_products' ) ); ?>[]"
+					data-placeholder="<?php esc_attr_e( 'Rechercher un produit…', 'bb-woo-mail-layout' ); ?>"
+					data-action="woocommerce_json_search_products_and_variations"
+					data-maximum-selection-length="<?php echo (int) Options::MAX_FEATURED; ?>">
+					<?php foreach ( $ids as $id ) : ?>
+						<?php $product = wc_get_product( (int) $id ); ?>
+						<?php if ( $product ) : ?>
+							<option value="<?php echo (int) $id; ?>" selected="selected"><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</select>
+				<p class="description"><?php echo esc_html( $field['desc'] ?? '' ); ?></p>
+			</td>
+		</tr>
+		<?php
+	}
 
 	/**
 	 * Éditeur restreint du pied de page (gras, lien).
@@ -705,6 +783,9 @@ final class SettingsPage {
 		}
 
 		wp_enqueue_media();
+		// Recherche de produits (champ « Produits mis en avant ») : scripts WooCommerce standard.
+		wp_enqueue_script( 'wc-enhanced-select' );
+		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'bb-wml-settings', BB_WML_URL . 'assets/admin/settings.css', array(), BB_WML_VERSION );
 		wp_enqueue_script( 'bb-wml-settings', BB_WML_URL . 'assets/admin/settings.js', array( 'media-editor' ), BB_WML_VERSION, true );
 		wp_localize_script(

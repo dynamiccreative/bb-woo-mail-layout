@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.0.4
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,8 @@ Mise en forme brandée et 100 % française des e-mails transactionnels WooCommer
 
 BB Woo Mail Layout remplace l'en-tête, le pied et le style de tous les e-mails WooCommerce (y compris ceux des extensions : Colissimo, GLS, Stripe, factures PDF…) par un layout codé par l'agence, compatible Outlook, Gmail, Apple Mail et les webmails français.
 
-* Deux layouts : « Classique » (fond clair, bandeau coloré) et « Sobre » (tout blanc, filet de couleur).
+* Trois layouts : « Classique » (fond clair, bandeau coloré), « Sobre » (tout blanc, filet de couleur) et « E-commerce » (photos produit dans le tableau de commande).
+* Bloc « Produits mis en avant » (3 produits : photo, titre, prix) et CSS personnalisé.
 * Logo, couleurs, police, bloc « Besoin d'aide ? », réseaux sociaux, pied de page légal.
 * Textes d'introduction français rédigés pour chaque e-mail natif, modifiables, avec placeholders.
 * Activation e-mail par e-mail : un e-mail désactivé garde le rendu WooCommerce natif.
@@ -49,6 +50,12 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.1.0 =
+* Nouveau layout « E-commerce » : barre d’accent et photos produit dans le tableau de commande.
+* Bloc « Produits mis en avant » : jusqu’à 3 produits (photo, titre, prix) dans les e-mails client.
+* Nouveaux placeholders : {billing_address}, {shipping_address}, {payment_method}, {shipping_method}, {payment_url}, {order_meta:clé}.
+* Champ CSS personnalisé (filtré).
 
 = 1.0.4 =
 * Traduction anglaise (en_US, en_GB).

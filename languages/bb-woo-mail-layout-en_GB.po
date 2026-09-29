@@ -8,330 +8,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: bb-woo-mail-layout\n"
 
-#: src/Settings/SettingsPage.php:76 src/Settings/SettingsPage.php:102
-msgid "Mise en forme bleuebuzz"
-msgstr "bleuebuzz email layout"
-
-#: src/Settings/SettingsPage.php:104
-msgid "Layout appliqué aux e-mails WooCommerce. Les sujets et titres se règlent toujours dans chaque e-mail WooCommerce (onglet « Options e-mail »)."
-msgstr "Layout applied to WooCommerce emails. Subjects and headings are still set in each WooCommerce email (“Email options” tab)."
-
-#: src/Settings/SettingsPage.php:108
-msgid "Layout"
-msgstr "Layout"
-
-#: src/Settings/SettingsPage.php:113
-msgid "Classique : fond clair et bandeau coloré. Sobre : tout blanc, filet de couleur."
-msgstr "Classic: light background and coloured banner. Minimal: all white, coloured rule."
-
-#: src/Settings/SettingsPage.php:121
-msgid "Logo"
-msgstr "Logo"
-
-#: src/Settings/SettingsPage.php:126
-msgid "Bandeau logo"
-msgstr "Logo banner"
-
-#: src/Settings/SettingsPage.php:127
-msgid "Afficher le logo en tête d’e-mail (lien vers la boutique)"
-msgstr "Show the logo at the top of the email (links to the shop)"
-
-#: src/Settings/SettingsPage.php:133
-msgid "Image"
-msgstr "Image"
-
-#: src/Settings/SettingsPage.php:134
-msgid "Image de la médiathèque de ce site (PNG ou JPG). Hauteur affichée : 80 px maximum."
-msgstr "Image from this site’s media library (PNG or JPG). Displayed height: 80 px maximum."
-
-#: src/Settings/SettingsPage.php:143
-msgid "Largeur maximale (px)"
-msgstr "Maximum width (px)"
-
-#: src/Settings/SettingsPage.php:160
-msgid "Couleurs et police"
-msgstr "Colours and font"
-
-#: src/Settings/SettingsPage.php:165
-msgid "Couleur principale"
-msgstr "Main colour"
-
-#: src/Settings/SettingsPage.php:166
-msgid "Bandeau, titres, liens."
-msgstr "Banner, headings, links."
-
-#: src/Settings/SettingsPage.php:173
-msgid "Couleur des boutons"
-msgstr "Button colour"
-
-#: src/Settings/SettingsPage.php:180
-msgid "Couleur du texte"
-msgstr "Text colour"
-
-#: src/Settings/SettingsPage.php:187
-msgid "Couleur de fond extérieur"
-msgstr "Outer background colour"
-
-#: src/Settings/SettingsPage.php:188
-msgid "Layout Classique uniquement."
-msgstr "Classic layout only."
-
-#: src/Settings/SettingsPage.php:195
-msgid "Police"
-msgstr "Font"
-
-#: src/Settings/SettingsPage.php:205
-msgid "Google Font (repli sur Arial)"
-msgstr "Google Font (Arial fallback)"
-
-#: src/Settings/SettingsPage.php:209
-msgid "Nom de la Google Font"
-msgstr "Google Font name"
-
-#: src/Settings/SettingsPage.php:210
-msgid "Ex. : Montserrat. Affichée par Apple Mail et iOS ; Gmail et Outlook affichent la police de repli."
-msgstr "E.g. Montserrat. Shown by Apple Mail and iOS; Gmail and Outlook show the fallback font."
-
-#: src/Settings/SettingsPage.php:222
-msgid "Blocs affichés"
-msgstr "Displayed blocks"
-
-#: src/Settings/SettingsPage.php:227
-msgid "Blocs"
-msgstr "Blocks"
-
-#: src/Settings/SettingsPage.php:228
-msgid "Paragraphe d’introduction"
-msgstr "Introduction paragraph"
-
-#: src/Settings/SettingsPage.php:235
-msgid "Bloc « Besoin d’aide ? »"
-msgstr "“Need help?” block"
-
-#: src/Settings/SettingsPage.php:242 src/Settings/SettingsPage.php:288
-msgid "Réseaux sociaux"
-msgstr "Social networks"
-
-#: src/Settings/SettingsPage.php:249 src/Settings/SettingsPage.php:320
-msgid "Pied de page"
-msgstr "Footer"
-
-#: src/Settings/SettingsPage.php:261 layouts/classique/footer.php:24
-#: layouts/sobre/footer.php:24
-msgid "Besoin d’aide ?"
-msgstr "Need help?"
-
-#: src/Settings/SettingsPage.php:263
-msgid "Le bloc n’apparaît que si au moins une information est renseignée."
-msgstr "The block only appears if at least one detail is filled in."
-
-#: src/Settings/SettingsPage.php:267
-msgid "Téléphone"
-msgstr "Phone"
-
-#: src/Settings/SettingsPage.php:272 src/Settings/SettingsPage.php:534
-#: src/Settings/SettingsPage.php:622
-msgid "E-mail"
-msgstr "Email"
-
-#: src/Settings/SettingsPage.php:277
-msgid "Horaires"
-msgstr "Opening hours"
-
-#: src/Settings/SettingsPage.php:280
-msgid "Du lundi au vendredi, de 9 h à 18 h"
-msgstr "Monday to Friday, 9 am to 6 pm"
-
-#: src/Settings/SettingsPage.php:290
-msgid "Seuls les réseaux dont l’URL est renseignée sont affichés."
-msgstr "Only networks with a URL are displayed."
-
-#: src/Settings/SettingsPage.php:325
-msgid "Nom légal"
-msgstr "Legal name"
-
-#: src/Settings/SettingsPage.php:330
-msgid "Adresse"
-msgstr "Address"
-
-#: src/Settings/SettingsPage.php:336 src/Email/Placeholders.php:30
-msgid "Lien vers le site"
-msgstr "Link to the website"
-
-#: src/Settings/SettingsPage.php:337
-msgid "Afficher le lien vers la boutique"
-msgstr "Show the link to the shop"
-
-#: src/Settings/SettingsPage.php:343
-msgid "Mentions"
-msgstr "Legal notice"
-
-#: src/Settings/SettingsPage.php:344
-msgid "Gras, lien et saut de ligne uniquement. Placeholders autorisés."
-msgstr "Bold, links and line breaks only. Placeholders allowed."
-
-#: src/Settings/SettingsPage.php:354
-msgid "E-mails mis en forme"
-msgstr "Styled emails"
-
-#: src/Settings/SettingsPage.php:356
-msgid "Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail décoché garde le rendu WooCommerce natif."
-msgstr "All emails registered in WooCommerce, including extensions. An unchecked email keeps the native WooCommerce rendering."
-
-#: src/Settings/SettingsPage.php:369
-msgid "Textes d’introduction"
-msgstr "Introduction texts"
-
-#: src/Settings/SettingsPage.php:371
-msgid "Laisser vide pour utiliser le texte par défaut (affiché en gris). Une ligne vide sépare deux paragraphes."
-msgstr "Leave empty to use the default text (shown in grey). A blank line separates two paragraphs."
-
-#: src/Settings/SettingsPage.php:384
-msgid "Prévisualisation, test, import / export"
-msgstr "Preview, test, import / export"
-
-#: src/Settings/SettingsPage.php:476
-msgid "Choisir une image"
-msgstr "Choose an image"
-
-#: src/Settings/SettingsPage.php:477
-msgid "Retirer"
-msgstr "Remove"
-
-#: src/Settings/SettingsPage.php:533
-msgid "Actif"
-msgstr "Active"
-
-#: src/Settings/SettingsPage.php:535
-msgid "ID"
-msgstr "ID"
-
-#: src/Settings/SettingsPage.php:536
-msgid "Destinataire"
-msgstr "Recipient"
-
-#: src/Settings/SettingsPage.php:537
-msgid "Source"
-msgstr "Source"
-
-#: src/Settings/SettingsPage.php:538
-msgid "Statut"
-msgstr "Status"
-
-#: src/Settings/SettingsPage.php:551
-msgid "Sujet et titre"
-msgstr "Subject and heading"
-
-#: src/Settings/SettingsPage.php:554
-msgid "Client"
-msgstr "Customer"
-
-#: src/Settings/SettingsPage.php:554
-msgid "Administrateur"
-msgstr "Administrator"
-
-#: src/Settings/SettingsPage.php:558
-msgid "Layout bleuebuzz"
-msgstr "bleuebuzz layout"
-
-#: src/Settings/SettingsPage.php:560
-msgid "Rendu WooCommerce"
-msgstr "WooCommerce rendering"
-
-#: src/Settings/SettingsPage.php:584
-msgid "Placeholders :"
-msgstr "Placeholders:"
-
-#: src/Settings/SettingsPage.php:618
-msgid "Aperçu et e-mail de test"
-msgstr "Preview and test email"
-
-#: src/Settings/SettingsPage.php:620
-msgid "L’aperçu et le test utilisent les réglages enregistrés : enregistrez vos modifications avant."
-msgstr "The preview and the test use the saved settings: save your changes first."
-
-#: src/Settings/SettingsPage.php:626
-msgid "rendu natif"
-msgstr "native rendering"
-
-#: src/Settings/SettingsPage.php:632
-msgid "Commande utilisée comme jeu de données"
-msgstr "Order used as sample data"
-
-#: src/Settings/SettingsPage.php:635
-msgid "Aucune commande sur ce site"
-msgstr "No orders on this site"
-
-#: src/Settings/SettingsPage.php:655
-msgid "Destinataire du test"
-msgstr "Test recipient"
-
-#: src/Settings/SettingsPage.php:659
-msgid "Prévisualiser"
-msgstr "Preview"
-
-#: src/Settings/SettingsPage.php:660
-msgid "Envoyer un e-mail de test"
-msgstr "Send a test email"
-
-#: src/Settings/SettingsPage.php:663
-msgid "Aperçu de l’e-mail"
-msgstr "Email preview"
-
-#: src/Settings/SettingsPage.php:667
-msgid "Import / export"
-msgstr "Import / export"
-
-#: src/Settings/SettingsPage.php:670
-msgid "Exporter les réglages (JSON)"
-msgstr "Export settings (JSON)"
-
-#: src/Settings/SettingsPage.php:674
-msgid "Importer"
-msgstr "Import"
-
-#: src/Settings/SettingsPage.php:677
-msgid "L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées."
-msgstr "Importing replaces all settings on this page. Unknown keys are rejected."
-
-#: src/Settings/SettingsPage.php:707
-msgid "Choisir le logo"
-msgstr "Choose the logo"
-
-#: src/Settings/SettingsPage.php:708
-msgid "Utiliser cette image"
-msgstr "Use this image"
-
-#: src/Settings/SettingsPage.php:709
-msgid "Génération de l’aperçu…"
-msgstr "Generating preview…"
-
-#: src/Settings/SettingsPage.php:710
-msgid "Envoi en cours…"
-msgstr "Sending…"
-
-#: src/Settings/SettingsPage.php:711
-msgid "Import en cours…"
-msgstr "Importing…"
-
-#: src/Settings/SettingsPage.php:712
-msgid "Une erreur est survenue."
-msgstr "An error occurred."
-
-#: src/Settings/SettingsPage.php:713
-msgid "Choisissez un fichier JSON."
-msgstr "Choose a JSON file."
-
-#: src/Settings/SettingsPage.php:714
-msgid "Remplacer tous les réglages de mise en forme par ceux du fichier ?"
-msgstr "Replace all layout settings with those from the file?"
-
-#: src/Settings/SettingsPage.php:727
-msgid "Réglages"
-msgstr "Settings"
+#: src/Settings/LogoChecker.php:81
+msgid "Le site n’a pas pu se joindre lui-même pour vérifier le logo, mais le fichier existe bien sur le serveur."
+msgstr "The site could not reach itself to check the logo, but the file does exist on the server."
+
+#. translators: %s: message d'erreur HTTP.
+#: src/Settings/LogoChecker.php:85
+msgid "Le logo est injoignable (%s). Les e-mails s’afficheront avec une image cassée."
+msgstr "The logo cannot be reached (%s). Emails will show a broken image."
+
+#. translators: %d: code HTTP.
+#: src/Settings/LogoChecker.php:92
+msgid "L’URL du logo répond %d au lieu de 200. Les e-mails s’afficheront avec une image cassée."
+msgstr "The logo URL returns %d instead of 200. Emails will show a broken image."
+
+#. translators: %s: type MIME.
+#: src/Settings/LogoChecker.php:99
+msgid "L’URL du logo ne renvoie pas une image (%s)."
+msgstr "The logo URL does not return an image (%s)."
+
+#: src/Settings/LogoChecker.php:104
+msgid "Logo vérifié : l’image répond correctement."
+msgstr "Logo checked: the image loads correctly."
 
 #: src/Settings/ImportExport.php:42 src/Settings/ImportExport.php:61
-#: src/Admin/Preview.php:38 src/Admin/TestEmail.php:41
+#: src/Admin/Preview.php:43 src/Admin/TestEmail.php:51
 msgid "Accès refusé."
 msgstr "Access denied."
 
@@ -382,88 +83,383 @@ msgstr "Unknown settings: %s."
 msgid "Type invalide pour « %s »."
 msgstr "Invalid type for “%s”."
 
-#: src/Settings/LogoChecker.php:81
-msgid "Le site n’a pas pu se joindre lui-même pour vérifier le logo, mais le fichier existe bien sur le serveur."
-msgstr "The site could not reach itself to check the logo, but the file does exist on the server."
+#: src/Settings/SettingsPage.php:82 src/Settings/SettingsPage.php:108
+msgid "Mise en forme bleuebuzz"
+msgstr "bleuebuzz email layout"
 
-#. translators: %s: message d'erreur HTTP.
-#: src/Settings/LogoChecker.php:85
-msgid "Le logo est injoignable (%s). Les e-mails s’afficheront avec une image cassée."
-msgstr "The logo cannot be reached (%s). Emails will show a broken image."
+#: src/Settings/SettingsPage.php:110
+msgid "Layout appliqué aux e-mails WooCommerce. Les sujets et titres se règlent toujours dans chaque e-mail WooCommerce (onglet « Options e-mail »)."
+msgstr "Layout applied to WooCommerce emails. Subjects and headings are still set in each WooCommerce email (“Email options” tab)."
 
-#. translators: %d: code HTTP.
-#: src/Settings/LogoChecker.php:92
-msgid "L’URL du logo répond %d au lieu de 200. Les e-mails s’afficheront avec une image cassée."
-msgstr "The logo URL returns %d instead of 200. Emails will show a broken image."
+#: src/Settings/SettingsPage.php:114
+msgid "Layout"
+msgstr "Layout"
 
-#. translators: %s: type MIME.
-#: src/Settings/LogoChecker.php:99
-msgid "L’URL du logo ne renvoie pas une image (%s)."
-msgstr "The logo URL does not return an image (%s)."
+#: src/Settings/SettingsPage.php:119
+msgid "Classique : fond clair et bandeau coloré. Sobre : tout blanc, filet de couleur. E-commerce : barre d’accent et photos produit dans le tableau de commande."
+msgstr "Classic: light background and coloured banner. Minimal: all white, coloured rule. E-commerce: accent bar and product photos in the order table."
 
-#: src/Settings/LogoChecker.php:104
-msgid "Logo vérifié : l’image répond correctement."
-msgstr "Logo checked: the image loads correctly."
+#: src/Settings/SettingsPage.php:127
+msgid "Logo"
+msgstr "Logo"
 
-#: src/Email/EmailRegistry.php:138
+#: src/Settings/SettingsPage.php:132
+msgid "Bandeau logo"
+msgstr "Logo banner"
+
+#: src/Settings/SettingsPage.php:133
+msgid "Afficher le logo en tête d’e-mail (lien vers la boutique)"
+msgstr "Show the logo at the top of the email (links to the shop)"
+
+#: src/Settings/SettingsPage.php:139
+msgid "Image"
+msgstr "Image"
+
+#: src/Settings/SettingsPage.php:140
+msgid "Image de la médiathèque de ce site (PNG ou JPG). Hauteur affichée : 80 px maximum."
+msgstr "Image from this site’s media library (PNG or JPG). Displayed height: 80 px maximum."
+
+#: src/Settings/SettingsPage.php:149
+msgid "Largeur maximale (px)"
+msgstr "Maximum width (px)"
+
+#: src/Settings/SettingsPage.php:166
+msgid "Couleurs et police"
+msgstr "Colours and font"
+
+#: src/Settings/SettingsPage.php:171
+msgid "Couleur principale"
+msgstr "Main colour"
+
+#: src/Settings/SettingsPage.php:172
+msgid "Bandeau, titres, liens."
+msgstr "Banner, headings, links."
+
+#: src/Settings/SettingsPage.php:179
+msgid "Couleur des boutons"
+msgstr "Button colour"
+
+#: src/Settings/SettingsPage.php:186
+msgid "Couleur du texte"
+msgstr "Text colour"
+
+#: src/Settings/SettingsPage.php:193
+msgid "Couleur de fond extérieur"
+msgstr "Outer background colour"
+
+#: src/Settings/SettingsPage.php:194
+msgid "Layout Classique uniquement."
+msgstr "Classic layout only."
+
+#: src/Settings/SettingsPage.php:201
+msgid "Police"
+msgstr "Font"
+
+#: src/Settings/SettingsPage.php:211
+msgid "Google Font (repli sur Arial)"
+msgstr "Google Font (Arial fallback)"
+
+#: src/Settings/SettingsPage.php:215
+msgid "Nom de la Google Font"
+msgstr "Google Font name"
+
+#: src/Settings/SettingsPage.php:216
+msgid "Ex. : Montserrat. Affichée par Apple Mail et iOS ; Gmail et Outlook affichent la police de repli."
+msgstr "E.g. Montserrat. Shown by Apple Mail and iOS; Gmail and Outlook show the fallback font."
+
+#: src/Settings/SettingsPage.php:228
+msgid "Blocs affichés"
+msgstr "Displayed blocks"
+
+#: src/Settings/SettingsPage.php:233
+msgid "Blocs"
+msgstr "Blocks"
+
+#: src/Settings/SettingsPage.php:234
+msgid "Paragraphe d’introduction"
+msgstr "Introduction paragraph"
+
+#: src/Settings/SettingsPage.php:241
+msgid "Bloc « Besoin d’aide ? »"
+msgstr "“Need help?” block"
+
+#: src/Settings/SettingsPage.php:248 src/Settings/SettingsPage.php:294
+msgid "Réseaux sociaux"
+msgstr "Social networks"
+
+#: src/Settings/SettingsPage.php:255 src/Settings/SettingsPage.php:326
+msgid "Pied de page"
+msgstr "Footer"
+
+#: src/Settings/SettingsPage.php:267 layouts/classique/footer.php:25
+#: layouts/sobre/footer.php:25 layouts/ecommerce/footer.php:25
+msgid "Besoin d’aide ?"
+msgstr "Need help?"
+
+#: src/Settings/SettingsPage.php:269
+msgid "Le bloc n’apparaît que si au moins une information est renseignée."
+msgstr "The block only appears if at least one detail is filled in."
+
+#: src/Settings/SettingsPage.php:273
+msgid "Téléphone"
+msgstr "Phone"
+
+#: src/Settings/SettingsPage.php:278 src/Settings/SettingsPage.php:622
+#: src/Settings/SettingsPage.php:710
+msgid "E-mail"
+msgstr "Email"
+
+#: src/Settings/SettingsPage.php:283
+msgid "Horaires"
+msgstr "Opening hours"
+
+#: src/Settings/SettingsPage.php:286
+msgid "Du lundi au vendredi, de 9 h à 18 h"
+msgstr "Monday to Friday, 9 am to 6 pm"
+
+#: src/Settings/SettingsPage.php:296
+msgid "Seuls les réseaux dont l’URL est renseignée sont affichés."
+msgstr "Only networks with a URL are displayed."
+
+#: src/Settings/SettingsPage.php:331
+msgid "Nom légal"
+msgstr "Legal name"
+
+#: src/Settings/SettingsPage.php:336
+msgid "Adresse"
+msgstr "Address"
+
+#: src/Settings/SettingsPage.php:342 src/Email/Placeholders.php:30
+msgid "Lien vers le site"
+msgstr "Link to the website"
+
+#: src/Settings/SettingsPage.php:343
+msgid "Afficher le lien vers la boutique"
+msgstr "Show the link to the shop"
+
+#: src/Settings/SettingsPage.php:349
+msgid "Mentions"
+msgstr "Legal notice"
+
+#: src/Settings/SettingsPage.php:350
+msgid "Gras, lien et saut de ligne uniquement. Placeholders autorisés."
+msgstr "Bold, links and line breaks only. Placeholders allowed."
+
+#: src/Settings/SettingsPage.php:360
+msgid "Produits mis en avant"
+msgstr "Featured products"
+
+#: src/Settings/SettingsPage.php:362
+msgid "Jusqu’à 3 produits (photo, titre, prix) affichés sous la commande, dans les e-mails envoyés au client."
+msgstr "Up to 3 products (photo, title, price) shown below the order, in emails sent to the customer."
+
+#: src/Settings/SettingsPage.php:366
+msgid "Bloc produits"
+msgstr "Products block"
+
+#: src/Settings/SettingsPage.php:367
+msgid "Afficher les produits mis en avant"
+msgstr "Show featured products"
+
+#: src/Settings/SettingsPage.php:373
+msgid "Titre du bloc"
+msgstr "Block title"
+
+#: src/Settings/SettingsPage.php:376 src/Email/LayoutRenderer.php:749
+msgid "Vous aimerez aussi"
+msgstr "You may also like"
+
+#: src/Settings/SettingsPage.php:379
+msgid "Produits"
+msgstr "Products"
+
+#: src/Settings/SettingsPage.php:380
+msgid "3 produits maximum. Les produits non publiés ou masqués du catalogue sont ignorés."
+msgstr "3 products maximum. Unpublished products and products hidden from the catalogue are skipped."
+
+#: src/Settings/SettingsPage.php:390
+msgid "CSS personnalisé"
+msgstr "Custom CSS"
+
+#: src/Settings/SettingsPage.php:392
+msgid "Ajouté après le CSS du layout (il l’emporte). Jetons disponibles : {{primary}}, {{button}}, {{text}}, {{muted}}, {{border}}, {{soft}}, {{background}}, {{font}}. Balises, @import et scripts sont retirés."
+msgstr "Added after the layout CSS (it takes precedence). Available tokens: {{primary}}, {{button}}, {{text}}, {{muted}}, {{border}}, {{soft}}, {{background}}, {{font}}. Tags, @import and scripts are removed."
+
+#: src/Settings/SettingsPage.php:396
+msgid "CSS"
+msgstr "CSS"
+
+#: src/Settings/SettingsPage.php:408
+msgid "E-mails mis en forme"
+msgstr "Styled emails"
+
+#: src/Settings/SettingsPage.php:410
+msgid "Tous les e-mails déclarés dans WooCommerce, extensions comprises. Un e-mail décoché garde le rendu WooCommerce natif."
+msgstr "All emails registered in WooCommerce, including extensions. An unchecked email keeps the native WooCommerce rendering."
+
+#: src/Settings/SettingsPage.php:423
+msgid "Textes d’introduction"
+msgstr "Introduction texts"
+
+#: src/Settings/SettingsPage.php:425
+msgid "Laisser vide pour utiliser le texte par défaut (affiché en gris). Une ligne vide sépare deux paragraphes."
+msgstr "Leave empty to use the default text (shown in grey). A blank line separates two paragraphs."
+
+#: src/Settings/SettingsPage.php:438
+msgid "Prévisualisation, test, import / export"
+msgstr "Preview, test, import / export"
+
+#: src/Settings/SettingsPage.php:530
+msgid "Choisir une image"
+msgstr "Choose an image"
+
+#: src/Settings/SettingsPage.php:531
+msgid "Retirer"
+msgstr "Remove"
+
+#: src/Settings/SettingsPage.php:560
+msgid "Rechercher un produit…"
+msgstr "Search for a product…"
+
+#: src/Settings/SettingsPage.php:621
+msgid "Actif"
+msgstr "Active"
+
+#: src/Settings/SettingsPage.php:623
+msgid "ID"
+msgstr "ID"
+
+#: src/Settings/SettingsPage.php:624
+msgid "Destinataire"
+msgstr "Recipient"
+
+#: src/Settings/SettingsPage.php:625
+msgid "Source"
+msgstr "Source"
+
+#: src/Settings/SettingsPage.php:626
+msgid "Statut"
+msgstr "Status"
+
+#: src/Settings/SettingsPage.php:639
+msgid "Sujet et titre"
+msgstr "Subject and heading"
+
+#: src/Settings/SettingsPage.php:642
+msgid "Client"
+msgstr "Customer"
+
+#: src/Settings/SettingsPage.php:642
+msgid "Administrateur"
+msgstr "Administrator"
+
+#: src/Settings/SettingsPage.php:646
+msgid "Layout bleuebuzz"
+msgstr "bleuebuzz layout"
+
+#: src/Settings/SettingsPage.php:648
+msgid "Rendu WooCommerce"
+msgstr "WooCommerce rendering"
+
+#: src/Settings/SettingsPage.php:672
+msgid "Placeholders :"
+msgstr "Placeholders:"
+
+#: src/Settings/SettingsPage.php:706
+msgid "Aperçu et e-mail de test"
+msgstr "Preview and test email"
+
+#: src/Settings/SettingsPage.php:708
+msgid "L’aperçu et le test utilisent les réglages enregistrés : enregistrez vos modifications avant."
+msgstr "The preview and the test use the saved settings: save your changes first."
+
+#: src/Settings/SettingsPage.php:714
+msgid "rendu natif"
+msgstr "native rendering"
+
+#: src/Settings/SettingsPage.php:720
+msgid "Commande utilisée comme jeu de données"
+msgstr "Order used as sample data"
+
+#: src/Settings/SettingsPage.php:723
+msgid "Aucune commande sur ce site"
+msgstr "No orders on this site"
+
+#: src/Settings/SettingsPage.php:743
+msgid "Destinataire du test"
+msgstr "Test recipient"
+
+#: src/Settings/SettingsPage.php:747
+msgid "Prévisualiser"
+msgstr "Preview"
+
+#: src/Settings/SettingsPage.php:748
+msgid "Envoyer un e-mail de test"
+msgstr "Send a test email"
+
+#: src/Settings/SettingsPage.php:751
+msgid "Aperçu de l’e-mail"
+msgstr "Email preview"
+
+#: src/Settings/SettingsPage.php:755
+msgid "Import / export"
+msgstr "Import / export"
+
+#: src/Settings/SettingsPage.php:758
+msgid "Exporter les réglages (JSON)"
+msgstr "Export settings (JSON)"
+
+#: src/Settings/SettingsPage.php:762
+msgid "Importer"
+msgstr "Import"
+
+#: src/Settings/SettingsPage.php:765
+msgid "L’import remplace tous les réglages de cette page. Les clés inconnues sont refusées."
+msgstr "Importing replaces all settings on this page. Unknown keys are rejected."
+
+#: src/Settings/SettingsPage.php:798
+msgid "Choisir le logo"
+msgstr "Choose the logo"
+
+#: src/Settings/SettingsPage.php:799
+msgid "Utiliser cette image"
+msgstr "Use this image"
+
+#: src/Settings/SettingsPage.php:800
+msgid "Génération de l’aperçu…"
+msgstr "Generating preview…"
+
+#: src/Settings/SettingsPage.php:801
+msgid "Envoi en cours…"
+msgstr "Sending…"
+
+#: src/Settings/SettingsPage.php:802
+msgid "Import en cours…"
+msgstr "Importing…"
+
+#: src/Settings/SettingsPage.php:803
+msgid "Une erreur est survenue."
+msgstr "An error occurred."
+
+#: src/Settings/SettingsPage.php:804
+msgid "Choisissez un fichier JSON."
+msgstr "Choose a JSON file."
+
+#: src/Settings/SettingsPage.php:805
+msgid "Remplacer tous les réglages de mise en forme par ceux du fichier ?"
+msgstr "Replace all layout settings with those from the file?"
+
+#: src/Settings/SettingsPage.php:818
+msgid "Réglages"
+msgstr "Settings"
+
+#: src/Email/EmailRegistry.php:145
 msgid "Must-use plugin"
 msgstr "Must-use plugin"
 
-#: src/Email/EmailRegistry.php:141
+#: src/Email/EmailRegistry.php:148
 msgid "Thème"
 msgstr "Theme"
-
-#: src/Email/Placeholders.php:29
-msgid "Nom du site"
-msgstr "Site name"
-
-#: src/Email/Placeholders.php:31
-msgid "Prénom du client"
-msgstr "Customer first name"
-
-#: src/Email/Placeholders.php:32
-msgid "Nom du client"
-msgstr "Customer last name"
-
-#: src/Email/Placeholders.php:33
-msgid "Numéro de commande"
-msgstr "Order number"
-
-#: src/Email/Placeholders.php:34
-msgid "Date de commande"
-msgstr "Order date"
-
-#: src/Email/Placeholders.php:35
-msgid "Total de la commande"
-msgstr "Order total"
-
-#: src/Email/Placeholders.php:36
-msgid "Lien « Voir ma commande »"
-msgstr "“View my order” link"
-
-#: src/Email/Placeholders.php:37
-msgid "Lien de suivi du colis (si fourni par l’extension d’expédition)"
-msgstr "Parcel tracking link (if provided by the shipping extension)"
-
-#: src/Email/Placeholders.php:38
-msgid "E-mail de l’administrateur"
-msgstr "Administrator email"
-
-#: src/Email/Placeholders.php:39
-msgid "Téléphone de la boutique"
-msgstr "Shop phone"
-
-#: src/Email/Placeholders.php:82
-msgid "Voir la commande"
-msgstr "View order"
-
-#: src/Email/Placeholders.php:82
-msgid "Voir ma commande"
-msgstr "View my order"
-
-#: src/Email/Placeholders.php:89
-msgid "Suivre mon colis"
-msgstr "Track my parcel"
 
 #: src/Email/DefaultTexts.php:28
 msgid ""
@@ -631,26 +627,101 @@ msgstr ""
 msgid "Notification de la boutique {site_title} : « {email_title} »."
 msgstr "Notification from the {site_title} shop: “{email_title}”."
 
-#: src/Email/Simulator.php:51
+#: src/Email/Simulator.php:56
 msgid "E-mail introuvable."
 msgstr "Email not found."
 
-#: src/Email/Simulator.php:57
+#: src/Email/Simulator.php:62
 msgid "Commande introuvable."
 msgstr "Order not found."
 
-#: src/Email/Simulator.php:66
+#: src/Email/Simulator.php:71
 msgid "Choisissez une commande pour cet e-mail."
 msgstr "Choose an order for this email."
 
-#: src/Email/Simulator.php:87
+#: src/Email/Simulator.php:92
 msgid "Ceci est un exemple de note ajoutée à la commande par la boutique."
 msgstr "This is a sample note added to the order by the shop."
 
-#. translators: %s: version minimale de WooCommerce.
-#: src/Plugin.php:128
-msgid "BB Woo Mail Layout nécessite WooCommerce %s ou supérieur. Le plugin est inactif."
-msgstr "BB Woo Mail Layout requires WooCommerce %s or later. The plugin is inactive."
+#: src/Email/Placeholders.php:29
+msgid "Nom du site"
+msgstr "Site name"
+
+#: src/Email/Placeholders.php:31
+msgid "Prénom du client"
+msgstr "Customer first name"
+
+#: src/Email/Placeholders.php:32
+msgid "Nom du client"
+msgstr "Customer last name"
+
+#: src/Email/Placeholders.php:33
+msgid "Numéro de commande"
+msgstr "Order number"
+
+#: src/Email/Placeholders.php:34
+msgid "Date de commande"
+msgstr "Order date"
+
+#: src/Email/Placeholders.php:35
+msgid "Total de la commande"
+msgstr "Order total"
+
+#: src/Email/Placeholders.php:36
+msgid "Lien « Voir ma commande »"
+msgstr "“View my order” link"
+
+#: src/Email/Placeholders.php:37
+msgid "Lien de suivi du colis (si fourni par l’extension d’expédition)"
+msgstr "Parcel tracking link (if provided by the shipping extension)"
+
+#: src/Email/Placeholders.php:38
+msgid "E-mail de l’administrateur"
+msgstr "Administrator email"
+
+#: src/Email/Placeholders.php:39
+msgid "Téléphone de la boutique"
+msgstr "Shop phone"
+
+#: src/Email/Placeholders.php:40 templates/emails/email-addresses.php:20
+msgid "Adresse de facturation"
+msgstr "Billing address"
+
+#: src/Email/Placeholders.php:41 templates/emails/email-addresses.php:35
+msgid "Adresse de livraison"
+msgstr "Shipping address"
+
+#: src/Email/Placeholders.php:42
+msgid "Moyen de paiement"
+msgstr "Payment method"
+
+#: src/Email/Placeholders.php:43
+msgid "Mode de livraison"
+msgstr "Shipping method"
+
+#: src/Email/Placeholders.php:44
+msgid "Lien « Payer ma commande » (commande à régler uniquement)"
+msgstr "“Pay for my order” link (unpaid orders only)"
+
+#: src/Email/Placeholders.php:45
+msgid "Métadonnée de commande (ex. {order_meta:_numero_client})"
+msgstr "Order meta (e.g. {order_meta:_customer_number})"
+
+#: src/Email/Placeholders.php:93
+msgid "Voir la commande"
+msgstr "View order"
+
+#: src/Email/Placeholders.php:93
+msgid "Voir ma commande"
+msgstr "View my order"
+
+#: src/Email/Placeholders.php:103
+msgid "Payer ma commande"
+msgstr "Pay for my order"
+
+#: src/Email/Placeholders.php:111
+msgid "Suivre mon colis"
+msgstr "Track my parcel"
 
 #: src/Admin/Notices.php:59 src/Admin/Notices.php:76
 msgid "BB Woo Mail Layout :"
@@ -665,28 +736,33 @@ msgstr "Fix the logo"
 msgid "ces extensions modifient aussi les e-mails WooCommerce et peuvent entrer en conflit : %s. Désactivez-les après avoir reporté leurs réglages (voir la procédure de migration)."
 msgstr "these extensions also modify WooCommerce emails and may conflict: %s. Deactivate them after carrying over their settings (see the migration guide)."
 
-#: src/Admin/TestEmail.php:50
+#: src/Admin/TestEmail.php:60
 msgid "Adresse destinataire invalide."
 msgstr "Invalid recipient address."
 
 #. translators: %s: sujet de l'e-mail.
-#: src/Admin/TestEmail.php:61
+#: src/Admin/TestEmail.php:71
 msgid "[Test] %s"
 msgstr "[Test] %s"
 
 #. translators: %s: erreur renvoyée par wp_mail.
-#: src/Admin/TestEmail.php:75
+#: src/Admin/TestEmail.php:85
 msgid "Échec de l’envoi : %s"
 msgstr "Sending failed: %s"
 
-#: src/Admin/TestEmail.php:76
+#: src/Admin/TestEmail.php:86
 msgid "Échec de l’envoi (wp_mail a renvoyé false). Vérifiez la configuration SMTP."
 msgstr "Sending failed (wp_mail returned false). Check the SMTP configuration."
 
 #. translators: 1: titre de l'e-mail, 2: destinataire.
-#: src/Admin/TestEmail.php:84
+#: src/Admin/TestEmail.php:94
 msgid "E-mail « %1$s » envoyé à %2$s."
 msgstr "Email “%1$s” sent to %2$s."
+
+#. translators: %s: version minimale de WooCommerce.
+#: src/Plugin.php:188
+msgid "BB Woo Mail Layout nécessite WooCommerce %s ou supérieur. Le plugin est inactif."
+msgstr "BB Woo Mail Layout requires WooCommerce %s or later. The plugin is inactive."
 
 #: templates/emails/customer-failed-order.php:22
 msgid "Réessayer le paiement"
@@ -716,51 +792,46 @@ msgstr "Account username:"
 msgid "Réinitialiser mon mot de passe"
 msgstr "Reset my password"
 
-#. translators: %s: numéro de commande.
-#: templates/emails/email-order-details.php:24
-msgid "Commande n° %s"
-msgstr "Order #%s"
-
-#: templates/emails/email-order-details.php:46
-msgid "Produit"
-msgstr "Product"
-
-#: templates/emails/email-order-details.php:47
-msgid "Quantité"
-msgstr "Quantity"
-
-#: templates/emails/email-order-details.php:48
-msgid "Prix"
-msgstr "Price"
-
-#: templates/emails/email-order-details.php:84
-msgid "Note du client :"
-msgstr "Customer note:"
-
-#: templates/emails/email-addresses.php:20
-msgid "Adresse de facturation"
-msgstr "Billing address"
-
 #: templates/emails/email-addresses.php:22
 msgid "Non renseignée"
 msgstr "Not provided"
-
-#: templates/emails/email-addresses.php:35
-msgid "Adresse de livraison"
-msgstr "Shipping address"
 
 #: templates/emails/customer-note.php:24
 msgid "Pour rappel, voici le détail de votre commande :"
 msgstr "As a reminder, here are your order details:"
 
-#: layouts/classique/footer.php:26 layouts/sobre/footer.php:26
+#. translators: %s: numéro de commande.
+#: templates/emails/email-order-details.php:26
+msgid "Commande n° %s"
+msgstr "Order #%s"
+
+#: templates/emails/email-order-details.php:48
+msgid "Produit"
+msgstr "Product"
+
+#: templates/emails/email-order-details.php:49
+msgid "Quantité"
+msgstr "Quantity"
+
+#: templates/emails/email-order-details.php:50
+msgid "Prix"
+msgstr "Price"
+
+#: templates/emails/email-order-details.php:86
+msgid "Note du client :"
+msgstr "Customer note:"
+
+#: layouts/classique/footer.php:27 layouts/sobre/footer.php:27
+#: layouts/ecommerce/footer.php:27
 msgid "Téléphone :"
 msgstr "Phone:"
 
-#: layouts/classique/footer.php:29 layouts/sobre/footer.php:29
+#: layouts/classique/footer.php:30 layouts/sobre/footer.php:30
+#: layouts/ecommerce/footer.php:30
 msgid "E-mail :"
 msgstr "Email:"
 
-#: layouts/classique/footer.php:67 layouts/sobre/footer.php:67
+#: layouts/classique/footer.php:68 layouts/sobre/footer.php:68
+#: layouts/ecommerce/footer.php:68
 msgid "Se désinscrire"
 msgstr "Unsubscribe"

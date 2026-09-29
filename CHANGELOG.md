@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- Nouveau layout **E-commerce** : barre d'accent, en-tête de tableau coloré, photos produit dans le tableau de commande (en-tête `Product Images: yes` du `styles.css` d'un layout).
+- Bloc **Produits mis en avant** : jusqu'à 3 produits choisis dans l'admin (photo, titre, prix, promo), dans les e-mails client ; produits non publiés ou masqués ignorés ; filtre `bb_email_featured_products`.
+- Nouveaux placeholders : `{billing_address}`, `{shipping_address}`, `{payment_method}`, `{shipping_method}`, `{payment_url}`, `{order_meta:clé}`.
+- Champ **CSS personnalisé** (balises, `@import` et scripts retirés ; jetons `{{primary}}`… disponibles).
+- `bin/make-pot.php` pour régénérer le catalogue de traduction.
+
 ## 1.0.4
 
 - Traduction anglaise livrée (`en_US`, `en_GB`) : libellés du layout, textes d'introduction par défaut, administration.
