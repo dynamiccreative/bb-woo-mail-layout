@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Aperçu « Ordinateur » : iframe de 640 px au lieu de 600 px. À 600 px, le `@media (max-width: 620px)` des layouts s'appliquait et l'aperçu montrait la version mobile (colonnes à 100 %).
+
 ## 1.2.0
 
 - **Nouvelle page de réglages** : sous-onglets Apparence, Contenu, E-mails, Outils au lieu de 12 sections empilées ; barre d'enregistrement fixe.

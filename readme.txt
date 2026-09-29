@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
 WC tested up to: 11.1
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,9 @@ Les « améliorations des e-mails » et l'éditeur d'e-mails en blocs de WooComm
 Non. Le transport (WP Mail SMTP, FluentSMTP, Amazon SES…) n'est pas touché.
 
 == Changelog ==
+
+= 1.2.1 =
+* Aperçu « Ordinateur » : l'iframe fait 640 px, pour ne plus déclencher les styles mobiles des layouts (max-width: 620px).
 
 = 1.2.0 =
 * Nouvelle page de réglages : sous-onglets Apparence, Contenu, E-mails, Outils ; aperçu 600 px collant, mis à jour en direct.
