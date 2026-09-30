@@ -1,7 +1,12 @@
 <?php
 /**
- * Layout « E-commerce » — en-tête : barre d’accent, bandeau coloré avec logo, titre centré.
+ * En-tête commun des layouts : ouvre le document et la cellule de contenu.
  *
+ * Variantes déclarées dans l'en-tête du styles.css du layout :
+ * - « Header Style: light » : fond blanc, logo souligné d'un filet (Sobre) ; sinon bandeau coloré ;
+ * - « Accent Bar: yes » : barre d'accent au-dessus du bandeau (E-commerce).
+ *
+ * Un layout peut fournir son propre header.php dans son dossier.
  * Variables : voir LayoutRenderer::view_vars().
  *
  * @package BB\WooMailLayout
@@ -11,6 +16,10 @@
 defined( 'ABSPATH' ) || exit;
 
 $bb_colors = $v['colors'];
+$bb_layout = $v['layout'];
+$bb_light  = ! empty( $bb_layout['light'] );
+$bb_page   = $bb_light ? '#ffffff' : $bb_colors['background'];
+$bb_band   = $bb_light ? '#ffffff' : $bb_colors['primary'];
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo esc_attr( $v['lang'] ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -33,18 +42,20 @@ $bb_colors = $v['colors'];
 <?php echo $v['css']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS du plugin, jetons assainis, « </ » neutralisé. ?>
 	</style>
 </head>
-<body class="bb-body bb-layout-ecommerce" bgcolor="<?php echo esc_attr( $bb_colors['background'] ); ?>" style="background-color:<?php echo esc_attr( $bb_colors['background'] ); ?>;">
+<body class="bb-body bb-layout-<?php echo esc_attr( $bb_layout['slug'] ); ?>" bgcolor="<?php echo esc_attr( $bb_page ); ?>" style="background-color:<?php echo esc_attr( $bb_page ); ?>;">
 <?php echo $v['preheader_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- échappé dans LayoutRenderer::preheader_html(). ?>
-<table role="presentation" class="bb-wrapper" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo esc_attr( $bb_colors['background'] ); ?>" style="background-color:<?php echo esc_attr( $bb_colors['background'] ); ?>;">
+<table role="presentation" class="bb-wrapper" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo esc_attr( $bb_page ); ?>" style="background-color:<?php echo esc_attr( $bb_page ); ?>;">
 	<tr>
 		<td class="bb-wrapper-cell" align="center" valign="top">
 			<!--[if mso]><table role="presentation" align="center" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 			<table role="presentation" class="bb-container" width="100%" cellpadding="0" cellspacing="0" border="0">
+<?php if ( ! empty( $bb_layout['accent'] ) ) : ?>
 				<tr>
 					<td class="bb-accent" height="4" bgcolor="<?php echo esc_attr( $bb_colors['button'] ); ?>" style="height:4px;font-size:0;line-height:0;background-color:<?php echo esc_attr( $bb_colors['button'] ); ?>;">&nbsp;</td>
 				</tr>
+<?php endif; ?>
 				<tr>
-					<td class="bb-header" align="center" bgcolor="<?php echo esc_attr( $bb_colors['primary'] ); ?>" style="background-color:<?php echo esc_attr( $bb_colors['primary'] ); ?>;padding:24px 32px;">
+					<td class="bb-header" align="center" bgcolor="<?php echo esc_attr( $bb_band ); ?>" style="background-color:<?php echo esc_attr( $bb_band ); ?>;<?php echo $bb_light ? 'padding:28px 32px 20px;border-bottom:3px solid ' . esc_attr( $bb_colors['primary'] ) . ';' : 'padding:24px 32px;'; ?>">
 						<?php if ( $v['logo'] ) : ?>
 							<a href="<?php echo esc_url( $v['site_url'] ); ?>" target="_blank" style="text-decoration:none;">
 								<?php if ( $v['logo']['width'] ) : ?>
@@ -54,7 +65,7 @@ $bb_colors = $v['colors'];
 								<?php endif; ?>
 							</a>
 						<?php else : ?>
-							<a href="<?php echo esc_url( $v['site_url'] ); ?>" target="_blank" style="font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:bold;color:<?php echo esc_attr( $bb_colors['primary_text'] ); ?>;text-decoration:none;"><?php echo esc_html( $v['site_title'] ); ?></a>
+							<a href="<?php echo esc_url( $v['site_url'] ); ?>" target="_blank" style="font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:bold;color:<?php echo esc_attr( $bb_light ? $bb_colors['primary'] : $bb_colors['primary_text'] ); ?>;text-decoration:none;"><?php echo esc_html( $v['site_title'] ); ?></a>
 						<?php endif; ?>
 					</td>
 				</tr>

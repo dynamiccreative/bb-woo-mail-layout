@@ -1,6 +1,6 @@
 <?php
 /**
- * En-tête des e-mails : délègue au layout actif (layouts/{layout}/header.php).
+ * En-tête des e-mails : délègue au layout actif (layouts/{layout}/header.php, sinon layouts/header.php).
  *
  * @package BB\WooMailLayout
  * @var mixed $email_heading Titre (réglage WooCommerce).

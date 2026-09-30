@@ -1,6 +1,6 @@
 <?php
 /**
- * Pied des e-mails : délègue au layout actif (layouts/{layout}/footer.php).
+ * Pied des e-mails : délègue au layout actif (layouts/{layout}/footer.php, sinon layouts/footer.php).
  *
  * @package BB\WooMailLayout
  * @var mixed $email E-mail (transmis par certaines versions / extensions seulement).

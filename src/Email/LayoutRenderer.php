@@ -21,6 +21,20 @@ final class LayoutRenderer {
 	private const HEADER = 'emails/email-header.php';
 	private const FOOTER = 'emails/email-footer.php';
 
+	/**
+	 * Templates WooCommerce servis par le gabarit commun templates/order.php (même contenu).
+	 */
+	private const ORDER_TEMPLATES = array(
+		'emails/admin-new-order.php',
+		'emails/admin-cancelled-order.php',
+		'emails/admin-failed-order.php',
+		'emails/customer-processing-order.php',
+		'emails/customer-on-hold-order.php',
+		'emails/customer-completed-order.php',
+		'emails/customer-cancelled-order.php',
+		'emails/customer-refunded-order.php',
+	);
+
 	/** Longueur maximale du pré-en-tête (les clients mail en affichent 90 à 140 caractères). */
 	private const PREHEADER_MAX = 140;
 
@@ -41,7 +55,7 @@ final class LayoutRenderer {
 	/**
 	 * Cache des layouts disponibles.
 	 *
-	 * @var array<string, array{label:string, path:string, images?:bool}>|null
+	 * @var array<string, array{slug:string, label:string, path:string, images?:bool, light?:bool, accent?:bool}>|null
 	 */
 	private static ?array $layouts = null;
 
@@ -74,9 +88,10 @@ final class LayoutRenderer {
 	}
 
 	/**
-	 * Layouts disponibles : dossiers de `layouts/` contenant header.php, footer.php et styles.css.
+	 * Layouts disponibles : dossiers de `layouts/` contenant un styles.css.
+	 * header.php / footer.php sont facultatifs : à défaut, les gabarits communs de `layouts/` sont utilisés.
 	 *
-	 * @return array<string, array{label:string, path:string, images?:bool}>
+	 * @return array<string, array{slug:string, label:string, path:string, images?:bool, light?:bool, accent?:bool}>
 	 */
 	public static function available_layouts(): array {
 		if ( null !== self::$layouts ) {
@@ -100,10 +115,12 @@ final class LayoutRenderer {
 		 */
 		$layouts = (array) apply_filters( 'bb_email_layouts', $layouts );
 
-		self::$layouts = array_filter(
-			$layouts,
-			static fn( $layout ) => is_array( $layout ) && isset( $layout['path'] ) && is_readable( trailingslashit( $layout['path'] ) . 'header.php' )
-		);
+		self::$layouts = array();
+		foreach ( $layouts as $slug => $layout ) {
+			if ( is_array( $layout ) && isset( $layout['path'] ) && is_readable( trailingslashit( $layout['path'] ) . 'styles.css' ) ) {
+				self::$layouts[ $slug ] = array( 'slug' => (string) $slug ) + $layout;
+			}
+		}
 		return self::$layouts;
 	}
 
@@ -111,26 +128,28 @@ final class LayoutRenderer {
 	 * Lit un dossier de layout.
 	 *
 	 * @param string $dir Dossier.
-	 * @return array{label:string, path:string, images:bool}|null
+	 * @return array{label:string, path:string, images:bool, light:bool, accent:bool}|null
 	 */
 	private static function read_layout( string $dir ): ?array {
 		$dir = trailingslashit( $dir );
-		foreach ( array( 'header.php', 'footer.php', 'styles.css' ) as $file ) {
-			if ( ! is_readable( $dir . $file ) ) {
-				return null;
-			}
+		if ( ! is_readable( $dir . 'styles.css' ) ) {
+			return null;
 		}
 		$data = get_file_data(
 			$dir . 'styles.css',
 			array(
 				'name'   => 'Layout Name',
 				'images' => 'Product Images',
+				'header' => 'Header Style',
+				'accent' => 'Accent Bar',
 			)
 		);
 		return array(
 			'label'  => '' !== $data['name'] ? $data['name'] : ucfirst( basename( $dir ) ),
 			'path'   => $dir,
 			'images' => 'yes' === strtolower( trim( $data['images'] ) ),
+			'light'  => 'light' === strtolower( trim( $data['header'] ) ),
+			'accent' => 'yes' === strtolower( trim( $data['accent'] ) ),
 		);
 	}
 
@@ -280,7 +299,9 @@ final class LayoutRenderer {
 			return $template;
 		}
 
-		$file = BB_WML_DIR . 'templates/' . $template_name;
+		$file = in_array( $template_name, self::ORDER_TEMPLATES, true )
+			? BB_WML_DIR . 'templates/order.php'
+			: BB_WML_DIR . 'templates/' . $template_name;
 		return is_readable( $file ) ? $file : $template;
 	}
 
@@ -293,7 +314,7 @@ final class LayoutRenderer {
 		static $templates = null;
 
 		if ( null === $templates ) {
-			$templates = array();
+			$templates = self::ORDER_TEMPLATES;
 			foreach ( (array) glob( BB_WML_DIR . 'templates/emails/*.php' ) as $file ) {
 				$name = 'emails/' . basename( $file );
 				if ( self::HEADER !== $name && self::FOOTER !== $name ) {
@@ -431,13 +452,17 @@ final class LayoutRenderer {
 	}
 
 	/**
-	 * Inclut une partie du layout avec ses variables.
+	 * Inclut une partie du layout avec ses variables : fichier du layout s'il existe, sinon gabarit commun.
 	 *
 	 * @param string              $part header|footer.
 	 * @param array<string,mixed> $v    Variables de vue.
 	 */
 	private function include_part( string $part, array $v ): void {
-		$file = $this->layout_path( $v['email'] ) . $part . '.php';
+		$v['layout'] = $this->layout_for( $v['email'] );
+		$file        = trailingslashit( (string) ( $v['layout']['path'] ?? '' ) ) . $part . '.php';
+		if ( ! is_readable( $file ) ) {
+			$file = BB_WML_DIR . 'layouts/' . $part . '.php';
+		}
 		( static function ( string $bb_file, array $v ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- $v est lu par le fichier inclus.
 			include $bb_file;
 		} )( $file, $v );
@@ -493,7 +518,8 @@ final class LayoutRenderer {
 	}
 
 	/**
-	 * Variables exposées aux fichiers header.php / footer.php d'un layout.
+	 * Variables exposées aux fichiers header.php / footer.php d'un layout
+	 * (plus `layout` : slug, label, path et options du layout, ajouté par include_part()).
 	 *
 	 * @param \WC_Email|null $email   E-mail.
 	 * @param string         $heading Titre.
@@ -907,7 +933,7 @@ final class LayoutRenderer {
 		ob_start();
 		( static function ( string $bb_file, string $title, array $products ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- variables lues par le gabarit inclus.
 			include $bb_file;
-		} )( BB_WML_DIR . 'layouts/partials/featured-products.php', $title, $products );
+		} )( BB_WML_DIR . 'layouts/featured-products.php', $title, $products );
 		return (string) ob_get_clean();
 	}
 

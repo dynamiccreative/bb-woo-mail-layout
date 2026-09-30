@@ -1,6 +1,8 @@
 <?php
 /**
- * Layout « Classique » — pied : aide, réseaux sociaux, mentions.
+ * Pied commun des layouts : aide, réseaux sociaux, mentions ; referme le document.
+ *
+ * Un layout peut fournir son propre footer.php dans son dossier.
  *
  * Variables : voir LayoutRenderer::view_vars().
  *
@@ -12,14 +14,16 @@ defined( 'ABSPATH' ) || exit;
 
 $bb_colors = $v['colors'];
 $bb_footer = $v['footer'];
+// Layout « light » (Sobre) : encadré d'aide blanc.
+$bb_help_bg = empty( $v['layout']['light'] ) ? $bb_colors['soft'] : '#ffffff';
 ?>
 					</td>
 				</tr>
-				<?php echo $v['featured_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- échappé dans layouts/partials/featured-products.php. ?>
+				<?php echo $v['featured_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- échappé dans layouts/featured-products.php. ?>
 				<?php if ( $v['help'] ) : ?>
 					<tr>
 						<td class="bb-help" bgcolor="#ffffff">
-							<table role="presentation" class="bb-help-box" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo esc_attr( $bb_colors['soft'] ); ?>">
+							<table role="presentation" class="bb-help-box" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo esc_attr( $bb_help_bg ); ?>">
 								<tr>
 									<td class="bb-help-cell">
 										<p class="bb-help-title"><?php esc_html_e( 'Besoin d’aide ?', 'bb-woo-mail-layout' ); ?></p>

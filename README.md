@@ -11,9 +11,9 @@ Plugin WordPress bleuebuzz de mise en forme des e-mails transactionnels WooComme
 | Étape | Mécanisme |
 |---|---|
 | Suivi de l'e-mail en cours | `woocommerce_before_template_part` / `after_template_part` : pile des `WC_Email` passés aux templates. WooCommerce ne transmet pas `$email` à `email-header.php` / `email-footer.php`, d'où cette pile. |
-| Layout | Filtre `wc_get_template` : `emails/email-header.php` et `emails/email-footer.php` pointent vers `templates/emails/`, qui délèguent à `layouts/{layout}/header.php` et `footer.php`. |
+| Layout | Filtre `wc_get_template` : `emails/email-header.php` et `emails/email-footer.php` pointent vers `templates/emails/`, qui délèguent aux gabarits communs `layouts/header.php` et `layouts/footer.php` (ou aux `header.php` / `footer.php` du dossier du layout s'il en fournit). |
 | CSS | Filtre `woocommerce_email_styles` (priorité 5) : le CSS natif est remplacé par `layouts/base.css` + `layouts/{layout}/styles.css` ; les CSS ajoutés ensuite par d'autres extensions sont conservés. L'inlining reste fait par WooCommerce (Emogrifier `CssInliner`). |
-| Contenu | Hooks WooCommerce standard. Les templates de contenu natifs sont surchargés (`templates/emails/*.php`) uniquement pour remplacer le « Hi %s » anglais par l'intro FR et franciser les libellés du tableau et des adresses. |
+| Contenu | Hooks WooCommerce standard. Les templates de contenu natifs sont surchargés (`templates/emails/*.php`, et `templates/order.php` pour les 8 e-mails de commande sans contenu propre) uniquement pour remplacer le « Hi %s » anglais par l'intro FR et franciser les libellés du tableau et des adresses. |
 | E-mail désactivé | Aucun filtre ne s'applique : rendu WooCommerce natif à l'identique. |
 | Email improvements | `pre_option_woocommerce_feature_email_improvements_enabled` et `…block_email_editor…` forcés à `no` tant que le plugin est actif ; l'option stockée n'est jamais modifiée. |
 
@@ -56,12 +56,13 @@ Réglages : une option sérialisée `bb_woo_mail_layout` (versionnée, migrée �
 
 ## Ajouter un layout
 
-1. Copier `layouts/classique/` vers `layouts/mon-layout/`.
+1. Copier `layouts/classique/` vers `layouts/mon-layout/` : un layout se résume à son `styles.css`.
 2. Renommer dans l'en-tête de `styles.css` : `Layout Name: Mon layout`.
-3. Adapter `header.php` (ouvre le document et la cellule de contenu) et `footer.php` (la referme). Les variables disponibles sont dans le tableau `$v` (voir `LayoutRenderer::view_vars()`) : `colors`, `logo`, `heading`, `intro_html`, `preheader_html` et `button_html` (header uniquement : le premier juste après `<body>`, le second sous l'intro), `help`, `socials`, `footer`, `settings`, `site_title`, `site_url`, `lang`, `charset`, `google_font_url`, `email`.
-4. Jetons CSS disponibles : `{{primary}}`, `{{primary_text}}`, `{{button}}`, `{{button_text}}`, `{{text}}`, `{{muted}}`, `{{border}}`, `{{soft}}`, `{{background}}`, `{{font}}`.
-5. Pour afficher les photos produit dans le tableau de commande, ajouter `Product Images: yes` dans l'en-tête de `styles.css` (comme le layout E-commerce).
-6. Le bloc produits mis en avant est fourni par `$v['featured_html']` (gabarit commun `layouts/partials/featured-products.php`) : l'insérer dans `footer.php`.
+3. Variantes de l'en-tête commun, dans l'en-tête de `styles.css` : `Header Style: light` (fond blanc, logo souligné d'un filet, encadré d'aide blanc, comme Sobre) et `Accent Bar: yes` (barre d'accent au-dessus du bandeau, comme E-commerce).
+4. Pour un balisage différent, placer un `header.php` (ouvre le document et la cellule de contenu) et/ou un `footer.php` (la referme) dans le dossier du layout, en partant de `layouts/header.php` / `layouts/footer.php`. Les variables disponibles sont dans le tableau `$v` (voir `LayoutRenderer::view_vars()`) : `colors`, `logo`, `heading`, `intro_html`, `preheader_html` et `button_html` (header uniquement : le premier juste après `<body>`, le second sous l'intro), `help`, `socials`, `footer`, `settings`, `site_title`, `site_url`, `lang`, `charset`, `google_font_url`, `email`, `layout` (`slug`, `label`, `path`, `images`, `light`, `accent`).
+5. Jetons CSS disponibles : `{{primary}}`, `{{primary_text}}`, `{{button}}`, `{{button_text}}`, `{{text}}`, `{{muted}}`, `{{border}}`, `{{soft}}`, `{{background}}`, `{{font}}`.
+6. Pour afficher les photos produit dans le tableau de commande, ajouter `Product Images: yes` dans l'en-tête de `styles.css` (comme le layout E-commerce).
+7. Le bloc produits mis en avant est fourni par `$v['featured_html']` (gabarit commun `layouts/featured-products.php`) : l'insérer dans un `footer.php` personnalisé.
 
 ## Placeholders
 

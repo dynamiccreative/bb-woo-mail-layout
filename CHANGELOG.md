@@ -1,5 +1,10 @@
 # Changelog
 
+## Non publié
+
+- **Arborescence simplifiée**, rendu HTML inchangé : les layouts partagent `layouts/header.php` et `layouts/footer.php` (et `layouts/featured-products.php`, ex-`layouts/partials/`) ; un layout se résume à son `styles.css`, dont l'en-tête déclare les variantes `Header Style: light` (Sobre) et `Accent Bar: yes` (E-commerce). Les 8 e-mails de commande sans contenu propre sont servis par un seul `templates/order.php`.
+- Layouts tiers : `header.php` / `footer.php` deviennent facultatifs (gabarits communs à défaut) ; un layout déclaré par `bb_email_layouts` doit contenir un `styles.css`. Les layouts qui fournissent leurs propres fichiers fonctionnent comme avant. Nouvelle variable de vue `$v['layout']`.
+
 ## 1.4.1
 
 - Filtre `bb_email_default_texts` : une extension déclare le texte d'intro par défaut de ses propres e-mails (utilisé par BB Woo Review Request).

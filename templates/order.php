@@ -1,7 +1,9 @@
 <?php
 /**
- * Commande échouée (admin) — surcharge BB Woo Mail Layout.
+ * E-mails de commande sans contenu propre — surcharge BB Woo Mail Layout.
  *
+ * Sert pour les templates listés dans LayoutRenderer::ORDER_TEMPLATES : nouvelle commande,
+ * commande annulée / échouée (admin), commande en cours / en attente / terminée / annulée / remboursée (client).
  * Le message d'accueil anglais de WooCommerce est remplacé par l'intro française du layout.
  * Le contenu métier reste produit par les hooks WooCommerce standard.
  *
